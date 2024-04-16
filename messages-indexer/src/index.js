@@ -13,4 +13,6 @@ async function main() {
   return Promise.all(chainIds.map(syncMessages))
 }
 
-main().then(exit).catch((error) => { console.error(error); exit(1) })
+main()
+  .then((_result) => exit(1)) // exit with 1 to indicate failure, this will restart the docker container
+  .catch((error) => { console.error(error); exit(1) })
