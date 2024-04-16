@@ -1,18 +1,18 @@
 # darwinia msgscan monorepo
 
-## Run server in dev
-1. run indexer
-
-```bash
-cd ./ponder
-yarn install
-yarn dev
-```
-
-2. run server
+## Run server with messages indexer
+1. run server
 
 ```bash
 cd ./server
 yarn install
-node ./src/index.js
+yarn start
+```
+
+2. run messages indexer
+
+```bash
+cd ./server
+yarn install
+yarn start
 ```
