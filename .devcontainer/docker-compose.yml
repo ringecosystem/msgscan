@@ -50,8 +50,8 @@ services:
     depends_on:
       - pg
     volumes:
-      - ../servers.json:/pgadmin4/servers.json
-      - ../pgpass:/pgadmin4/pgpass
+      - ./servers.json:/pgadmin4/servers.json
+      - ./pgpass:/pgadmin4/pgpass
 
 volumes:
   postgres-data:
