@@ -4,8 +4,8 @@ import { checkTableExists } from './db/prepare_tables.js'
 import syncMessages from './sync_messages.js'
 
 async function main() {
-  if (!await checkTableExists('Message')) {
-    console.error('Message table does not exist')
+  if (!await checkTableExists('indexer', 'Message')) { // schema from server/ponder.config.js -> database.publishSchema
+    console.error('indexer.Message table does not exist')
     return
   }
 
