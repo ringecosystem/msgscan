@@ -3,7 +3,7 @@ import sql from './db.js'
 async function getLatestRootImported(chainId) {
   const result = await sql`
     SELECT *
-    FROM public."HashImportedV2"
+    FROM indexer."HashImportedV2"
     WHERE "chainId" = ${chainId}
     ORDER BY "blockTimestamp" DESC
     LIMIT 1

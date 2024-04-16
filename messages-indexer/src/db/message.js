@@ -5,7 +5,7 @@ const MESSAGE_TABLE = 'Message'
 
 async function getLastMessageIndex(chainId) {
   const result = await sql`
-    SELECT max("messageIndex") as max_index FROM public.${sql(MESSAGE_TABLE)} WHERE "messageFromChainId" = ${chainId}
+    SELECT max("messageIndex") as max_index FROM indexer.${sql(MESSAGE_TABLE)} WHERE "messageFromChainId" = ${chainId}
   `
   return result[0].max_index || 0
 }
@@ -26,7 +26,7 @@ async function createMessage(message) {
   // check if message already exists
   const exists = await sql`
     SELECT EXISTS (
-      SELECT * FROM public.${sql(MESSAGE_TABLE)} WHERE id=${id}
+      SELECT * FROM indexer.${sql(MESSAGE_TABLE)} WHERE id=${id}
     );
   `
   if (exists[0].exists) {
@@ -37,7 +37,7 @@ async function createMessage(message) {
   // if not, create message
   const { msgportFrom, msgportTo, msgportPayload } = await extractMsgportPayload(message)
   await sql`
-    INSERT INTO public.${sql(MESSAGE_TABLE)} (
+    INSERT INTO indexer.${sql(MESSAGE_TABLE)} (
       id,
       "msgHash",
       root,
@@ -87,7 +87,7 @@ async function createMessage(message) {
 async function findMessagesByStatuses(messageFromChainId, statuses) {
   const result = await sql`
     SELECT *
-    FROM public.${sql(MESSAGE_TABLE)}
+    FROM indexer.${sql(MESSAGE_TABLE)}
     WHERE "messageFromChainId" = ${messageFromChainId} and "status" IN ${sql(statuses)}
   `
   return result
@@ -96,7 +96,7 @@ async function findMessagesByStatuses(messageFromChainId, statuses) {
 async function findMessagesByStatus(messageFromChainId, status) {
   const result = await sql`
     SELECT *
-    FROM public.${sql(MESSAGE_TABLE)}
+    FROM indexer.${sql(MESSAGE_TABLE)}
     WHERE "messageFromChainId" = ${messageFromChainId} and "status" = ${status}
   `
   return result
@@ -105,7 +105,7 @@ async function findMessagesByStatus(messageFromChainId, status) {
 async function findMessageByRoot(root) {
   const result = await sql`
     SELECT *
-    FROM public.${sql(MESSAGE_TABLE)}
+    FROM indexer.${sql(MESSAGE_TABLE)}
     WHERE "root" = ${root}
   `
   return result[0]
@@ -113,7 +113,7 @@ async function findMessageByRoot(root) {
 
 async function updateMessageStatus(message, status) {
   await sql`
-    UPDATE public.${sql(MESSAGE_TABLE)}
+    UPDATE indexer.${sql(MESSAGE_TABLE)}
     SET status = ${status}
     WHERE id = ${message.id}
   `
@@ -121,7 +121,7 @@ async function updateMessageStatus(message, status) {
 
 async function updateMessage(message, fields) {
   await sql`
-    UPDATE public.${sql(MESSAGE_TABLE)}
+    UPDATE indexer.${sql(MESSAGE_TABLE)}
     SET ${sql(fields)}
     WHERE id = ${message.id}
   `
@@ -130,13 +130,13 @@ async function updateMessage(message, fields) {
 async function findMessagesWithMissingSigners() {
   const result = await sql`
     SELECT *
-    FROM public.${sql(MESSAGE_TABLE)}
+    FROM indexer.${sql(MESSAGE_TABLE)}
     WHERE status >= 1 and "acceptedBlockTimestamp" > EXTRACT(EPOCH FROM NOW() - interval '6 hours') and (signers is null or array_length(string_to_array(signers, ','), 1) < 5)
   `
   return result
 }
 
-export { 
+export {
   getLastMessageIndex, findMessagesByStatus, findMessagesByStatuses, findMessageByRoot, findMessagesWithMissingSigners,
   updateMessageStatus, updateMessage, createMessage
 }

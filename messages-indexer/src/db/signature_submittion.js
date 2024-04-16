@@ -4,7 +4,7 @@ import sql from './db.js'
 async function findSigners(chainId, messageIndex) {
   const result = await sql`
     SELECT signer
-    FROM public."SignatureSubmittion"
+    FROM indexer."SignatureSubmittion"
     WHERE "srcChainId" = ${chainId} and "msgIndex" = ${messageIndex}
   `
 
