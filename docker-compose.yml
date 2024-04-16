@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  server:
+    build: ./server
+    depends_on:
+      - pg
+  messages-indexer:
+    build: ./messages-indexer
+    restart: on-failure
+    depends_on:
+      - pg
+    environment:
+      - PG_HOST=pg
+      - PG_PORT=5432
+      - PG_USER=postgres
+      - PG_PASSWORD=password
+      - PG_DB=postgres
+  pg:
+    image: postgres:latest
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
