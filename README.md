@@ -1,1 +1,1 @@
-# darwinia-msgscan
+# darwinia-msgscan monorepo
