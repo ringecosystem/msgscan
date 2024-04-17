@@ -20,7 +20,7 @@ async function doSetDispatched(messageFromChainId) {
       dispatchTransactionHash: dispatched.transactionHash,
       dispatchTransactionIndex: dispatched.transactionIndex,
       dispatchLogIndex: dispatched.logIndex,
-      proof: transaction.input.slice(-32 * 64).match(/.{64}/g).map(item => `0x${item}`),
+      proof: transaction.input.slice(-32 * 64).match(/.{64}/g).map(item => `0x${item}`).join(','),
       status: dispatched.dispatchResult ? MESSAGE_STATUS.DISPATCH_SUCCESS : MESSAGE_STATUS.DISPATCH_FAILED,
     })
     console.log(`message ${message.id} set dispatched`)

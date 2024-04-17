@@ -129,13 +129,13 @@ export default createSchema((p) => ({
     dispatchTransactionHash: p.string().optional(),
     dispatchTransactionIndex: p.string().optional(),
     dispatchLogIndex: p.int().optional(),
-    proof: p.string().list().optional(), // from transaction of MessageDispatchedV2
+    proof: p.string().optional(), // from transaction of MessageDispatchedV2
 
     //
     msgportPayload: p.string().optional(),
     msgportFrom: p.string().optional(),
     msgportTo: p.string().optional(),
-    signers: p.string().list().optional(),
+    signers: p.string().optional(),
     latestSignaturesUpdatedAt: p.bigint().optional(),
   })
 }));

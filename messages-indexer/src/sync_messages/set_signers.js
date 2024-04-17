@@ -10,7 +10,7 @@ async function setSigners() {
       continue
     }
 
-    updateMessage(message, { signers, latestSignaturesUpdatedAt: Math.floor(new Date().getTime() / 1000) })
+    updateMessage(message, { signers: signers.join(','), latestSignaturesUpdatedAt: Math.floor(new Date().getTime() / 1000) })
     console.log(`updated signers of message ${message.id}`)
   }
 }
