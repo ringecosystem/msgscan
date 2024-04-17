@@ -5,7 +5,7 @@ import syncMessages from './sync_messages.js'
 
 async function start() {
   if (!await checkTableExists('indexer', 'Message')) { // schema from server/ponder.config.js -> database.publishSchema
-    throw new Error('indexer.Message table does not exist')
+    throw new Error("'indexer.Message' table does not exist. Please check if the server is running. It needs some time if it is the first time you are running the server.")
   }
 
   const chainIds = [421614, 11155111, 167008]
