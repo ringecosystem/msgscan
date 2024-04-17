@@ -28,7 +28,7 @@ async function doSetDispatched(messageFromChainId) {
 }
 
 function setDispatched(chainId) {
-  return async function() {
+  return async () => {
     await doSetDispatched(chainId)
   }
 }

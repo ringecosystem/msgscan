@@ -14,7 +14,7 @@ async function doFetchMessages(chainId) {
 }
 
 function fetchMessages(chainId) {
-  return async function() {
+  return async () => {
     await doFetchMessages(chainId)
   }
 }

@@ -24,7 +24,7 @@ async function doSetRootReady(chainId) {
 }
 
 function setRootReady(chainId) {
-  return async function() {
+  return async () => {
     await doSetRootReady(chainId)
   }
 }
