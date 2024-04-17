@@ -285,10 +285,10 @@
   resolved "https://registry.npmjs.org/@pkgjs/parseargs/-/parseargs-0.11.0.tgz"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
-"@ponder/core@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@ponder/core/-/core-0.4.3.tgz#77cc64c490074f7553f25fbf520784b9f7abe2a0"
-  integrity sha512-jzpIaG6xj+Jf6wo9KS6hxfoH1cKdzLeFAFbhdRm7JJPZWWCqPtloB8caH0Fq8ACS4p4IC/IYkp4wmaIAliUkRw==
+"@ponder/core@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@ponder/core/-/core-0.4.4.tgz#e60208cd094bc9d34ca83be32df26fe8e9d89749"
+  integrity sha512-oVud09JZ9xGQS2wbEtduC3aBzTXlfDmdxBw24/4JWU+V8gRGZowfjC0XKyGZ1HgylVjq8weZUO7v4yufbSZmZw==
   dependencies:
     "@babel/code-frame" "^7.23.4"
     "@commander-js/extra-typings" "^12.0.1"
@@ -944,10 +944,10 @@ escape-string-regexp@^4.0.0:
   resolved "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz"
   integrity sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==
 
-eslint-config-ponder@^0.4.3:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/eslint-config-ponder/-/eslint-config-ponder-0.4.3.tgz#583daef1f55e3daca8a4c5f4bcf8e466aea8f01c"
-  integrity sha512-F+L4BAocUPSyMQHr+0kWKgQRCsShgCh3sk6fgfTZ8lOLmqY4+Mch5G/NzWgmofOeJhnovIHx6sKWsXwGHiFgkg==
+eslint-config-ponder@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/eslint-config-ponder/-/eslint-config-ponder-0.4.4.tgz#c72d67266881e06742c39f4512580dbc1e1ceecc"
+  integrity sha512-6N4yBbZvaGng4HODZ5fUf4OHarR3XFPLj44Z1e+Y8tR7ZXgDdvqwhZHuPg++v4bYc90RuPKRt5Cdl84U467ldw==
 
 eslint-scope@^7.2.2:
   version "7.2.2"
@@ -2185,6 +2185,7 @@ stacktrace-parser@^0.1.10:
     type-fest "^0.7.1"
 
 "string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0:
+  name string-width-cjs
   version "4.2.3"
   resolved "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -2210,6 +2211,7 @@ string_decoder@^1.1.1, string_decoder@^1.3.0:
     safe-buffer "~5.2.0"
 
 "strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+  name strip-ansi-cjs
   version "6.0.1"
   resolved "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
