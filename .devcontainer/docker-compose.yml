@@ -32,7 +32,7 @@ services:
     # (Adding the "ports" property to this file will not forward from a Codespace.)
 
   pgadmin:
-    image: dpage/pgadmin4:8
+    image: dpage/pgadmin4:8.5
     ports:
       - "5050:80"
     entrypoint: >
