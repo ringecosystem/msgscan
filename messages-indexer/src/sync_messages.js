@@ -4,15 +4,15 @@ import setDispatched from './sync_messages/set_dispatched.js'
 import setSigners from './sync_messages/set_signers.js'
 
 async function loop(fn) {
-  while (true) {
-    try {
-      await fn()
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-    } catch (error) {
-      console.error(error)
-      console.log(`retrying ${fn.name} in 5 seconds...`)
-      await new Promise((resolve) => setTimeout(resolve, 5000))
-    }
+  try {
+    await fn()
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await loop(fn)
+  } catch (error) {
+    console.error(error)
+    console.log(`retrying ${fn.name} in 5 seconds...`)
+    await new Promise((resolve) => setTimeout(resolve, 5000))
+    await loop(fn)
   }
 }
 
