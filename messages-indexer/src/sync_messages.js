@@ -2,27 +2,20 @@ import fetchMessages from './sync_messages/fetch_messages.js'
 import setRootReady from './sync_messages/set_root_ready.js'
 import setDispatched from './sync_messages/set_dispatched.js'
 import setSigners from './sync_messages/set_signers.js'
+import { loop } from './utils.js'
 
-async function loop(fn) {
-  try {
-    await fn()
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    await loop(fn)
-  } catch (error) {
-    console.error(error)
-    console.log(`retrying ${fn.name} in 5 seconds...`)
-    await new Promise((resolve) => setTimeout(resolve, 5000))
-    await loop(fn)
-  }
-}
+async function syncMessages(chainIds) {
+  const promises = chainIds.map((chainId) => {
+    return [
+      loop(fetchMessages(chainId)),
+      loop(setRootReady(chainId)),
+      loop(setDispatched(chainId))
+    ]
+  }).concat([
+    loop(setSigners, 5000)
+  ]).flat()
 
-async function syncMessages(chainId) {
-  await Promise.all([
-    loop(fetchMessages(chainId)),
-    loop(setRootReady(chainId)),
-    loop(setDispatched(chainId)),
-    loop(setSigners),
-  ])
+  await Promise.all(promises)
 }
 
 export default syncMessages

@@ -4,6 +4,7 @@ import { findSigners } from '../db/signature_submittion.js'
 async function setSigners() {
   const messages = await findMessagesWithMissingSigners()
 
+  console.log(`found ${messages.length} messages with missing signers`);
   for (const message of messages) {
     const signers = await findSigners(message.messageFromChainId, message.messageIndex)
     if (signers.length === 0) {
