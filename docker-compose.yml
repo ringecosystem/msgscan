@@ -3,10 +3,13 @@ version: "3.8"
 services:
   server:
     build: ./server
+    restart: on-failure
     depends_on:
       - pg
     env_file:
       - ./server/.env.local
+    ports:
+      - "42069:42069"
   messages-indexer:
     build: ./messages-indexer
     restart: on-failure
