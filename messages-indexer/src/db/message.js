@@ -131,7 +131,7 @@ async function findMessagesWithMissingSigners() {
   const result = await sql`
     SELECT *
     FROM indexer.${sql(MESSAGE_TABLE)}
-    WHERE status >= 1 and "acceptedBlockTimestamp" > EXTRACT(EPOCH FROM NOW() - interval '6 hours') and (signers is null or array_length(string_to_array(signers, ','), 1) < 5)
+    WHERE status >= 1 and (signers is null or array_length(string_to_array(signers, ','), 1) < 5)
   `
   return result
 }
