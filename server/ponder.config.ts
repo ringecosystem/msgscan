@@ -14,7 +14,7 @@ export default createConfig({
     darwinia: {
       chainId: 46,
       transport: http(process.env.PONDER_RPC_URL_DARWINIA),
-      maxRequestsPerSecond: 1,
+      maxRequestsPerSecond: 5,
     },
     // testnets
     // pangolin: {
@@ -25,12 +25,12 @@ export default createConfig({
     sepolia: {
       chainId: 11155111,
       transport: http(process.env.PONDER_RPC_URL_SEPOLIA),
-      maxRequestsPerSecond: 1,
+      maxRequestsPerSecond: 10,
     },
     arbitrum_sepolia: {
       chainId: 421614,
       transport: http(process.env.PONDER_RPC_URL_ARBITRUM_SEPOLIA),
-      maxRequestsPerSecond: 1,
+      maxRequestsPerSecond: 10,
     },
     // takio_katla: {
     //   chainId: 167008,
@@ -83,6 +83,10 @@ export default createConfig({
         darwinia: {
           startBlock: 2492391,
         },
+        // arbitrum_sepolia: {
+        //   address: "0x2828c0223e6435365a3b977e87f12aefb7cbcbab",
+        //   startBlock: 34545993,
+        // }
       },
     },
   },
