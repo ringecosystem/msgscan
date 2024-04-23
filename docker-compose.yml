@@ -10,6 +10,8 @@ services:
       - ./server/.env.local
     ports:
       - "42069:42069"
+    volumes:
+      - ./server/.ponder:./.ponder
   messages-indexer:
     build: ./messages-indexer
     restart: on-failure
