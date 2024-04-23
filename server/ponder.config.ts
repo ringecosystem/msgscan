@@ -34,7 +34,7 @@ export default createConfig({
     },
     taiko_katla: {
       chainId: 167008,
-      transport: http(process.env.PONDER_RPC_URL_TAKIO_KATLA),
+      transport: http(process.env.PONDER_RPC_URL_TAIKO_KATLA),
       maxRequestsPerSecond: 1,
     },
     // tron_shasta: {
