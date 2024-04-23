@@ -11,7 +11,7 @@ services:
     ports:
       - "42069:42069"
     volumes:
-      - ./server/.ponder:./.ponder
+      - ./server/.ponder:/app/.ponder
   messages-indexer:
     build: ./messages-indexer
     restart: on-failure
