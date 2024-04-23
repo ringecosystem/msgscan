@@ -1,18 +1,11 @@
 # darwinia msgscan monorepo
 
 ## Run server with messages indexer
-1. run server
 
-```bash
-cd ./server
-yarn install
-yarn start
-```
+1. edit env files
 
-2. run messages indexer
+    - ./.env
+    - ./server/.env
+    - ./messages-indexer/.env
 
-```bash
-cd ./server
-yarn install
-yarn start
-```
+2. docker-compose up -d
