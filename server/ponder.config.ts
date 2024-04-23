@@ -32,7 +32,7 @@ export default createConfig({
       transport: http(process.env.PONDER_RPC_URL_ARBITRUM_SEPOLIA),
       maxRequestsPerSecond: 10,
     },
-    takio_katla: {
+    taiko_katla: {
       chainId: 167008,
       transport: http(process.env.PONDER_RPC_URL_TAKIO_KATLA),
       maxRequestsPerSecond: 1,
