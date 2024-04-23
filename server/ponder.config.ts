@@ -25,12 +25,12 @@ export default createConfig({
     sepolia: {
       chainId: 11155111,
       transport: http(process.env.PONDER_RPC_URL_SEPOLIA),
-      maxRequestsPerSecond: 10,
+      maxRequestsPerSecond: 5,
     },
     arbitrum_sepolia: {
       chainId: 421614,
       transport: http(process.env.PONDER_RPC_URL_ARBITRUM_SEPOLIA),
-      maxRequestsPerSecond: 10,
+      maxRequestsPerSecond: 5,
     },
     taiko_katla: {
       chainId: 167008,
