@@ -8,8 +8,7 @@ import { SignaturePubAbi } from "./abis/v2/SignaturePubAbi";
 export default createConfig({
   database: {
     kind: "postgres",
-    publishSchema: "indexer",
-    connectionString: process.env.DATABASE_URL,
+    publishSchema: "indexer"
   },
   networks: {
     darwinia: {
