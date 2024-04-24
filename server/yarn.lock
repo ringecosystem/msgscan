@@ -285,18 +285,17 @@
   resolved "https://registry.npmjs.org/@pkgjs/parseargs/-/parseargs-0.11.0.tgz"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
-"@ponder/core@^0.4.6":
-  version "0.4.6"
-  resolved "https://registry.yarnpkg.com/@ponder/core/-/core-0.4.6.tgz#3eeed7e838c5367cac1a0e479e87ad34953057e5"
-  integrity sha512-iKqqUUVPvA7C7yqb5hAaRM4F+NVrCminqYqyY3uCPVe3hne10FmzAVDH+sLujUIWdsvUUOoYqcyNeAK7AVgJJw==
+"@ponder/core@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@ponder/core/-/core-0.4.9.tgz#f0a0d85baa68084c44a5570c80d775732a7989c6"
+  integrity sha512-w58R50wlLWfq0Mb2izb4zrhBNGz2x4twWA8R7shwXZ1LdJsi5bmnGDXY10wDefjUjVlqvkUA/KaCZDKXmfuS/g==
   dependencies:
     "@babel/code-frame" "^7.23.4"
     "@commander-js/extra-typings" "^12.0.1"
     "@hono/graphql-server" "^0.4.3"
     "@hono/node-server" "^1.8.2"
-    "@ponder/utils" "0.1.3"
+    "@ponder/utils" "0.1.4"
     abitype "^0.10.2"
-    async-mutex "^0.4.0"
     better-sqlite3 "^9.1.1"
     commander "^12.0.0"
     conf "^12.0.0"
@@ -324,10 +323,10 @@
     vite-node "^1.0.2"
     vite-tsconfig-paths "^4.3.1"
 
-"@ponder/utils@0.1.3":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@ponder/utils/-/utils-0.1.3.tgz#cdfd7ea81f121b7edc3432fe99b44c4ee4043b41"
-  integrity sha512-2wg1sDs/XLHdxEyg1cxPQ0nMM3k/YMyML1knd84In0/b7MGy6jgV0mMuXfmA8CvKj8j9160nqjLZz1gietxK6g==
+"@ponder/utils@0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@ponder/utils/-/utils-0.1.4.tgz#083d52af0a999c4ca9694a638873efb90faa82ba"
+  integrity sha512-NszanAm2DWZqCcv3XMkpgx9mfbMD8qc9ifux6xwWaryJbo9Ofu/zpvU0CIf7192WrrROaXQyWjfXHLf8Lf/YXg==
 
 "@rollup/rollup-android-arm-eabi@4.13.0":
   version "4.13.0"
@@ -532,13 +531,6 @@ argparse@^2.0.1:
   version "2.0.1"
   resolved "https://registry.npmjs.org/argparse/-/argparse-2.0.1.tgz"
   integrity sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==
-
-async-mutex@^0.4.0:
-  version "0.4.1"
-  resolved "https://registry.npmjs.org/async-mutex/-/async-mutex-0.4.1.tgz"
-  integrity sha512-WfoBo4E/TbCX1G95XTjbWTE3X2XLG0m1Xbv2cwOtuPdyH9CZvnaA5nCt1ucjaKEgW2A5IF71hxrRhr83Je5xjA==
-  dependencies:
-    tslib "^2.4.0"
 
 asynckit@^0.4.0:
   version "0.4.0"
@@ -944,10 +936,10 @@ escape-string-regexp@^4.0.0:
   resolved "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz"
   integrity sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==
 
-eslint-config-ponder@^0.4.6:
-  version "0.4.6"
-  resolved "https://registry.yarnpkg.com/eslint-config-ponder/-/eslint-config-ponder-0.4.6.tgz#621eba780489fececd987984b51d35a9dbb9a639"
-  integrity sha512-J/H4ZWxQobF+4PcFxMi8wne4W23y/GjwFzqodlFZestnlGb9bBujJorpq2in0JjJEh1yIOjyS3VJU8nKwUDYSw==
+eslint-config-ponder@^0.4.9:
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/eslint-config-ponder/-/eslint-config-ponder-0.4.9.tgz#b03d822e0e0d990bf493167aab3acb5f1786fac7"
+  integrity sha512-H5ZRYlIewXSzmfs6K30oBEt/ZGEFsH0rmrzLk2jbtPzC3xvaRUI7rcO/zLIyyYAu26R2znNNlFsEubtBgDByCw==
 
 eslint-scope@^7.2.2:
   version "7.2.2"
@@ -2304,7 +2296,7 @@ tsconfck@^3.0.3:
   resolved "https://registry.npmjs.org/tsconfck/-/tsconfck-3.0.3.tgz"
   integrity sha512-4t0noZX9t6GcPTfBAbIbbIU4pfpCwh0ueq3S4O/5qXI1VwK1outmxhe9dOiEWqMz3MW2LKgDTpqWV+37IWuVbA==
 
-tslib@^2.0.3, tslib@^2.4.0:
+tslib@^2.0.3:
   version "2.6.2"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.6.2.tgz"
   integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==
