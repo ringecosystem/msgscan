@@ -6,27 +6,43 @@ services:
     restart: on-failure
     depends_on:
       - pg
-    env_file:
-      - ./server/.env.local
     ports:
       - "42069:42069"
     volumes:
       - ./server/.ponder:/app/.ponder
     environment:
-      - NODE_ENV=development
+      - PONDER_RPC_URL_ETHEREUM=${PONDER_RPC_URL_ETHEREUM}
+      - PONDER_RPC_URL_SEPOLIA=${PONDER_RPC_URL_SEPOLIA}
+      - PONDER_RPC_URL_ARBITRUM=${PONDER_RPC_URL_ARBITRUM}
+      - PONDER_RPC_URL_ARBITRUM_SEPOLIA=${PONDER_RPC_URL_ARBITRUM_SEPOLIA}
+      - PONDER_RPC_URL_POLYGON=${PONDER_RPC_URL_POLYGON}
+      - PONDER_RPC_URL_BLAST=${PONDER_RPC_URL_BLAST}
+      - PONDER_RPC_URL_TAIKO_KATLA=${PONDER_RPC_URL_TAIKO_KATLA}
+      - PONDER_RPC_URL_TRON_SHASTA=${PONDER_RPC_URL_TRON_SHASTA}
+      - PONDER_RPC_URL_DARWINIA=${PONDER_RPC_URL_DARWINIA}
+      - PONDER_RPC_URL_CRAB=${PONDER_RPC_URL_CRAB}
+      - PONDER_RPC_URL_PANGOLIN=${PONDER_RPC_URL_PANGOLIN}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pg:5432/${POSTGRES_DB}
+
   messages-indexer:
     build: ./messages-indexer
     restart: on-failure
     depends_on:
       - pg
       - server
-    env_file:
-      - ./messages-indexer/.env
+    environment:
+      - POSTGRES_HOST=pg
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+
   pg:
     image: postgres:latest
     restart: unless-stopped
     volumes:
       - ./data:/var/lib/postgresql/data
-    env_file:
-      - ./.env
-
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
