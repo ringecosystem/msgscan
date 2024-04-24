@@ -9,6 +9,7 @@ export default createConfig({
   database: {
     kind: "postgres",
     publishSchema: "indexer",
+    connectionString: process.env.DATABASE_URL,
   },
   networks: {
     darwinia: {
@@ -47,7 +48,7 @@ export default createConfig({
     // === V2
     ORMPV2: {
       abi: ORMPAbiV2,
-      address: "0xa30daF3c6071361960aF29e52C1eC860a037886f",
+      address: "0x9BEc71b9C646653C6C73Af8D4B7E5f84a5420005",
       network: {
         // testnets
         pangolin: {
