@@ -97,45 +97,54 @@ export default createSchema((p) => ({
   }),
 
   Message: p.createTable({
-    id: p.string(), // messageFromChainId-messageIndex
+    ///////////////////////////////
+    // common fields
+    ///////////////////////////////
+    // global id
+    // ormp: sourceChainId-messageIndex, 
+    // lz: sourceChainId-nonce, is it unique?
+    id: p.string(), 
+    protocol: p.string(), // ormp, lz, ..
+    payload: p.string(),
+    status: p.int(), // 0: pending, 1: success, 2: failed
 
-    // fields from MessageAcceptedV2
-    msgHash: p.string(),
-    root: p.string(),
-    messageChannel: p.string(),
-    messageIndex: p.int(),
-    messageFromChainId: p.bigint(),
-    messageFrom: p.string(),
-    messageToChainId: p.bigint(),
-    messageTo: p.string(),
-    messageGasLimit: p.string(),
-    messageEncoded: p.string(),
+    // source
+    sourceChainId: p.bigint(),
+    sourceBlockNumber: p.bigint(),
+    sourceBlockTimestamp: p.bigint(),
+    sourceTransactionHash: p.string(),
+    sourceTransactionIndex: p.int(),
+    sourceLogIndex: p.int(),
+    sourceDappAddress: p.string(),
+    sourceMsgportAddress: p.string(),
 
-    // MessageAcceptedV2
-    // extra fields
-    acceptedBlockNumber: p.bigint(),
-    acceptedBlockTimestamp: p.bigint(),
-    acceptedTransactionHash: p.string(),
-    acceptedTransactionIndex: p.int(),
-    acceptedLogIndex: p.int(),
+    // target
+    targetChainId: p.bigint().optional(),
+    targetBlockNumber: p.bigint().optional(),
+    targetBlockTimestamp: p.bigint().optional(),
+    targetTransactionHash: p.string().optional(),
+    targetTransactionIndex: p.string().optional(),
+    targetLogIndex: p.int().optional(),
+    targetDappAddress: p.string().optional(),
+    targetMsgportAddress: p.string().optional(),
 
-    // status
-    status: p.int(),
+    ///////////////////////////////
+    // protocol fields
+    ///////////////////////////////
+    // fields for ormp
+    ormpMsgHash: p.string(),
+    ormpRoot: p.string(),
+    ormpMessageChannel: p.string(),
+    ormpMessageIndex: p.int(),
+    ormpMessageGasLimit: p.string(),
+    ormpMessageEncoded: p.string(),
+    ormpSigners: p.string().optional(),
+    ormpLatestSignaturesUpdatedAt: p.bigint().optional(),
 
-    // MessageDispatchedV2 event & transaction
-    // extra fields
-    dispatchBlockNumber: p.bigint().optional(),
-    dispatchBlockTimestamp: p.bigint().optional(),
-    dispatchTransactionHash: p.string().optional(),
-    dispatchTransactionIndex: p.string().optional(),
-    dispatchLogIndex: p.int().optional(),
-    proof: p.string().optional(), // from transaction of MessageDispatchedV2
-
-    //
-    msgportPayload: p.string().optional(),
-    msgportFrom: p.string().optional(),
-    msgportTo: p.string().optional(),
-    signers: p.string().optional(),
-    latestSignaturesUpdatedAt: p.bigint().optional(),
+    // fields for lz
+    lzGuid: p.string().optional(),
+    lzNonce: p.bigint().optional(),
+    lzSrcEid: p.string().optional(),
+    lzDstEid: p.string().optional(),
   })
 }));
