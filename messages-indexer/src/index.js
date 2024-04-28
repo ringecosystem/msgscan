@@ -1,7 +1,7 @@
 import { exit } from 'process';
 
 import { checkTableExists } from './db/prepare_tables.js'
-import syncMessages from './sync_messages.js'
+import syncMessages from './ormp/sync_messages.js'
 
 async function main() {
   try {

@@ -1,4 +1,4 @@
-import sql from './db.js'
+import sql from '../../db/db.js'
 
 async function findMessageDispatchedByMsgHash(chainId, msgHash) {
   const result = await sql`

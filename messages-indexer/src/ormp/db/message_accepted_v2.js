@@ -1,4 +1,4 @@
-import sql from './db.js'
+import sql from '../../db/db.js'
 
 async function getMessageAcceptedsByIndexGt(chainId, messageIndex) {
   const result = await sql`

@@ -103,7 +103,7 @@ export default createSchema((p) => ({
     // global id
     // ormp: ormp-sourceChainId-messageIndex, 
     // lz: lz-sourceChainId-nonce, is it unique?
-    id: p.string(), 
+    id: p.string(),
     protocol: p.string(), // ormp, lz, ..
     payload: p.string(),
     protocolPayload: p.string(), // msgportPrefix + payload
@@ -117,7 +117,7 @@ export default createSchema((p) => ({
     sourceTransactionIndex: p.int(),
     sourceLogIndex: p.int(),
     sourceDappAddress: p.string(),
-    sourceMsgportAddress: p.string(),
+    sourcePortAddress: p.string(),
 
     // target
     targetChainId: p.bigint().optional(),
@@ -127,18 +127,17 @@ export default createSchema((p) => ({
     targetTransactionIndex: p.string().optional(),
     targetLogIndex: p.int().optional(),
     targetDappAddress: p.string().optional(),
-    targetMsgportAddress: p.string().optional(),
+    targetPortAddress: p.string().optional(),
 
     ///////////////////////////////
     // protocol fields
     ///////////////////////////////
     // fields for ormp
-    ormpMsgHash: p.string(),
-    ormpRoot: p.string(),
-    ormpMessageChannel: p.string(),
-    ormpMessageIndex: p.int(),
-    ormpMessageGasLimit: p.string(),
-    ormpMessageEncoded: p.string(),
+    ormpMsgHash: p.string().optional(),
+    ormpRoot: p.string().optional(),
+    ormpProof: p.string().optional(),
+    ormpMessageIndex: p.int().optional(),
+    ormpMessageGasLimit: p.string().optional(),
     ormpSigners: p.string().optional(),
     ormpLatestSignaturesUpdatedAt: p.bigint().optional(),
 

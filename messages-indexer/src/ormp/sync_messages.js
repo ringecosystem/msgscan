@@ -1,14 +1,12 @@
 import fetchMessages from './sync_messages/fetch_messages.js'
-import setRootReady from './sync_messages/set_root_ready.js'
 import setDispatched from './sync_messages/set_dispatched.js'
 import setSigners from './sync_messages/set_signers.js'
-import { loop } from './utils.js'
+import { loop } from '../utils.js'
 
-async function syncMessages(chainIds) {
+async function ormpSyncMessages(chainIds) {
   const promises = chainIds.map((chainId) => {
     return [
       loop(fetchMessages(chainId)),
-      loop(setRootReady(chainId)),
       loop(setDispatched(chainId))
     ]
   }).concat([
@@ -18,5 +16,4 @@ async function syncMessages(chainIds) {
   await Promise.all(promises)
 }
 
-export default syncMessages
-
+export default ormpSyncMessages
