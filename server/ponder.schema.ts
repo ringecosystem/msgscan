@@ -106,6 +106,7 @@ export default createSchema((p) => ({
     id: p.string(), 
     protocol: p.string(), // ormp, lz, ..
     payload: p.string(),
+    protocolPayload: p.string(), // msgportPrefix + payload
     status: p.int(), // 0: pending, 1: success, 2: failed
 
     // source
