@@ -101,7 +101,7 @@ export default createSchema((p) => ({
     // common fields
     ///////////////////////////////
     // global id
-    // `${context.network.chainId}-${event.block.number}-${event.log.transactionIndex}-${event.log.logIndex}`
+    // `${sourceChainId}-${sourceBlockNumber}-${sourceTransactionIndex}-${sourceLogIndex}`
     id: p.string(), 
     protocol: p.string(), // ormp, lz, ..
     payload: p.string(),
