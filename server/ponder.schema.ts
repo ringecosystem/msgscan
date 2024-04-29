@@ -101,8 +101,7 @@ export default createSchema((p) => ({
     // common fields
     ///////////////////////////////
     // global id
-    // ormp: ormp-sourceChainId-messageIndex, 
-    // lz: lz-sourceChainId-nonce, is it unique?
+    // `${context.network.chainId}-${event.block.number}-${event.log.transactionIndex}-${event.log.logIndex}`
     id: p.string(), 
     protocol: p.string(), // ormp, lz, ..
     payload: p.string(),
