@@ -101,8 +101,7 @@ export default createSchema((p) => ({
     // common fields
     ///////////////////////////////
     // global id
-    // ormp: ormp-sourceChainId-messageIndex, 
-    // lz: lz-sourceChainId-nonce, is it unique?
+    // `${sourceChainId}-${sourceBlockNumber}-${sourceTransactionIndex}-${sourceLogIndex}`
     id: p.string(),
     protocol: p.string(), // ormp, lz, ..
     payload: p.string(),
@@ -134,7 +133,6 @@ export default createSchema((p) => ({
     ///////////////////////////////
     // fields for ormp
     ormpMsgHash: p.string().optional(),
-    ormpRoot: p.string().optional(),
     ormpProof: p.string().optional(),
     ormpMessageIndex: p.int().optional(),
     ormpMessageGasLimit: p.string().optional(),
