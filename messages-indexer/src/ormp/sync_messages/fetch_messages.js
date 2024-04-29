@@ -48,7 +48,6 @@ async function doFetchMessages(chainId) {
         targetDappAddress: targetDappAddress,
 
         ormpMsgHash: messageAccepted.msgHash,
-        ormpRoot: messageAccepted.root,
         ormpMessageIndex: messageAccepted.messageIndex,
         ormpMessageGasLimit: messageAccepted.messageGasLimit,
       },
