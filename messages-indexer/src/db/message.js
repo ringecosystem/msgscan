@@ -1,7 +1,7 @@
 import sql from './db.js'
 import { MESSAGE_STATUS, MESSAGE_TABLE } from '../constants.js'
 
-async function createMessage(id, protocol, protocolPayload, properties) {
+async function createMessage(id, properties) {
   // check if message already exists
   const exists = await sql`
     SELECT EXISTS (
@@ -13,10 +13,18 @@ async function createMessage(id, protocol, protocolPayload, properties) {
     return
   }
 
+  // check if protocol and protocolPayload provided
+  if (!properties.protocol || !properties.protocolPayload) {
+    throw new Error(`protocol and protocolPayload are required`)
+  }
+
+  // check if status is null or undefined
+  if (properties.status != null || properties.status != undefined) {
+    throw new Error(`status should be null or undefined`)
+  }
+
   let allProps = {
     id,
-    protocol,
-    protocolPayload,
     status: MESSAGE_STATUS.PENDING,
     ...properties
   }

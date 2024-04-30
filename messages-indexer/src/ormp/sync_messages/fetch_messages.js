@@ -18,7 +18,7 @@ async function doFetchMessages(chainId) {
 
   // create messages
   for (const messageAccepted of messageAccepteds) {
-    const id = `ormp-${messageAccepted.messageFromChainId}-${messageAccepted.messageIndex}`
+    const id = `${messageAccepted.chainId}-${messageAccepted.blockNumber}-${messageAccepted.transactionIndex}-${messageAccepted.logIndex}`
     console.log(`creating message ${id}`)
 
     const { sourceDappAddress, targetDappAddress, payload } = await destructProtocolPayload(messageAccepted.messageEncoded)
@@ -29,11 +29,12 @@ async function doFetchMessages(chainId) {
 
     await createMessage(
       id,
-      "ormp",
-      messageAccepted.messageEncoded,
       {
+        protocol: 'ormp',
+        protocolPayload: messageAccepted.messageEncoded,
         payload: payload,
 
+        // source
         sourceChainId: messageAccepted.messageFromChainId,
         sourceBlockNumber: messageAccepted.blockNumber,
         sourceBlockTimestamp: messageAccepted.blockTimestamp,
@@ -43,6 +44,7 @@ async function doFetchMessages(chainId) {
         sourcePortAddress: messageAccepted.messageFrom,
         sourceDappAddress: sourceDappAddress,
 
+        // target
         targetChainId: messageAccepted.messageToChainId,
         targetPortAddress: messageAccepted.messageTo,
         targetDappAddress: targetDappAddress,

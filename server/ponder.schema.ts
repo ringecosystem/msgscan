@@ -72,6 +72,7 @@ export default createSchema((p) => ({
     logIndex: p.int(),
 
     srcChainId: p.bigint(),
+    tgtChainId: p.bigint(),
     channel: p.hex(),
     msgIndex: p.bigint(),
     oracle: p.hex(),
@@ -88,7 +89,6 @@ export default createSchema((p) => ({
     logIndex: p.int(),
 
     srcChainId: p.bigint(),
-
     channel: p.hex(),
     msgIndex: p.bigint(),
     signer: p.hex(),
