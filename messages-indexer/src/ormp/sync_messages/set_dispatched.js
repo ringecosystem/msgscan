@@ -20,7 +20,6 @@ async function doSetDispatched(messageFromChainId) {
       targetTransactionHash: dispatched.transactionHash,
       targetTransactionIndex: dispatched.transactionIndex,
       targetLogIndex: dispatched.logIndex,
-      ormpProof: transaction.input.slice(-32 * 64).match(/.{64}/g).map(item => `0x${item}`).join(','),
       status: dispatched.dispatchResult ? MESSAGE_STATUS.SUCCESS : MESSAGE_STATUS.FAILED,
     })
     console.log(`message ${message.id} dispatched ${dispatched.dispatchResult ? 'success' : 'failed'}`)
