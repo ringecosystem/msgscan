@@ -72,13 +72,12 @@ export default createSchema((p) => ({
     logIndex: p.int(),
 
     srcChainId: p.bigint(),
-    tgtChainId: p.bigint(),
-    channel: p.hex(),
+    channel: p.hex(), // ormp address of the source chain
     msgIndex: p.bigint(),
     oracle: p.hex(),
-    hash: p.string(), // msgRoot
+    hash: p.string(), // msg hash
   }),
-  SignatureSubmittion: p.createTable({
+  SignatureSubmittion: p.createTable({ // event on darwinia
     id: p.string(),
 
     chainId: p.bigint(),
@@ -93,7 +92,7 @@ export default createSchema((p) => ({
     msgIndex: p.bigint(),
     signer: p.hex(),
     signature: p.string(),
-    data: p.string(),
+    data: p.string(), // msg related data used to sign, (msghash, encodedParams, expiration);
   }),
 
   Message: p.createTable({
