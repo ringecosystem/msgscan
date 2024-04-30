@@ -8,6 +8,7 @@ import { SignaturePubAbi } from "./abis/v2/SignaturePubAbi";
 export default createConfig({
   database: {
     kind: "postgres",
+    connectionString: process.env.DATABASE_URL || "postgres://postgres:password@pg:5432/postgres",
     publishSchema: "indexer"
   },
   networks: {
