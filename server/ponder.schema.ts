@@ -1,8 +1,8 @@
 import { createSchema } from "@ponder/core";
 
 export default createSchema((p) => ({
-  // === V2
-  MessageAcceptedV2: p.createTable({
+  MessageSent: p.createTable({
+    // `${chainId}-${blockNumber}-${transactionIndex}-${logIndex}`
     id: p.string(),
 
     chainId: p.bigint(),
@@ -12,27 +12,16 @@ export default createSchema((p) => ({
     transactionIndex: p.int(),
     logIndex: p.int(),
 
-    msgHash: p.string(),
-    // message struct
-    messageChannel: p.string(),
-    messageIndex: p.bigint(),
-    messageFromChainId: p.bigint(),
-    messageFrom: p.string(),
-    messageToChainId: p.bigint(),
-    messageTo: p.string(),
-    messageGasLimit: p.bigint(),
-    messageEncoded: p.string(),
-    // extra
-    oracle: p.hex().optional(),
-    oracleAssigned: p.boolean().optional(),
-    oracleAssignedFee: p.bigint().optional(),
-    oracleLogIndex: p.int().optional(),
-    relayer: p.hex().optional(),
-    relayerAssigned: p.boolean().optional(),
-    relayerAssignedFee: p.bigint().optional(),
-    relayerLogIndex: p.int().optional(),
+    evMsgId: p.string(), // fields with ev prefix are from the event fields
+    evFromDapp: p.string(),
+    evToChainId: p.bigint(),
+    evToDapp: p.string(),
+    evMessage: p.string(),
+    evParams: p.string(),
   }),
-  MessageDispatchedV2: p.createTable({
+
+  MessageRecv: p.createTable({
+    // `${chainId}-${blockNumber}-${transactionIndex}-${logIndex}`
     id: p.string(),
 
     chainId: p.bigint(),
@@ -42,66 +31,16 @@ export default createSchema((p) => ({
     transactionIndex: p.int(),
     logIndex: p.int(),
 
-    msgHash: p.string(),
-    dispatchResult: p.boolean(),
-  }),
-  MessageAssignedV2: p.createTable({
-    id: p.string(),
-
-    chainId: p.bigint(),
-    blockNumber: p.bigint(),
-    blockTimestamp: p.bigint(),
-    transactionHash: p.string(),
-    transactionIndex: p.int(),
-    logIndex: p.int(),
-
-    msgHash: p.string(),
-    oracle: p.hex(),
-    relayer: p.hex(),
-    oracleFee: p.bigint(),
-    relayerFee: p.bigint(),
-  }),
-  HashImportedV2: p.createTable({
-    id: p.string(),
-
-    chainId: p.bigint(),
-    blockNumber: p.bigint(),
-    blockTimestamp: p.bigint(),
-    transactionHash: p.string(),
-    transactionIndex: p.int(),
-    logIndex: p.int(),
-
-    srcChainId: p.bigint(),
-    channel: p.hex(), // ormp address of the source chain
-    msgIndex: p.bigint(),
-    oracle: p.hex(),
-    hash: p.string(), // msg hash
-  }),
-  SignatureSubmittion: p.createTable({ // event on darwinia
-    id: p.string(),
-
-    chainId: p.bigint(),
-    blockNumber: p.bigint(),
-    blockTimestamp: p.bigint(),
-    transactionHash: p.string(),
-    transactionIndex: p.int(),
-    logIndex: p.int(),
-
-    srcChainId: p.bigint(),
-    channel: p.hex(),
-    msgIndex: p.bigint(),
-    signer: p.hex(),
-    signature: p.string(),
-    data: p.string(), // msg related data used to sign, (msghash, encodedParams, expiration);
+    evMsgId: p.string(),
+    evResult: p.boolean(),
+    evReturnData: p.string(),
   }),
 
   Message: p.createTable({
     ///////////////////////////////
     // common fields
     ///////////////////////////////
-    // global id
-    // `${sourceChainId}-${sourceBlockNumber}-${sourceTransactionIndex}-${sourceLogIndex}`
-    id: p.string(),
+    id: p.string(), // the msgId returned by the port's `send` function
     protocol: p.string(), // ormp, lz, ..
     payload: p.string(),
     protocolPayload: p.string(), // msgportPrefix + payload
@@ -127,9 +66,9 @@ export default createSchema((p) => ({
     targetDappAddress: p.string().optional(),
     targetPortAddress: p.string().optional(),
 
-    ///////////////////////////////
-    // protocol fields
-    ///////////////////////////////
+    //////////////////////////////////////////////////////////////////////
+    // protocol fields 
+    //////////////////////////////////////////////////////////////////////
     // fields for ormp
     ormpMsgHash: p.string().optional(),
     ormpProof: p.string().optional(),

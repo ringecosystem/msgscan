@@ -1,10 +1,8 @@
 import { createConfig } from "@ponder/core";
 import { http } from "viem";
 
-import { ORMPAbi as ORMPAbiV2 } from "./abis/v2/ORMPAbi";
-import { SignaturePubAbi } from "./abis/v2/SignaturePubAbi";
+import { IMessagePort } from "./abis/IMessagePort";
 
-// sync from https://github.com/darwinia-network/ormponder/blob/main/ponder.config.ts
 export default createConfig({
   database: {
     kind: "postgres",
@@ -52,9 +50,8 @@ export default createConfig({
 
   },
   contracts: {
-    // === V2
-    ORMPV2: {
-      abi: ORMPAbiV2,
+    IMessagePort: {
+      abi: IMessagePort,
       address: "0x9BEc71b9C646653C6C73Af8D4B7E5f84a5420005",
       network: {
         // testnets
@@ -81,20 +78,9 @@ export default createConfig({
       },
       filter: {
         event: [
-          "MessageAccepted",
-          "MessageDispatched",
-          "MessageAssigned",
-          "HashImported",
+          "MessageSent",
+          "MessageRecv",
         ],
-      },
-    },
-    SignaturePub: {
-      abi: SignaturePubAbi,
-      address: "0xb2aa34fde97ffdb6197dd5a2be23c2121405cc12",
-      network: {
-        darwinia: {
-          startBlock: 2562642,
-        },
       },
     },
   },
