@@ -285,10 +285,10 @@
   resolved "https://registry.npmjs.org/@pkgjs/parseargs/-/parseargs-0.11.0.tgz"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
-"@ponder/core@^0.4.9":
-  version "0.4.9"
-  resolved "https://registry.yarnpkg.com/@ponder/core/-/core-0.4.9.tgz#f0a0d85baa68084c44a5570c80d775732a7989c6"
-  integrity sha512-w58R50wlLWfq0Mb2izb4zrhBNGz2x4twWA8R7shwXZ1LdJsi5bmnGDXY10wDefjUjVlqvkUA/KaCZDKXmfuS/g==
+"@ponder/core@^0.4.13":
+  version "0.4.13"
+  resolved "https://registry.yarnpkg.com/@ponder/core/-/core-0.4.13.tgz#2a07171a5f3ac2b07bc9f3463d69e051046d4c7e"
+  integrity sha512-bikdE6+WRNi9p26RtRP5awQGGAZoIYmOcyYNZwmRpRF5iv35JE4EqiRxWHu3LY2vAB1XlhKz+suxRClQ19Xq/w==
   dependencies:
     "@babel/code-frame" "^7.23.4"
     "@commander-js/extra-typings" "^12.0.1"
@@ -936,10 +936,10 @@ escape-string-regexp@^4.0.0:
   resolved "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz"
   integrity sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==
 
-eslint-config-ponder@^0.4.9:
-  version "0.4.9"
-  resolved "https://registry.yarnpkg.com/eslint-config-ponder/-/eslint-config-ponder-0.4.9.tgz#b03d822e0e0d990bf493167aab3acb5f1786fac7"
-  integrity sha512-H5ZRYlIewXSzmfs6K30oBEt/ZGEFsH0rmrzLk2jbtPzC3xvaRUI7rcO/zLIyyYAu26R2znNNlFsEubtBgDByCw==
+eslint-config-ponder@^0.4.13:
+  version "0.4.13"
+  resolved "https://registry.yarnpkg.com/eslint-config-ponder/-/eslint-config-ponder-0.4.13.tgz#7765440893d8f2d2ca35f7ccfe29f8796c924719"
+  integrity sha512-NnlcxcUJ7F6RFm/rm1KIk69NYgwVJRcqXmWRecA7n0XWjW9vKJFXuVeM0NzeLUQTR8kiVc9lvb6nNL7dNuAFsg==
 
 eslint-scope@^7.2.2:
   version "7.2.2"

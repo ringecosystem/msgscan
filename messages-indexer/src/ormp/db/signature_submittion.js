@@ -1,4 +1,4 @@
-import sql from './db.js'
+import sql from '../../db/db.js'
 
 // returns [signer]
 async function findSigners(chainId, messageIndex) {

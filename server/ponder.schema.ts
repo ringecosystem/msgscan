@@ -13,7 +13,6 @@ export default createSchema((p) => ({
     logIndex: p.int(),
 
     msgHash: p.string(),
-    root: p.string(),
     // message struct
     messageChannel: p.string(),
     messageIndex: p.bigint(),
@@ -73,12 +72,12 @@ export default createSchema((p) => ({
     logIndex: p.int(),
 
     srcChainId: p.bigint(),
+    channel: p.hex(), // ormp address of the source chain
+    msgIndex: p.bigint(),
     oracle: p.hex(),
-    lookupKey: p.string(),
-    srcBlockNumber: p.bigint(),
-    hash: p.string(), // msgRoot
+    hash: p.string(), // msg hash
   }),
-  SignatureSubmittion: p.createTable({
+  SignatureSubmittion: p.createTable({ // event on darwinia
     id: p.string(),
 
     chainId: p.bigint(),
@@ -93,7 +92,7 @@ export default createSchema((p) => ({
     msgIndex: p.bigint(),
     signer: p.hex(),
     signature: p.string(),
-    data: p.string(),
+    data: p.string(), // msg related data used to sign, (msghash, encodedParams, expiration);
   }),
 
   Message: p.createTable({
@@ -102,7 +101,7 @@ export default createSchema((p) => ({
     ///////////////////////////////
     // global id
     // `${sourceChainId}-${sourceBlockNumber}-${sourceTransactionIndex}-${sourceLogIndex}`
-    id: p.string(), 
+    id: p.string(),
     protocol: p.string(), // ormp, lz, ..
     payload: p.string(),
     protocolPayload: p.string(), // msgportPrefix + payload
@@ -116,7 +115,7 @@ export default createSchema((p) => ({
     sourceTransactionIndex: p.int(),
     sourceLogIndex: p.int(),
     sourceDappAddress: p.string(),
-    sourceMsgportAddress: p.string(),
+    sourcePortAddress: p.string(),
 
     // target
     targetChainId: p.bigint().optional(),
@@ -126,18 +125,16 @@ export default createSchema((p) => ({
     targetTransactionIndex: p.string().optional(),
     targetLogIndex: p.int().optional(),
     targetDappAddress: p.string().optional(),
-    targetMsgportAddress: p.string().optional(),
+    targetPortAddress: p.string().optional(),
 
     ///////////////////////////////
     // protocol fields
     ///////////////////////////////
     // fields for ormp
-    ormpMsgHash: p.string(),
-    ormpRoot: p.string(),
-    ormpMessageChannel: p.string(),
-    ormpMessageIndex: p.int(),
-    ormpMessageGasLimit: p.string(),
-    ormpMessageEncoded: p.string(),
+    ormpMsgHash: p.string().optional(),
+    ormpProof: p.string().optional(),
+    ormpMessageIndex: p.int().optional(),
+    ormpMessageGasLimit: p.string().optional(),
     ormpSigners: p.string().optional(),
     ormpLatestSignaturesUpdatedAt: p.bigint().optional(),
 

@@ -8,40 +8,48 @@ import { SignaturePubAbi } from "./abis/v2/SignaturePubAbi";
 export default createConfig({
   database: {
     kind: "postgres",
+    connectionString: process.env.DATABASE_URL || "postgres://postgres:password@pg:5432/postgres",
     publishSchema: "indexer"
   },
   networks: {
-    darwinia: {
-      chainId: 46,
-      transport: http(process.env.PONDER_RPC_URL_DARWINIA),
-      maxRequestsPerSecond: 5,
-    },
     // testnets
-    pangolin: {
-      chainId: 43,
-      transport: http(process.env.PONDER_RPC_URL_PANGOLIN),
-      maxRequestsPerSecond: 1,
-    },
-    sepolia: {
-      chainId: 11155111,
-      transport: http(process.env.PONDER_RPC_URL_SEPOLIA),
-      maxRequestsPerSecond: 5,
-    },
     arbitrum_sepolia: {
       chainId: 421614,
       transport: http(process.env.PONDER_RPC_URL_ARBITRUM_SEPOLIA),
       maxRequestsPerSecond: 5,
     },
+    pangolin: {
+      chainId: 43,
+      transport: http(process.env.PONDER_RPC_URL_PANGOLIN),
+      maxRequestsPerSecond: 1,
+    },
+    pangoro: {
+      chainId: 45,
+      transport: http("https://fraa-flashbox-2871-rpc.a.stagenet.tanssi.network"),
+      maxRequestsPerSecond: 1,
+    },
+    sepolia: {
+      chainId: 11155111,
+      transport: http(process.env.PONDER_RPC_URL_SEPOLIA),
+      maxRequestsPerSecond: 1,
+    },
     taiko_katla: {
       chainId: 167008,
       transport: http(process.env.PONDER_RPC_URL_TAIKO_KATLA),
+      maxRequestsPerSecond: 5,
+    },
+    tron_shasta: {
+      chainId: 2494104990,
+      transport: http(process.env.PONDER_RPC_URL_TRON_SHASTA),
       maxRequestsPerSecond: 1,
     },
-    // tron_shasta: {
-    //   chainId: 2494104990,
-    //   transport: http(process.env.PONDER_RPC_URL_TRON_SHASTA),
-    //   maxRequestsPerSecond: 1,
-    // },
+    // mainnets
+    darwinia: {
+      chainId: 46,
+      transport: http(process.env.PONDER_RPC_URL_DARWINIA),
+      maxRequestsPerSecond: 5,
+    },
+
   },
   contracts: {
     // === V2
@@ -53,6 +61,10 @@ export default createConfig({
         pangolin: {
           startBlock: 2701388,
         },
+        pangoro: {
+          startBlock: 47065,
+          address: "0xE46ed7594fFa6AD7c3b5232827EC2AF8f94beb38",
+        },
         sepolia: {
           startBlock: 5728578,
         },
@@ -62,10 +74,10 @@ export default createConfig({
         taiko_katla: {
           startBlock: 890471,
         },
-        // tron_shasta: {
-        //   startBlock: 43245627,
-        //   address: "0x4a7C839b0a32c90ad3b397875df73B905b1Bf0CA", // TGm4AeM42R9ocbbN3ibrDtf5kkQVTTFMYS
-        // },
+        tron_shasta: {
+          startBlock: 43536767,
+          address: "0x13c991C5BEf30c0E8600D95B8554B4DeDa4853b8", // TBmqJzYEQXJLBU4ycvMLPuqxMfEkVMeDQ8
+        },
       },
       filter: {
         event: [
@@ -81,12 +93,8 @@ export default createConfig({
       address: "0xb2aa34fde97ffdb6197dd5a2be23c2121405cc12",
       network: {
         darwinia: {
-          startBlock: 2513694,
+          startBlock: 2562642,
         },
-        // arbitrum_sepolia: {
-        //   address: "0x2828c0223e6435365a3b977e87f12aefb7cbcbab",
-        //   startBlock: 34545993,
-        // }
       },
     },
   },
