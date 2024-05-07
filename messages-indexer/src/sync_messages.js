@@ -3,14 +3,12 @@ import setResult from './sync_messages/set_result.js'
 import { loop } from './utils.js'
 
 async function syncMessages(chainIds) {
-  const promises = chainIds.map((chainId) => {
-    return [
+  await Promise.all(
+    chainIds.map((chainId) => [
       loop(getNewMessages(chainId)),
       loop(setResult(chainId))
-    ]
-  }).flat()
-
-  await Promise.all(promises)
+    ]).flat()
+  )
 }
 
 export default syncMessages
