@@ -2,14 +2,14 @@ import * as Message from '../db/message.js'
 import * as MessageSent from '../db/message_sent.js'
 import { MESSAGE_STATUS } from '../constants.js'
 
-async function doFetchMessages(protocol, chainId) {
-  const lastMessage = await Message.getLastMessageOf(protocol, chainId)
+async function doGetNewMessages(chainId) {
+  const lastMessage = await Message.getLastMessageOf(chainId)
 
   let messageSents
   if (!lastMessage) {
-    messageSents = await MessageSent.getMessageSentsAfter(protocol, chainId, 0, 0, 0)
+    messageSents = await MessageSent.getMessageSentsAfter(chainId, 0, 0, 0)
   } else {
-    messageSents = await MessageSent.getMessageSentsAfter(protocol, chainId, lastMessage.sourceBlockNumber, lastMessage.sourceTransactionIndex, lastMessage.sourceLogIndex)
+    messageSents = await MessageSent.getMessageSentsAfter(chainId, lastMessage.sourceBlockNumber, lastMessage.sourceTransactionIndex, lastMessage.sourceLogIndex)
   }
 
   // create messages
@@ -42,16 +42,10 @@ async function doFetchMessages(protocol, chainId) {
   }
 }
 
-function fetchMessages(protocol, chainId) {
+function getNewMessages(protocol, chainId) {
   return async () => {
-    await doFetchMessages(protocol, chainId)
+    await doGetNewMessages(protocol, chainId)
   }
 }
 
-export default fetchMessages
-
-async function main() {
-  await doFetchMessages('ormp', 11155111)
-}
-
-main().catch(console.error)
+export default getNewMessages

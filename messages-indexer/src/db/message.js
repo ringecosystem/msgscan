@@ -1,11 +1,11 @@
 import sql from './db.js'
 import { MESSAGE_STATUS, MESSAGE_TABLE } from '../constants.js'
 
-async function getLastMessageOf(protocol, chainId) {
+async function getLastMessageOf(sourceChainId) {
   const result = await sql`
     SELECT * 
     FROM indexer.${sql(MESSAGE_TABLE)} 
-    WHERE protocol=${protocol} and "sourceChainId" = ${chainId} 
+    WHERE "sourceChainId" = ${sourceChainId} 
     ORDER BY "sourceBlockNumber" DESC, "sourceTransactionIndex" DESC, "sourceLogIndex" DESC 
     LIMIT 1
   `
