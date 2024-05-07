@@ -1,10 +1,13 @@
 import { ponder } from "@/generated";
 
-ponder.on("IMessagePort:MessageSent", async ({ event, context }) => {
+ponder.on("ORMPUpgradeablePort:MessageSent", async ({ event, context }) => {
   const { MessageSent } = context.db;
   await MessageSent.create({
     id: `${context.network.chainId}-${event.block.number}-${event.log.transactionIndex}-${event.log.logIndex}`,
     data: {
+      protocol: "ormp",
+      portAddress: event.log.address,
+
       chainId: BigInt(context.network.chainId),
       blockNumber: event.block.number,
       blockTimestamp: event.block.timestamp,
@@ -22,11 +25,14 @@ ponder.on("IMessagePort:MessageSent", async ({ event, context }) => {
   });
 })
 
-ponder.on("IMessagePort:MessageRecv", async ({ event, context }) => {
+ponder.on("ORMPUpgradeablePort:MessageRecv", async ({ event, context }) => {
   const { MessageRecv } = context.db;
   await MessageRecv.create({
     id: `${context.network.chainId}-${event.block.number}-${event.log.transactionIndex}-${event.log.logIndex}`,
     data: {
+      protocol: "ormp",
+      portAddress: event.log.address,
+
       chainId: BigInt(context.network.chainId),
       blockNumber: event.block.number,
       blockTimestamp: event.block.timestamp,
@@ -39,4 +45,4 @@ ponder.on("IMessagePort:MessageRecv", async ({ event, context }) => {
       evReturnData: event.args.returnData,
     },
   });
-});;
+})

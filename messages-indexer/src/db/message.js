@@ -1,6 +1,25 @@
 import sql from './db.js'
 import { MESSAGE_STATUS, MESSAGE_TABLE } from '../constants.js'
 
+async function getLastMessageOf(protocol, chainId) {
+  const result = await sql`
+    SELECT * 
+    FROM indexer.${sql(MESSAGE_TABLE)} 
+    WHERE protocol=${protocol} and "sourceChainId" = ${chainId} 
+    ORDER BY "sourceBlockNumber" DESC, "sourceTransactionIndex" DESC, "sourceLogIndex" DESC 
+    LIMIT 1
+  `
+
+  return result[0] || null
+}
+
+// async function main() {
+//   const lastMessage = await getLastMessageOf('ormp', 11155111)
+//   console.log(lastMessage)
+// }
+//
+// main().catch(console.error)
+
 async function createMessage(id, properties) {
   // check if message already exists
   const exists = await sql`
@@ -13,26 +32,19 @@ async function createMessage(id, properties) {
     return
   }
 
-  // check if protocol and protocolPayload provided
-  if (!properties.protocol || !properties.protocolPayload) {
-    throw new Error(`protocol and protocolPayload are required`)
-  }
-
-  // check if status is null or undefined
-  if (properties.status != null || properties.status != undefined) {
-    throw new Error(`status should be null or undefined`)
+  if (!properties.protocol) {
+    throw new Error(`protocol is required`)
   }
 
   let allProps = {
     id,
-    status: MESSAGE_STATUS.PENDING,
     ...properties
   }
-  let columns = Object.keys(allProps)
+  let columnNames = Object.keys(allProps)
 
   // if not, create message
   await sql`
-    INSERT INTO indexer.${sql(MESSAGE_TABLE)} ${sql(allProps, columns)}
+    INSERT INTO indexer.${sql(MESSAGE_TABLE)} ${sql(allProps, columnNames)}
   `
 }
 
@@ -71,6 +83,7 @@ async function updateMessage(message, fields) {
 }
 
 export {
+  getLastMessageOf, 
   findMessagesByStatus, findMessagesByStatuses,
   updateMessageStatus, updateMessage, createMessage
 }

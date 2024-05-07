@@ -23,7 +23,7 @@ export default createConfig({
     },
     pangoro: {
       chainId: 45,
-      transport: http("https://fraa-flashbox-2871-rpc.a.stagenet.tanssi.network"),
+      transport: http(process.env.PONDER_RPC_URL_PANGORO),
       maxRequestsPerSecond: 1,
     },
     sepolia: {
@@ -50,30 +50,21 @@ export default createConfig({
 
   },
   contracts: {
-    IMessagePort: {
+    ORMPUpgradeablePort: {
       abi: IMessagePort,
-      address: "0x9BEc71b9C646653C6C73Af8D4B7E5f84a5420005",
+      address: "0x305fcc849d81b9E972f4AD8E03c4B22e773A8c21",
       network: {
-        // testnets
         pangolin: {
-          startBlock: 2701388,
-        },
-        pangoro: {
-          startBlock: 47065,
-          address: "0xE46ed7594fFa6AD7c3b5232827EC2AF8f94beb38",
+          startBlock: 2808745,
         },
         sepolia: {
-          startBlock: 5728578,
-        },
-        arbitrum_sepolia: {
-          startBlock: 35145606,
+          startBlock: 5847359,
         },
         taiko_katla: {
-          startBlock: 890471,
+          startBlock: 1054482,
         },
-        tron_shasta: {
-          startBlock: 43536767,
-          address: "0x13c991C5BEf30c0E8600D95B8554B4DeDa4853b8", // TBmqJzYEQXJLBU4ycvMLPuqxMfEkVMeDQ8
+        arbitrum_sepolia: {
+          startBlock: 41129456,
         },
       },
       filter: {

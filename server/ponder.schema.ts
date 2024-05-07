@@ -5,6 +5,9 @@ export default createSchema((p) => ({
     // `${chainId}-${blockNumber}-${transactionIndex}-${logIndex}`
     id: p.string(),
 
+    protocol: p.string(),
+    portAddress: p.string(),
+
     chainId: p.bigint(),
     blockNumber: p.bigint(),
     blockTimestamp: p.bigint(),
@@ -23,6 +26,9 @@ export default createSchema((p) => ({
   MessageRecv: p.createTable({
     // `${chainId}-${blockNumber}-${transactionIndex}-${logIndex}`
     id: p.string(),
+
+    protocol: p.string(),
+    portAddress: p.string(),
 
     chainId: p.bigint(),
     blockNumber: p.bigint(),
@@ -43,8 +49,9 @@ export default createSchema((p) => ({
     id: p.string(), // the msgId returned by the port's `send` function
     protocol: p.string(), // ormp, lz, ..
     payload: p.string(),
-    protocolPayload: p.string(), // msgportPrefix + payload
+    params: p.string(),
     status: p.int(), // 0: pending, 1: success, 2: failed
+    protocolPayload: p.string().optional(), // msgportPrefix + payload
 
     // source
     sourceChainId: p.bigint(),
