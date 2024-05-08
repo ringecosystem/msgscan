@@ -14,8 +14,6 @@ async function doGetNewMessages(chainId) {
 
   // create messages
   for (const messageSent of messageSents) {
-    console.log(`creating message ${messageSent.evMsgId}`)
-
     await Message.createMessage(
       messageSent.evMsgId,
       {
@@ -38,6 +36,7 @@ async function doGetNewMessages(chainId) {
         targetChainId: messageSent.evToChainId,
         targetDappAddress: messageSent.evToDapp,
       },
+      console.log(`message ${messageSent.evMsgId} created.`)
     )
   }
 }
