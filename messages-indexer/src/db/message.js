@@ -68,11 +68,6 @@ async function updateMessageStatus(message, status) {
 }
 
 async function updateMessage(message, fields) {
-  console.log("---------------------")
-  console.log(message)
-  console.log(fields)
-  console.log("---------------------")
-  console.log(`updating message ${message.id} with ${JSON.stringify(fields)}`)
   await sql`
     UPDATE indexer.${sql(MESSAGE_TABLE)}
     SET ${sql(fields)}
