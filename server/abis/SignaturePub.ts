@@ -1,4 +1,4 @@
-export const SignaturePubAbi = [
+export const SignaturePub = [
   {
     name: "SignatureSubmittion",
     type: "event",

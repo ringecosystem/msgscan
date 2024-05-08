@@ -13,13 +13,6 @@ async function getLastMessageOf(sourceChainId) {
   return result[0] || null
 }
 
-// async function main() {
-//   const lastMessage = await getLastMessageOf('ormp', 11155111)
-//   console.log(lastMessage)
-// }
-//
-// main().catch(console.error)
-
 async function createMessage(id, properties) {
   // check if message already exists
   const exists = await sql`
@@ -75,6 +68,11 @@ async function updateMessageStatus(message, status) {
 }
 
 async function updateMessage(message, fields) {
+  console.log("---------------------")
+  console.log(message)
+  console.log(fields)
+  console.log("---------------------")
+  console.log(`updating message ${message.id} with ${JSON.stringify(fields)}`)
   await sql`
     UPDATE indexer.${sql(MESSAGE_TABLE)}
     SET ${sql(fields)}
@@ -82,8 +80,16 @@ async function updateMessage(message, fields) {
   `
 }
 
+async function findMessagesWithoutProtocolInfo(sourceChainId) {
+  return await sql`
+    SELECT *
+    FROM indexer.${sql(MESSAGE_TABLE)}
+    WHERE "sourceChainId" = ${sourceChainId} and (protocol='ormp' AND "ormpMsgHash" IS NULL) OR (protocol='lz' AND "lzGuid" IS NULL)
+  `
+}
+
 export {
   getLastMessageOf, 
-  findMessagesByStatus, findMessagesByStatuses,
+  findMessagesByStatus, findMessagesByStatuses, findMessagesWithoutProtocolInfo,
   updateMessageStatus, updateMessage, createMessage
 }

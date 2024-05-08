@@ -4,7 +4,7 @@ import * as Transaction from '../db/transaction.js'
 
 import { MESSAGE_STATUS } from '../constants.js'
 
-async function doSetRecv(sourceChainId) {
+async function doSetDispatchResult(sourceChainId) {
   const messages = await Message.findMessagesByStatuses(sourceChainId, [MESSAGE_STATUS.PENDING])
 
   for (const message of messages) {
@@ -28,10 +28,10 @@ async function doSetRecv(sourceChainId) {
   }
 }
 
-function setRecv(chainId) {
+function setDispatchResult(chainId) {
   return async () => {
-    await doSetRecv(chainId)
+    await doSetDispatchResult(chainId)
   }
 }
 
-export default setRecv
+export default setDispatchResult

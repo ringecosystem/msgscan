@@ -2,6 +2,7 @@ import { createConfig } from "@ponder/core";
 import { http } from "viem";
 
 import { IMessagePort } from "./abis/IMessagePort";
+import { ORMP } from "./abis/ORMP";
 
 export default createConfig({
   database: {
@@ -71,6 +72,29 @@ export default createConfig({
         event: [
           "MessageSent",
           "MessageRecv",
+        ],
+      },
+    },
+    ORMP: {
+      abi: ORMP,
+      address: "0x9BEc71b9C646653C6C73Af8D4B7E5f84a5420005",
+      network: {
+        pangolin: {
+          startBlock: 2701388,
+        },
+        sepolia: {
+          startBlock: 5728578,
+        },
+        taiko_katla: {
+          startBlock: 890471,
+        },
+        arbitrum_sepolia: {
+          startBlock: 35145606,
+        },
+      },
+      filter: {
+        event: [
+          "MessageAccepted",
         ],
       },
     },
