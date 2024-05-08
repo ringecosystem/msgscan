@@ -3,6 +3,7 @@ import { http } from "viem";
 
 import { IMessagePort } from "./abis/IMessagePort";
 import { ORMP } from "./abis/ORMP";
+import { SignaturePub } from "./abis/SignaturePub";
 
 export default createConfig({
   database: {
@@ -96,6 +97,15 @@ export default createConfig({
         event: [
           "MessageAccepted",
         ],
+      },
+    },
+    SignaturePub: {
+      abi: SignaturePub,
+      address: "0xb2aa34fde97ffdb6197dd5a2be23c2121405cc12",
+      network: {
+        darwinia: {
+          startBlock: 2562642,
+        },
       },
     },
   },

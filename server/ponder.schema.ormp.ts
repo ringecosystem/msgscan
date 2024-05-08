@@ -22,7 +22,24 @@ function ormpSchema(p) {
       evMessageTo: p.string(), // target port address
       evMessageGasLimit: p.bigint(),
       evMessageEncoded: p.string(),
-    })
+    }),
+    SignatureSubmittion: p.createTable({ // event only on darwinia
+      id: p.string(),
+
+      chainId: p.bigint(),
+      blockNumber: p.bigint(),
+      blockTimestamp: p.bigint(),
+      transactionHash: p.string(),
+      transactionIndex: p.int(),
+      logIndex: p.int(),
+
+      srcChainId: p.bigint(), // the message sent from this chain
+      channel: p.hex(),
+      msgIndex: p.bigint(),
+      signer: p.hex(),
+      signature: p.string(),
+      data: p.string(), // msg related data used to sign, (msghash, encodedParams, expiration);
+    }),
   }
 }
 

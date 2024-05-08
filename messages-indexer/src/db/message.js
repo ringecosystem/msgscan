@@ -75,16 +75,35 @@ async function updateMessage(message, fields) {
   `
 }
 
-async function findMessagesWithoutProtocolInfo(sourceChainId) {
+async function findMessagesWithoutOrmpInfo() {
   return await sql`
     SELECT *
     FROM indexer.${sql(MESSAGE_TABLE)}
-    WHERE "sourceChainId" = ${sourceChainId} and (protocol='ormp' AND "ormpMsgHash" IS NULL) OR (protocol='lz' AND "lzGuid" IS NULL)
+    WHERE 
+      "protocol"='ormp' AND
+      "ormpMsgHash" IS NULL
   `
+}
+
+// only for ormp messages
+// now - sourceBlockTime < 3 hours and number of signers < 5
+async function findMessagesWithoutOrmpSigners() {
+  const result = await sql`
+    SELECT *
+    FROM indexer.${sql(MESSAGE_TABLE)}
+    WHERE 
+      "protocol"='ormp' AND
+      "ormpMsgIndex" IS NOT NULL AND
+      "status" >= 1 AND
+      "sourceBlockTime" > NOW() - INTERVAL '3 hours' AND
+      ("ormpSigners" is null OR array_length(string_to_array("ormpSigners", ','), 1) < 5)
+  `
+  return result
 }
 
 export {
   getLastMessageOf, 
-  findMessagesByStatus, findMessagesByStatuses, findMessagesWithoutProtocolInfo,
-  updateMessageStatus, updateMessage, createMessage
+  findMessagesByStatus, findMessagesByStatuses,
+  updateMessageStatus, updateMessage, createMessage,
+  findMessagesWithoutOrmpInfo, findMessagesWithoutOrmpSigners
 }

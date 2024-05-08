@@ -84,7 +84,7 @@ function messageSchema(p) {
       ///////////////////////////////
       // fields for ormp
       ormpMsgHash: p.string().optional(),
-      ormpMessageIndex: p.int().optional(),
+      ormpMsgIndex: p.int().optional(),
       ormpMessageGasLimit: p.string().optional(),
       ormpSigners: p.string().optional(),
       ormpLatestSignaturesUpdatedAt: p.bigint().optional(),
