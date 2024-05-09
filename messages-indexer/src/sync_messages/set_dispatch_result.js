@@ -24,7 +24,7 @@ async function doSetDispatchResult(sourceChainId) {
       targetPortAddress: messageRecv.portAddress,
       status: messageRecv.evResult ? MESSAGE_STATUS.SUCCESS : MESSAGE_STATUS.FAILED,
     })
-    console.log(`message ${message.id} dispatched ${messageRecv.evResult ? 'success' : 'failed'}`)
+    console.log(`message ${message.id} ${messageRecv.evResult ? 'success' : 'failed'}.`)
   }
 }
 
