@@ -23,7 +23,7 @@ export default createConfig({
       transport: http(process.env.PONDER_RPC_URL_PANGOLIN),
       maxRequestsPerSecond: 1,
     },
-    pangoro: {
+    pangoro: { // https://evmexplorer.tanssi-chains.network/?rpcUrl=https://fraa-flashbox-2871-rpc.a.stagenet.tanssi.network
       chainId: 45,
       transport: http(process.env.PONDER_RPC_URL_PANGORO),
       maxRequestsPerSecond: 1,
@@ -67,6 +67,14 @@ export default createConfig({
         },
         arbitrum_sepolia: {
           startBlock: 41129456,
+        },
+        tron_shasta: {
+          startBlock: 43881710,
+          address: "0x0b159252e7a9d603e7aB1Fa264987efC78e8D538", // TAypGzHxfGZchPkSMBiiNH8aotxhzCudpS
+        },
+        pangoro: {
+          startBlock: 118897,
+          address: "0x64672778785c84a18Ec6e4858505E86D7F383774"
         },
       },
       filter: {
