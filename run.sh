@@ -1,20 +1,21 @@
 #!/bin/bash
 
 # check if `docker compose` or `docker-compose` is installed
-# alising `docker compose` to `docker-compose` if the former is found
 if ! command -v docker-compose &> /dev/null
 then
     if command -v docker &> /dev/null
     then
-        alias docker-compose='docker compose'
+        DOCKER_COMPOSE='docker compose'
     else
         echo "docker-compose could not be found. Please install it."
         exit 1
     fi
+else
+    DOCKER_COMPOSE='docker-compose'
 fi
 
 # stop and clean
-docker-compose down
+$DOCKER_COMPOSE down
 read -p "Do you want to remove the data and .ponder directories? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -36,9 +37,9 @@ read -p "Do you want to build the images? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    docker-compose up -d --build
+    $DOCKER_COMPOSE up -d --build
 else
-    docker-compose up -d
+    $DOCKER_COMPOSE up -d
 fi
 
-docker-compose logs -f
+$DOCKER_COMPOSE logs -f
