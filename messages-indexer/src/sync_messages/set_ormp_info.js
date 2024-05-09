@@ -14,6 +14,7 @@ async function setOrmpInfo() {
       ormpMessageGasLimit: messageAccepted.evMessageGasLimit,
       protocolPayload: messageAccepted.evMessageEncoded,
     })
+    console.log(`message ${message.id} ormp info set.`)
   }
 }
 

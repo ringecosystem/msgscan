@@ -85,8 +85,6 @@ async function findMessagesWithoutOrmpInfo() {
   `
 }
 
-// only for ormp messages
-// now - sourceBlockTime < 3 hours and number of signers < 5
 async function findMessagesWithoutOrmpSigners() {
   const result = await sql`
     SELECT *
@@ -95,14 +93,14 @@ async function findMessagesWithoutOrmpSigners() {
       "protocol"='ormp' AND
       "ormpMsgIndex" IS NOT NULL AND
       "status" >= 1 AND
-      "sourceBlockTime" > NOW() - INTERVAL '3 hours' AND
-      ("ormpSigners" is null OR array_length(string_to_array("ormpSigners", ','), 1) < 5)
+      to_timestamp("sourceBlockTimestamp") > NOW() - INTERVAL '6 hours' AND
+      ("ormpSigners" is null OR array_length(string_to_array("ormpSigners", ','), 1) < 4)
   `
   return result
 }
 
 export {
-  getLastMessageOf, 
+  getLastMessageOf,
   findMessagesByStatus, findMessagesByStatuses,
   updateMessageStatus, updateMessage, createMessage,
   findMessagesWithoutOrmpInfo, findMessagesWithoutOrmpSigners
