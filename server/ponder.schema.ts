@@ -87,7 +87,6 @@ function messageSchema(p) {
       ormpMsgIndex: p.int().optional(),
       ormpMessageGasLimit: p.string().optional(),
       ormpSigners: p.string().optional(),
-      ormpLatestSignaturesUpdatedAt: p.bigint().optional(),
 
       // fields for lz
       lzGuid: p.string().optional(),
