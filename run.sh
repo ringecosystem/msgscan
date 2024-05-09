@@ -14,8 +14,13 @@ else
     DOCKER_COMPOSE='docker-compose'
 fi
 
-# stop and clean
-$DOCKER_COMPOSE down
+# stop if services are running
+if $DOCKER_COMPOSE ps | grep -q "Up"
+then
+    echo "Stopping the services..."
+    $DOCKER_COMPOSE down
+fi
+
 read -p "Do you want to remove the data and .ponder directories? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
