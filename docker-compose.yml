@@ -7,7 +7,7 @@ services:
     depends_on:
       - pg
     ports:
-      - "42069:42069"
+      - "42059:42069"
     volumes:
       - ./server/.ponder:/app/.ponder
     environment:
