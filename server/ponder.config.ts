@@ -100,6 +100,14 @@ export default createConfig({
         arbitrum_sepolia: {
           startBlock: 35145606,
         },
+        tron_shasta: {
+          startBlock: 43536767,
+          address: "0x13c991C5BEf30c0E8600D95B8554B4DeDa4853b8", // TBmqJzYEQXJLBU4ycvMLPuqxMfEkVMeDQ8
+        },
+        pangoro: {
+          startBlock: 47065,
+          address: "0xE46ed7594fFa6AD7c3b5232827EC2AF8f94beb38",
+        },
       },
       filter: {
         event: [
