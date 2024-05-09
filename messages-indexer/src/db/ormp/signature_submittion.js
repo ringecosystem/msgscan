@@ -1,11 +1,11 @@
-import sql from '../../db/db.js'
+import sql from '../db.js'
 
 // returns [signer]
-async function findSigners(chainId, messageIndex) {
+async function findSigners(srcChainId, msgIndex) {
   const result = await sql`
     SELECT signer
     FROM indexer."SignatureSubmittion"
-    WHERE "srcChainId" = ${chainId} and "msgIndex" = ${messageIndex}
+    WHERE "srcChainId" = ${srcChainId} and "msgIndex" = ${msgIndex}
   `
 
   // uniq

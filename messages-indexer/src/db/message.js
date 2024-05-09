@@ -1,6 +1,18 @@
 import sql from './db.js'
 import { MESSAGE_STATUS, MESSAGE_TABLE } from '../constants.js'
 
+async function getLastMessageOf(sourceChainId) {
+  const result = await sql`
+    SELECT * 
+    FROM indexer.${sql(MESSAGE_TABLE)} 
+    WHERE "sourceChainId" = ${sourceChainId} 
+    ORDER BY "sourceBlockNumber" DESC, "sourceTransactionIndex" DESC, "sourceLogIndex" DESC 
+    LIMIT 1
+  `
+
+  return result[0] || null
+}
+
 async function createMessage(id, properties) {
   // check if message already exists
   const exists = await sql`
@@ -13,26 +25,19 @@ async function createMessage(id, properties) {
     return
   }
 
-  // check if protocol and protocolPayload provided
-  if (!properties.protocol || !properties.protocolPayload) {
-    throw new Error(`protocol and protocolPayload are required`)
-  }
-
-  // check if status is null or undefined
-  if (properties.status != null || properties.status != undefined) {
-    throw new Error(`status should be null or undefined`)
+  if (!properties.protocol) {
+    throw new Error(`protocol is required`)
   }
 
   let allProps = {
     id,
-    status: MESSAGE_STATUS.PENDING,
     ...properties
   }
-  let columns = Object.keys(allProps)
+  let columnNames = Object.keys(allProps)
 
   // if not, create message
   await sql`
-    INSERT INTO indexer.${sql(MESSAGE_TABLE)} ${sql(allProps, columns)}
+    INSERT INTO indexer.${sql(MESSAGE_TABLE)} ${sql(allProps, columnNames)}
   `
 }
 
@@ -70,7 +75,33 @@ async function updateMessage(message, fields) {
   `
 }
 
+async function findMessagesWithoutOrmpInfo() {
+  return await sql`
+    SELECT *
+    FROM indexer.${sql(MESSAGE_TABLE)}
+    WHERE 
+      "protocol"='ormp' AND
+      "ormpMsgHash" IS NULL
+  `
+}
+
+async function findMessagesWithoutOrmpSigners() {
+  const result = await sql`
+    SELECT *
+    FROM indexer.${sql(MESSAGE_TABLE)}
+    WHERE 
+      "protocol"='ormp' AND
+      "ormpMsgIndex" IS NOT NULL AND
+      "status" >= 1 AND
+      to_timestamp("sourceBlockTimestamp") > NOW() - INTERVAL '6 hours' AND
+      ("ormpSigners" is null OR array_length(string_to_array("ormpSigners", ','), 1) < 4)
+  `
+  return result
+}
+
 export {
+  getLastMessageOf,
   findMessagesByStatus, findMessagesByStatuses,
-  updateMessageStatus, updateMessage, createMessage
+  updateMessageStatus, updateMessage, createMessage,
+  findMessagesWithoutOrmpInfo, findMessagesWithoutOrmpSigners
 }

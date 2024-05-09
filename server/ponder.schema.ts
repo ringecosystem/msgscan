@@ -1,147 +1,106 @@
 import { createSchema } from "@ponder/core";
+import ormpSchema from "./ponder.schema.ormp.ts";
 
-export default createSchema((p) => ({
-  // === V2
-  MessageAcceptedV2: p.createTable({
-    id: p.string(),
+function msgportSchema(p) {
+  return {
+    MessageSent: p.createTable({
+      // `${chainId}-${blockNumber}-${transactionIndex}-${logIndex}`
+      id: p.string(),
 
-    chainId: p.bigint(),
-    blockNumber: p.bigint(),
-    blockTimestamp: p.bigint(),
-    transactionHash: p.string(),
-    transactionIndex: p.int(),
-    logIndex: p.int(),
+      protocol: p.string(),
+      portAddress: p.string(),
 
-    msgHash: p.string(),
-    // message struct
-    messageChannel: p.string(),
-    messageIndex: p.bigint(),
-    messageFromChainId: p.bigint(),
-    messageFrom: p.string(),
-    messageToChainId: p.bigint(),
-    messageTo: p.string(),
-    messageGasLimit: p.bigint(),
-    messageEncoded: p.string(),
-    // extra
-    oracle: p.hex().optional(),
-    oracleAssigned: p.boolean().optional(),
-    oracleAssignedFee: p.bigint().optional(),
-    oracleLogIndex: p.int().optional(),
-    relayer: p.hex().optional(),
-    relayerAssigned: p.boolean().optional(),
-    relayerAssignedFee: p.bigint().optional(),
-    relayerLogIndex: p.int().optional(),
-  }),
-  MessageDispatchedV2: p.createTable({
-    id: p.string(),
+      chainId: p.bigint(),
+      blockNumber: p.bigint(),
+      blockTimestamp: p.bigint(),
+      transactionHash: p.string(),
+      transactionIndex: p.int(),
+      logIndex: p.int(),
 
-    chainId: p.bigint(),
-    blockNumber: p.bigint(),
-    blockTimestamp: p.bigint(),
-    transactionHash: p.string(),
-    transactionIndex: p.int(),
-    logIndex: p.int(),
+      evMsgId: p.string(), // fields with ev prefix are from the event fields
+      evFromDapp: p.string(),
+      evToChainId: p.bigint(),
+      evToDapp: p.string(),
+      evMessage: p.string(),
+      evParams: p.string(),
+    }),
 
-    msgHash: p.string(),
-    dispatchResult: p.boolean(),
-  }),
-  MessageAssignedV2: p.createTable({
-    id: p.string(),
+    MessageRecv: p.createTable({
+      // `${chainId}-${blockNumber}-${transactionIndex}-${logIndex}`
+      id: p.string(),
 
-    chainId: p.bigint(),
-    blockNumber: p.bigint(),
-    blockTimestamp: p.bigint(),
-    transactionHash: p.string(),
-    transactionIndex: p.int(),
-    logIndex: p.int(),
+      protocol: p.string(),
+      portAddress: p.string(),
 
-    msgHash: p.string(),
-    oracle: p.hex(),
-    relayer: p.hex(),
-    oracleFee: p.bigint(),
-    relayerFee: p.bigint(),
-  }),
-  HashImportedV2: p.createTable({
-    id: p.string(),
+      chainId: p.bigint(),
+      blockNumber: p.bigint(),
+      blockTimestamp: p.bigint(),
+      transactionHash: p.string(),
+      transactionIndex: p.int(),
+      logIndex: p.int(),
 
-    chainId: p.bigint(),
-    blockNumber: p.bigint(),
-    blockTimestamp: p.bigint(),
-    transactionHash: p.string(),
-    transactionIndex: p.int(),
-    logIndex: p.int(),
+      evMsgId: p.string(),
+      evResult: p.boolean(),
+      evReturnData: p.string(),
+    }),
+  }
+}
 
-    srcChainId: p.bigint(),
-    channel: p.hex(), // ormp address of the source chain
-    msgIndex: p.bigint(),
-    oracle: p.hex(),
-    hash: p.string(), // msg hash
-  }),
-  SignatureSubmittion: p.createTable({ // event on darwinia
-    id: p.string(),
+function messageSchema(p) {
+  return {
+    Message: p.createTable({
+      ///////////////////////////////
+      // common fields
+      ///////////////////////////////
+      id: p.string(), // the msgId returned by the port's `send` function
+      protocol: p.string(), // ormp, lz, ..
+      payload: p.string(),
+      params: p.string(),
+      status: p.int(), // 0: pending, 1: success, 2: failed
+      protocolPayload: p.string().optional(), // msgportPrefix + payload
 
-    chainId: p.bigint(),
-    blockNumber: p.bigint(),
-    blockTimestamp: p.bigint(),
-    transactionHash: p.string(),
-    transactionIndex: p.int(),
-    logIndex: p.int(),
+      // source
+      sourceChainId: p.bigint(),
+      sourceBlockNumber: p.bigint(),
+      sourceBlockTimestamp: p.bigint(),
+      sourceTransactionHash: p.string(),
+      sourceTransactionIndex: p.int(),
+      sourceLogIndex: p.int(),
+      sourceDappAddress: p.string(),
+      sourcePortAddress: p.string(),
 
-    srcChainId: p.bigint(),
-    channel: p.hex(),
-    msgIndex: p.bigint(),
-    signer: p.hex(),
-    signature: p.string(),
-    data: p.string(), // msg related data used to sign, (msghash, encodedParams, expiration);
-  }),
+      // target
+      targetChainId: p.bigint().optional(),
+      targetBlockNumber: p.bigint().optional(),
+      targetBlockTimestamp: p.bigint().optional(),
+      targetTransactionHash: p.string().optional(),
+      targetTransactionIndex: p.string().optional(),
+      targetLogIndex: p.int().optional(),
+      targetDappAddress: p.string().optional(),
+      targetPortAddress: p.string().optional(),
 
-  Message: p.createTable({
-    ///////////////////////////////
-    // common fields
-    ///////////////////////////////
-    // global id
-    // `${sourceChainId}-${sourceBlockNumber}-${sourceTransactionIndex}-${sourceLogIndex}`
-    id: p.string(),
-    protocol: p.string(), // ormp, lz, ..
-    payload: p.string(),
-    protocolPayload: p.string(), // msgportPrefix + payload
-    status: p.int(), // 0: pending, 1: success, 2: failed
+      ///////////////////////////////
+      // protocol fields 
+      ///////////////////////////////
+      // fields for ormp
+      ormpMsgHash: p.string().optional(),
+      ormpMsgIndex: p.int().optional(),
+      ormpMessageGasLimit: p.string().optional(),
+      ormpSigners: p.string().optional(),
 
-    // source
-    sourceChainId: p.bigint(),
-    sourceBlockNumber: p.bigint(),
-    sourceBlockTimestamp: p.bigint(),
-    sourceTransactionHash: p.string(),
-    sourceTransactionIndex: p.int(),
-    sourceLogIndex: p.int(),
-    sourceDappAddress: p.string(),
-    sourcePortAddress: p.string(),
+      // fields for lz
+      lzGuid: p.string().optional(),
+      lzNonce: p.bigint().optional(),
+      lzSrcEid: p.string().optional(),
+      lzDstEid: p.string().optional(),
+    })
+  }
+}
 
-    // target
-    targetChainId: p.bigint().optional(),
-    targetBlockNumber: p.bigint().optional(),
-    targetBlockTimestamp: p.bigint().optional(),
-    targetTransactionHash: p.string().optional(),
-    targetTransactionIndex: p.string().optional(),
-    targetLogIndex: p.int().optional(),
-    targetDappAddress: p.string().optional(),
-    targetPortAddress: p.string().optional(),
-
-    ///////////////////////////////
-    // protocol fields
-    ///////////////////////////////
-    // fields for ormp
-    ormpMsgHash: p.string().optional(),
-    ormpProof: p.string().optional(),
-    ormpMessageIndex: p.int().optional(),
-    ormpMessageGasLimit: p.string().optional(),
-    ormpSigners: p.string().optional(),
-    ormpLatestSignaturesUpdatedAt: p.bigint().optional(),
-
-    // fields for lz
-    lzGuid: p.string().optional(),
-    lzNonce: p.bigint().optional(),
-    lzSrcEid: p.string().optional(),
-    lzDstEid: p.string().optional(),
+export default createSchema(
+  (p) => ({
+    ...msgportSchema(p),
+    ...messageSchema(p),
+    ...ormpSchema(p),
   })
-}));
+);

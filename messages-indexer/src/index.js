@@ -1,6 +1,7 @@
 import { exit } from 'process';
 
 import { checkTableExists } from './db/prepare_tables.js'
+import syncMessages from './sync_messages.js'
 
 async function main() {
   try {
@@ -8,11 +9,7 @@ async function main() {
       throw new Error("'indexer.Message' table does not exist. Please check if the server is running. It needs some time if it is the first time you are running the server.")
     }
 
-    // why use Promise.all, because there will be more than one protocol.
-    await Promise.all([
-      (await import(`./ormp/sync_messages.js`)).default([421614, 11155111], 'ormp'),
-    ])
-
+    await syncMessages([421614, 11155111])
   } catch (error) {
     await new Promise((resolve) => setTimeout(resolve, 10000)) // wait 10 seconds before retrying by docker-compose
     throw error

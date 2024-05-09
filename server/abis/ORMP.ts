@@ -1,4 +1,4 @@
-export const ORMPAbi = [
+export const ORMP = [
   {
     inputs: [{ internalType: "address", name: "dao", type: "address" }],
     stateMutability: "nonpayable",
@@ -48,14 +48,45 @@ export const ORMPAbi = [
     inputs: [
       {
         indexed: true,
-        internalType: "bytes32",
-        name: "msgHash",
-        type: "bytes32",
+        internalType: "address",
+        name: "oracle",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "chainId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "channel",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "msgIndex",
+        type: "uint256",
       },
       {
         indexed: false,
         internalType: "bytes32",
-        name: "root",
+        name: "hash",
+        type: "bytes32",
+      },
+    ],
+    name: "HashImported",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "msgHash",
         type: "bytes32",
       },
       {
@@ -88,6 +119,43 @@ export const ORMPAbi = [
         type: "bytes32",
       },
       {
+        indexed: true,
+        internalType: "address",
+        name: "oracle",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "relayer",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "oracleFee",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "relayerFee",
+        type: "uint256",
+      },
+    ],
+    name: "MessageAssigned",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "msgHash",
+        type: "bytes32",
+      },
+      {
         indexed: false,
         internalType: "bool",
         name: "dispatchResult",
@@ -98,17 +166,43 @@ export const ORMPAbi = [
     type: "event",
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "oldSetter",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newSetter",
+        type: "address",
+      },
+    ],
+    name: "SetterChanged",
+    type: "event",
+  },
+  {
     inputs: [],
     name: "LOCAL_CHAINID",
-    outputs: [{ internalType: "uint256", name: "chainId", type: "uint256" }],
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [{ internalType: "address", name: "setter_", type: "address" }],
+    inputs: [{ internalType: "address", name: "newSetter", type: "address" }],
     name: "changeSetter",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "count",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -134,7 +228,7 @@ export const ORMPAbi = [
       { internalType: "address", name: "ua", type: "address" },
       { internalType: "uint256", name: "gasLimit", type: "uint256" },
       { internalType: "bytes", name: "encoded", type: "bytes" },
-      { internalType: "bytes", name: "params", type: "bytes" },
+      { internalType: "bytes", name: "", type: "bytes" },
     ],
     name: "fee",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
@@ -159,24 +253,25 @@ export const ORMPAbi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "imtBranch",
-    outputs: [{ internalType: "bytes32[32]", name: "", type: "bytes32[32]" }],
+    inputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "bytes32", name: "", type: "bytes32" },
+    ],
+    name: "hashLookup",
+    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [],
-    name: "messageCount",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "prove",
-    outputs: [{ internalType: "bytes32[32]", name: "", type: "bytes32[32]" }],
-    stateMutability: "view",
+    inputs: [
+      { internalType: "uint256", name: "chainId", type: "uint256" },
+      { internalType: "address", name: "channel", type: "address" },
+      { internalType: "uint256", name: "msgIndex", type: "uint256" },
+      { internalType: "bytes32", name: "hash_", type: "bytes32" },
+    ],
+    name: "importHash",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -204,20 +299,13 @@ export const ORMPAbi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "root",
-    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [
       { internalType: "uint256", name: "toChainId", type: "uint256" },
       { internalType: "address", name: "to", type: "address" },
       { internalType: "uint256", name: "gasLimit", type: "uint256" },
       { internalType: "bytes", name: "encoded", type: "bytes" },
       { internalType: "address", name: "refund", type: "address" },
-      { internalType: "bytes", name: "params", type: "bytes" },
+      { internalType: "bytes", name: "", type: "bytes" },
     ],
     name: "send",
     outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
@@ -259,6 +347,13 @@ export const ORMPAbi = [
       { internalType: "address", name: "relayer", type: "address" },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "version",
+    outputs: [{ internalType: "string", name: "", type: "string" }],
+    stateMutability: "pure",
     type: "function",
   },
 ] as const;

@@ -6,7 +6,7 @@ async function findTransactionByHash(chainId, transactionHash) {
     FROM ponder_sync."transactions"
     WHERE "chainId" = ${chainId} and "hash" = ${transactionHash}
   `
-  return result.length == 0 ? null : result[0]
+  return result[0] || null
 }
 
 export { findTransactionByHash }
