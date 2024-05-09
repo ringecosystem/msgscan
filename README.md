@@ -1,11 +1,7 @@
 # darwinia msgscan monorepo
 
-## Run server with messages indexer
+## Run using docker
 
-1. edit env files
-
-    - ./.env
-    - ./server/.env
-    - ./messages-indexer/.env
-
-2. docker-compose up -d
+1. export env vars  
+   open [docker-compose.yml](./docker-compose.yml) file to know what env vars need to be set.  
+3. docker-compose up -d
