@@ -1,14 +1,15 @@
 #!/bin/bash
 
 # check if `docker compose` or `docker-compose` is installed
+# alising `docker compose` to `docker-compose` if the former is found
 if ! command -v docker-compose &> /dev/null
 then
-    if ! command -v docker compose &> /dev/null
+    if command -v docker &> /dev/null
     then
-        echo "docker-compose or docker compose could not be found."
-        exit 1
-    else
         alias docker-compose='docker compose'
+    else
+        echo "docker-compose could not be found. Please install it."
+        exit 1
     fi
 fi
 
