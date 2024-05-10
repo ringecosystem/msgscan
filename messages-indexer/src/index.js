@@ -8,7 +8,7 @@ async function main() {
     throw new Error("Table 'indexer.Message' does not exist. Please check if the server is running. It needs some time if it is the first time you are running the server.")
   }
 
-  await syncMessages([421614, 11155111])
+  await syncMessages([43, 45, 421614, 11155111, 2494104990])
 }
 
 (async () => {
