@@ -30,6 +30,7 @@ then
 fi
 
 # env vars
+echo "Setting up environment variables..."
 export POSTGRES_HOST=pg
 export POSTGRES_PORT=5432
 export POSTGRES_USER=postgres
