@@ -26,7 +26,7 @@ export default createConfig({
     pangoro: { // https://evmexplorer.tanssi-chains.network/?rpcUrl=https://fraa-flashbox-2871-rpc.a.stagenet.tanssi.network
       chainId: 45,
       transport: http(process.env.PONDER_RPC_URL_PANGORO),
-      maxRequestsPerSecond: 5,
+      maxRequestsPerSecond: process.env.PANGORO_MAX_REQUESTS_PER_SECOND ? parseInt(process.env.PANGORO_MAX_REQUESTS_PER_SECOND) : 1
     },
     sepolia: {
       chainId: 11155111,
