@@ -26,17 +26,12 @@ export default createConfig({
     pangoro: { // https://evmexplorer.tanssi-chains.network/?rpcUrl=https://fraa-flashbox-2871-rpc.a.stagenet.tanssi.network
       chainId: 45,
       transport: http(process.env.PONDER_RPC_URL_PANGORO),
-      maxRequestsPerSecond: 1,
+      maxRequestsPerSecond: 5,
     },
     sepolia: {
       chainId: 11155111,
       transport: http(process.env.PONDER_RPC_URL_SEPOLIA),
       maxRequestsPerSecond: 1,
-    },
-    taiko_katla: {
-      chainId: 167008,
-      transport: http(process.env.PONDER_RPC_URL_TAIKO_KATLA),
-      maxRequestsPerSecond: 5,
     },
     tron_shasta: {
       chainId: 2494104990,
@@ -54,19 +49,16 @@ export default createConfig({
   contracts: {
     ORMPUpgradeablePort: {
       abi: IMessagePort,
-      address: "0x305fcc849d81b9E972f4AD8E03c4B22e773A8c21",
+      address: "0x2632B7BEd9Ec2665B85F6A9b79E350b81440EA13",
       network: {
         pangolin: {
-          startBlock: 2808745,
+          startBlock: 2817846,
         },
         sepolia: {
-          startBlock: 5847359,
-        },
-        taiko_katla: {
-          startBlock: 1054482,
+          startBlock: 5859881,
         },
         arbitrum_sepolia: {
-          startBlock: 41129456,
+          startBlock: 41809966,
         },
         tron_shasta: {
           startBlock: 43881710,
@@ -86,28 +78,27 @@ export default createConfig({
     },
     ORMP: {
       abi: ORMP,
-      address: "0x9BEc71b9C646653C6C73Af8D4B7E5f84a5420005",
+      address: "0x56F423Db036F2eDD05567b1211122E0B17C3bfF4",
       network: {
+        // testnets
         pangolin: {
-          startBlock: 2701388,
-        },
-        sepolia: {
-          startBlock: 5728578,
-        },
-        taiko_katla: {
-          startBlock: 890471,
-        },
-        arbitrum_sepolia: {
-          startBlock: 35145606,
-        },
-        tron_shasta: {
-          startBlock: 43536767,
-          address: "0x13c991C5BEf30c0E8600D95B8554B4DeDa4853b8", // TBmqJzYEQXJLBU4ycvMLPuqxMfEkVMeDQ8
+          startBlock: 2817837,
         },
         pangoro: {
           startBlock: 47065,
           address: "0xE46ed7594fFa6AD7c3b5232827EC2AF8f94beb38",
         },
+        sepolia: {
+          startBlock: 5859881,
+        },
+        arbitrum_sepolia: {
+          startBlock: 41809342,
+        },
+        tron_shasta: {
+          startBlock: 43445461,
+          address: "0x13c991C5BEf30c0E8600D95B8554B4DeDa4853b8", // TBmqJzYEQXJLBU4ycvMLPuqxMfEkVMeDQ8
+        },
+        // mainnets
       },
       filter: {
         event: [
@@ -126,3 +117,7 @@ export default createConfig({
     },
   },
 });
+// https://sepolia.etherscan.io/address/0x56F423Db036F2eDD05567b1211122E0B17C3bfF4
+// https://sepolia.arbiscan.io/address/0x56F423Db036F2eDD05567b1211122E0B17C3bfF4
+// https://pangolin.subscan.io/address/0x56F423Db036F2eDD05567b1211122E0B17C3bfF4
+// https://shasta.tronscan.org/#/contract/TBmqJzYEQXJLBU4ycvMLPuqxMfEkVMeDQ8
