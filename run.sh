@@ -30,25 +30,13 @@ then
 fi
 
 # env vars
-echo "Setting up environment variables..."
-export POSTGRES_HOST=pg
-export POSTGRES_PORT=5432
-export POSTGRES_USER=postgres
-export POSTGRES_PASSWORD=password
-export POSTGRES_DB=postgres
-export PONDER_RPC_URL_ETHEREUM=https://mainnet.infura.io/v3/b4916cde136d459c8105e497ff300ec7
-export PONDER_RPC_URL_SEPOLIA=https://sepolia.infura.io/v3/b4916cde136d459c8105e497ff300ec7
-export PONDER_RPC_URL_ARBITRUM=https://arbitrum-mainnet.infura.io/v3/b4916cde136d459c8105e497ff300ec7
-export PONDER_RPC_URL_ARBITRUM_SEPOLIA=https://arbitrum-sepolia.infura.io/v3/b4916cde136d459c8105e497ff300ec7
-export PONDER_RPC_URL_POLYGON=https://polygon-mainnet.infura.io/v3/b4916cde136d459c8105e497ff300ec7
-export PONDER_RPC_URL_BLAST=https://rpc.blast.io
-export PONDER_RPC_URL_TAIKO_KATLA=https://rpc.katla.taiko.xyz
-export PONDER_RPC_URL_TRON_SHASTA=https://api.shasta.trongrid.io/jsonrpc
-export PONDER_RPC_URL_DARWINIA=http://c1.darwinia-rpc.itering.io:9944/
-export PONDER_RPC_URL_CRAB=http://c2.crab-rpc.itering.io:9944/
-export PONDER_RPC_URL_PANGOLIN=http://g1.testnets.darwinia.network:9940
-export PONDER_RPC_URL_PANGORO=https://fraa-flashbox-2871-rpc.a.stagenet.tanssi.network
-export PANGORO_MAX_REQUESTS_PER_SECOND=10
+# check if .env file exists
+if [ ! -f .env ]; then
+    echo "No .env file found. Please create one."
+    exit 1
+fi
+echo "Loading environment variables from .env file..."
+export $(grep -v '^#' .env | xargs) # Load environment variables
 
 # start the services
 read -p "Do you want to build the images? (y/n) " -n 1 -r
