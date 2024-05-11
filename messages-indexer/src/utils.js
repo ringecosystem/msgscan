@@ -1,4 +1,4 @@
-async function loopDo(fn, interval = 1000) {
+async function loopDo(fn, interval = 5000) {
   try {
     await fn()
     await new Promise((resolve) => setTimeout(resolve, interval))
