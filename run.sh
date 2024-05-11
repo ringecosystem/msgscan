@@ -23,7 +23,7 @@ fi
 
 # remove the data and .ponder directories
 read -p "Do you want to remove the data and .ponder directories? (y/n) " -r
-echo
+echo -n
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     sudo rm -rf ./server/.ponder
@@ -41,7 +41,7 @@ export $(grep -v '^#' .env | xargs) # Load environment variables
 
 # start the services
 read -p "Do you want to build the images? (y/n) " -r
-echo
+echo -n
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     $DOCKER_COMPOSE up -d --build
