@@ -9,11 +9,14 @@ async function setOrmpSigners() {
     const signers = await SignatureSubmittion.findSigners(message.sourceChainId, message.ormpMsgIndex)
 
     if (signers.length > 0) {
-      console.debug(`message ${message.id} ormp signers: ${signers}`)
-      await Message.updateMessage(message, {
-        ormpSigners: signers.join(','),
-      })
-      console.log(`message ${message.id} ormp signers set.`)
+      const signersStr = signers.join(',')
+      if (signerStr != message.ormpSigners) {
+        console.debug(`message ${message.id} ormp signers: ${signers}`)
+        await Message.updateMessage(message, {
+          ormpSigners: ,
+        })
+        console.log(`message ${message.id} ormp signers set.`)
+      }
     }
   }
 }
