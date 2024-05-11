@@ -10,10 +10,10 @@ async function setOrmpSigners() {
 
     if (signers.length > 0) {
       const signersStr = signers.join(',')
-      if (signerStr != message.ormpSigners) {
-        console.debug(`message ${message.id} ormp signers: ${signers}`)
+      if (signersStr != message.ormpSigners) {
+        console.debug(`message ${message.id} ormp signers: ${signersStr}`)
         await Message.updateMessage(message, {
-          ormpSigners: signerStr,
+          ormpSigners: signersStr,
         })
         console.log(`message ${message.id} ormp signers set.`)
       }
