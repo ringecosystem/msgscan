@@ -13,7 +13,7 @@ async function setOrmpSigners() {
       if (signerStr != message.ormpSigners) {
         console.debug(`message ${message.id} ormp signers: ${signers}`)
         await Message.updateMessage(message, {
-          ormpSigners: ,
+          ormpSigners: signerStr,
         })
         console.log(`message ${message.id} ormp signers set.`)
       }
