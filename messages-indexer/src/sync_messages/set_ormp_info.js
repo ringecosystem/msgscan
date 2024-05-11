@@ -6,15 +6,15 @@ async function setOrmpInfo() {
 
   for (const message of messages) {
     const messageAccepted = await MessageAccepted.findByTxHashAndPortAddress(message.sourceTransactionHash, message.sourcePortAddress)
-    if (!messageAccepted) throw new Error(`MessageAccepted not found for message ${message.id}`)
-
-    await Message.updateMessage(message, {
-      ormpMsgHash: messageAccepted.evMsgHash,
-      ormpMsgIndex: messageAccepted.evMessageIndex,
-      ormpMessageGasLimit: messageAccepted.evMessageGasLimit,
-      protocolPayload: messageAccepted.evMessageEncoded,
-    })
-    console.log(`message ${message.id} ormp info set.`)
+    if (messageAccepted) {
+      await Message.updateMessage(message, {
+        ormpMsgHash: messageAccepted.evMsgHash,
+        ormpMsgIndex: messageAccepted.evMessageIndex,
+        ormpMessageGasLimit: messageAccepted.evMessageGasLimit,
+        protocolPayload: messageAccepted.evMessageEncoded,
+      })
+      console.log(`message ${message.id} ormp info set.`)
+    }
   }
 }
 
