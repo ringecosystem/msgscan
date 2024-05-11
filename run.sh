@@ -21,7 +21,8 @@ then
     $DOCKER_COMPOSE down
 fi
 
-read -p "Do you want to remove the data and .ponder directories? (y/n) " -n 1 -r
+# remove the data and .ponder directories
+read -p "Do you want to remove the data and .ponder directories? (y/n) " -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -29,7 +30,7 @@ then
     sudo rm -rf ./data
 fi
 
-# env vars
+# load env vars
 # check if .env file exists
 if [ ! -f .env ]; then
     echo "No .env file found. Please create one."
@@ -39,7 +40,7 @@ echo "Loading environment variables from .env file..."
 export $(grep -v '^#' .env | xargs) # Load environment variables
 
 # start the services
-read -p "Do you want to build the images? (y/n) " -n 1 -r
+read -p "Do you want to build the images? (y/n) " -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
