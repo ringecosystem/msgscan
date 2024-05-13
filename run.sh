@@ -26,8 +26,14 @@ read -p "Do you want to remove the data and .ponder directories? (y/n) " -r
 echo -n
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    sudo rm -rf ./server/.ponder
-    sudo rm -rf ./data
+    read -p "Are you sure to remove them? (y/n) " -r
+    echo -n
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        echo "Removing the data and .ponder directories..."
+        sudo rm -rf ./server/.ponder
+        sudo rm -rf ./data
+    fi
 fi
 
 # load env vars
