@@ -1,15 +1,15 @@
 version: "3.8"
 
 services:
-  server:
-    build: ./server
+  ponder:
+    build: ./ponder
     restart: on-failure
     depends_on:
       - pg
     ports:
       - "42059:42069"
     volumes:
-      - ./server/.ponder:/app/.ponder
+      - ./ponder/.ponder:/app/.ponder
     environment:
       - PONDER_RPC_URL_ETHEREUM=${PONDER_RPC_URL_ETHEREUM}
       - PONDER_RPC_URL_SEPOLIA=${PONDER_RPC_URL_SEPOLIA}
@@ -26,12 +26,12 @@ services:
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pg:5432/${POSTGRES_DB}
       - PANGORO_MAX_REQUESTS_PER_SECOND=${PANGORO_MAX_REQUESTS_PER_SECOND}
 
-  messages-indexer:
-    build: ./messages-indexer
+  scanner:
+    build: ./scanner
     restart: on-failure
     depends_on:
       - pg
-      - server
+      - ponder
     environment:
       - POSTGRES_HOST=pg
       - POSTGRES_PORT=5432
