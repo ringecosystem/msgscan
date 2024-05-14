@@ -103,7 +103,8 @@ async function findMessagesWithoutOrmpSigners() {
 async function findAll() {
   const result = await sql`
     SELECT *
-    FROM indexer."SignatureSubmittion"
+    FROM indexer.${sql(MESSAGE_TABLE)}
+    ORDER BY "sourceBlockTimestamp" DESC
   `
   return result
 }

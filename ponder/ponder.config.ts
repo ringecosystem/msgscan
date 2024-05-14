@@ -51,15 +51,15 @@ export default createConfig({
       abi: IMessagePort,
       address: "0x2632B7BEd9Ec2665B85F6A9b79E350b81440EA13",
       network: {
-        pangolin: {
-          startBlock: 2817846,
-        },
-        sepolia: {
-          startBlock: 5859881,
-        },
-        arbitrum_sepolia: {
-          startBlock: 41809966,
-        },
+        // pangolin: {
+        //   startBlock: 2817846,
+        // },
+        // sepolia: {
+        //   startBlock: 5859881,
+        // },
+        // arbitrum_sepolia: {
+        //   startBlock: 41809966,
+        // },
         tron_shasta: {
           startBlock: 43881710,
           address: "0x0b159252e7a9d603e7aB1Fa264987efC78e8D538", // TAypGzHxfGZchPkSMBiiNH8aotxhzCudpS
@@ -81,19 +81,19 @@ export default createConfig({
       address: "0x56F423Db036F2eDD05567b1211122E0B17C3bfF4",
       network: {
         // testnets
-        pangolin: {
-          startBlock: 2836100,
-        },
+        // pangolin: {
+        //   startBlock: 2836100,
+        // },
         pangoro: {
           startBlock: 127804,
           address: "0xE46ed7594fFa6AD7c3b5232827EC2AF8f94beb38",
         },
-        sepolia: {
-          startBlock: 5877944,
-        },
-        arbitrum_sepolia: {
-          startBlock: 42771116,
-        },
+        // sepolia: {
+        //   startBlock: 5877944,
+        // },
+        // arbitrum_sepolia: {
+        //   startBlock: 42771116,
+        // },
         tron_shasta: {
           startBlock: 43958393,
           address: "0x13c991C5BEf30c0E8600D95B8554B4DeDa4853b8", // TBmqJzYEQXJLBU4ycvMLPuqxMfEkVMeDQ8

@@ -6,7 +6,7 @@ import * as message from './db/message.js'
 
 app.get('/', async (req, res) => {
   const messages = await message.findAll()
-  res.send(messages.map(m => m.id))
+  res.send(messages)
 })
 
 app.listen(port, () => {
