@@ -1,0 +1,11 @@
+{
+  "name": "msgscan-server-lib",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "postgres": "^3.4.4"
+  }
+}

@@ -1,0 +1,9 @@
+const MESSAGE_STATUS = {
+  PENDING: 0,
+  SUCCESS: 1,
+  FAILED: 2,
+}
+
+const MESSAGE_TABLE = 'Message'
+
+export { MESSAGE_STATUS, MESSAGE_TABLE }

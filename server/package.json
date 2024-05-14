@@ -1,0 +1,9 @@
+{
+  "name": "msgport-server",
+  "private": true,
+  "workspaces": [
+    "./lib",
+    "./api",
+    "./scanner"
+  ]
+}
