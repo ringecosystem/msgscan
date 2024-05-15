@@ -31,7 +31,7 @@ then
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         echo "Removing the data and .ponder directories..."
-        sudo rm -rf ./server/.ponder
+        sudo rm -rf ./ponder/.ponder
         sudo rm -rf ./data
     fi
 fi
@@ -44,6 +44,8 @@ if [ ! -f .env ]; then
 fi
 echo "Loading environment variables from .env file..."
 export $(grep -v '^#' .env | xargs) # Load environment variables
+export DEPLOYMENT_ID=$(openssl rand -hex 6)
+echo "Deployment ID: $DEPLOYMENT_ID"
 
 # start the services
 read -p "Do you want to build the images? (y/n) " -r
