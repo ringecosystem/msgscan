@@ -1,11 +1,13 @@
-import sql from './db.js'
+import lib from 'msgscan-lib'
+const sql = lib.sql
+const constants = lib.constants
 
 // get all MessageSent events after a given log on ${chainId}
 async function getMessageSentsAfter(chainId, blockNumber, transactionIndex, logIndex) {
   const id = `${chainId}-${blockNumber}-${transactionIndex}-${logIndex}`
   const result = await sql`
     SELECT *
-    FROM indexer."MessageSent"
+    FROM ${sql(constants.PONDER_PUBLISH_SCHEMA)}."MessageSent"
     WHERE "chainId"=${chainId} and id > ${id}
   `
   return result

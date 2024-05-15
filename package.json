@@ -1,0 +1,10 @@
+{
+  "name": "msgscan",
+  "private": true,
+  "workspaces": [
+    "./ponder",
+    "./lib",
+    "./scanner",
+    "./server"
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "name": "msgscan-server-scanner",
+  "name": "msgscan-scanner",
   "version": "1.0.0",
   "description": "messages indexer depends on server",
   "main": "src/index.js",

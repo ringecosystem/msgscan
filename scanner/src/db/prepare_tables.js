@@ -1,4 +1,5 @@
-import sql from './db.js'
+import lib from 'msgscan-lib'
+const sql = lib.sql
 
 async function checkTableExists(schema, tableName) {
   const exists = await sql`
