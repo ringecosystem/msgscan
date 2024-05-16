@@ -16,7 +16,7 @@ app.get('/messages/:msgIdOrSrcTxHash', async (req, res) => {
   res.send(result)
 })
 
-app.get('/messages/send_by/:sourceDappAddress', async (req, res) => {
+app.get('/messages/sent_by/:sourceDappAddress', async (req, res) => {
   const result = await message.queryBySrcDappAddress(req.params.sourceDappAddress)
   res.send(result)
 })
