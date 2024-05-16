@@ -21,6 +21,17 @@ async function findBySrcTxHash(sourceTransactionHash) {
   return result[0] || null
 }
 
+async function findByMsgId(msgId) {
+  const result = await sql`
+    SELECT *
+    FROM ${sql(PONDER_PUBLISH_SCHEMA)}.${sql(MESSAGE_TABLE)}
+    WHERE "id" = ${msgId}
+    ORDER BY "sourceBlockTimestamp" DESC
+    LIMIT 1
+  `
+  return result[0] || null
+}
+
 async function queryBySrcDappAddress(sourceDappAddress) {
   const result = await sql`
     SELECT *
@@ -32,5 +43,5 @@ async function queryBySrcDappAddress(sourceDappAddress) {
 }
 
 export {
-  queryAll, findBySrcTxHash, queryBySrcDappAddress
+  queryAll, findBySrcTxHash, findByMsgId, queryBySrcDappAddress
 }

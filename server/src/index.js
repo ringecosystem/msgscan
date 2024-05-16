@@ -8,8 +8,11 @@ app.get('/', async (req, res) => {
   res.send('Hello Msgscan!')
 })
 
-app.get('/messages/:sourceChainTransactionHash', async (req, res) => {
-  const result = await message.findBySrcTxHash(req.params.sourceChainTransactionHash)
+app.get('/messages/:msgIdOrSrcTxHash', async (req, res) => {
+  let result = await message.findByMsgId(req.params.msgIdOrSrcTxHash)
+  if (!result) {
+    result = await message.findBySrcTxHash(req.params.msgIdOrSrcTxHash)
+  }
   res.send(result)
 })
 
