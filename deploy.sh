@@ -15,11 +15,22 @@ else
 fi
 
 # stop if services are running
-if $DOCKER_COMPOSE ps | grep -q "Up"
+if docker ps | grep -q "msgscan-ponder-1"
 then
     echo "Stopping the services..."
     $DOCKER_COMPOSE down
 fi
+
+# load env vars
+# check if .env file exists
+if [ ! -f .env ]; then
+    echo "No .env file found. Please create one."
+    exit 1
+fi
+echo "Loading environment variables from .env file..."
+export $(grep -v '^#' .env | xargs) # Load environment variables
+export DEPLOYMENT_ID=$(openssl rand -hex 6)
+echo "Deployment ID: $DEPLOYMENT_ID"
 
 # remove the data and .ponder directories
 read -p "Do you want to remove the data and .ponder directories? (y/n) " -r
@@ -35,17 +46,6 @@ then
         sudo rm -rf ./data
     fi
 fi
-
-# load env vars
-# check if .env file exists
-if [ ! -f .env ]; then
-    echo "No .env file found. Please create one."
-    exit 1
-fi
-echo "Loading environment variables from .env file..."
-export $(grep -v '^#' .env | xargs) # Load environment variables
-export DEPLOYMENT_ID=$(openssl rand -hex 6)
-echo "Deployment ID: $DEPLOYMENT_ID"
 
 # start the services
 read -p "Do you want to build the images? (y/n) " -r
