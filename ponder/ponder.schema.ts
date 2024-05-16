@@ -1,7 +1,7 @@
 import { createSchema } from "@ponder/core";
-import ormpSchema from "./ponder.schema.ormp.ts";
+import ormpSchema from "./ponder.schema.ormp";
 
-function msgportSchema(p) {
+function msgportSchema(p: any) {
   return {
     MessageSent: p.createTable({
       // `${chainId}-${blockNumber}-${transactionIndex}-${logIndex}`
@@ -46,7 +46,7 @@ function msgportSchema(p) {
   }
 }
 
-function messageSchema(p) {
+function messageSchema(p: any) {
   return {
     Message: p.createTable({
       ///////////////////////////////
@@ -93,6 +93,9 @@ function messageSchema(p) {
       lzNonce: p.bigint().optional(),
       lzSrcEid: p.string().optional(),
       lzDstEid: p.string().optional(),
+    }, {
+      sourceTransactionHashIndex: p.index("sourceTransactionHash"),
+      sourceDappAddressIndex: p.index("sourceDappAddress"),
     })
   }
 }

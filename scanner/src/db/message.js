@@ -1,10 +1,10 @@
 import sql from './db.js'
-import { MESSAGE_STATUS, MESSAGE_TABLE } from '../constants.js'
+import { MESSAGE_TABLE, PONDER_PUBLISH_SCHEMA } from '../constants.js'
 
 async function getLastMessageOf(sourceChainId) {
   const result = await sql`
     SELECT * 
-    FROM indexer.${sql(MESSAGE_TABLE)} 
+    FROM ${sql(PONDER_PUBLISH_SCHEMA)}.${sql(MESSAGE_TABLE)} 
     WHERE "sourceChainId" = ${sourceChainId} 
     ORDER BY "sourceBlockNumber" DESC, "sourceTransactionIndex" DESC, "sourceLogIndex" DESC 
     LIMIT 1
@@ -17,7 +17,7 @@ async function createMessage(id, properties) {
   // check if message already exists
   const exists = await sql`
     SELECT EXISTS (
-      SELECT * FROM indexer.${sql(MESSAGE_TABLE)} WHERE id=${id}
+      SELECT * FROM ${sql(PONDER_PUBLISH_SCHEMA)}.${sql(MESSAGE_TABLE)} WHERE id=${id}
     );
   `
   if (exists[0].exists) {
@@ -37,14 +37,14 @@ async function createMessage(id, properties) {
 
   // if not, create message
   await sql`
-    INSERT INTO indexer.${sql(MESSAGE_TABLE)} ${sql(allProps, columnNames)}
+    INSERT INTO ${sql(PONDER_PUBLISH_SCHEMA)}.${sql(MESSAGE_TABLE)} ${sql(allProps, columnNames)}
   `
 }
 
 async function findMessagesByStatuses(sourceChainId, statuses) {
   const result = await sql`
   SELECT *
-    FROM indexer.${sql(MESSAGE_TABLE)}
+    FROM ${sql(PONDER_PUBLISH_SCHEMA)}.${sql(MESSAGE_TABLE)}
     WHERE "sourceChainId" = ${sourceChainId} and "status" IN ${sql(statuses)}
   `
   return result
@@ -53,7 +53,7 @@ async function findMessagesByStatuses(sourceChainId, statuses) {
 async function findMessagesByStatus(sourceChainId, status) {
   const result = await sql`
   SELECT *
-    FROM indexer.${sql(MESSAGE_TABLE)}
+    FROM ${sql(PONDER_PUBLISH_SCHEMA)}.${sql(MESSAGE_TABLE)}
     WHERE "sourceChainId" = ${sourceChainId} and "status" = ${status}
   `
   return result
@@ -61,7 +61,7 @@ async function findMessagesByStatus(sourceChainId, status) {
 
 async function updateMessageStatus(message, status) {
   await sql`
-    UPDATE indexer.${sql(MESSAGE_TABLE)}
+    UPDATE ${sql(PONDER_PUBLISH_SCHEMA)}.${sql(MESSAGE_TABLE)}
     SET status = ${status}
     WHERE id = ${message.id}
   `
@@ -69,7 +69,7 @@ async function updateMessageStatus(message, status) {
 
 async function updateMessage(message, fields) {
   await sql`
-    UPDATE indexer.${sql(MESSAGE_TABLE)}
+    UPDATE ${sql(PONDER_PUBLISH_SCHEMA)}.${sql(MESSAGE_TABLE)}
     SET ${sql(fields)}
     WHERE id = ${message.id}
   `
@@ -78,7 +78,7 @@ async function updateMessage(message, fields) {
 async function findMessagesWithoutOrmpInfo() {
   return await sql`
     SELECT *
-    FROM indexer.${sql(MESSAGE_TABLE)}
+    FROM ${sql(PONDER_PUBLISH_SCHEMA)}.${sql(MESSAGE_TABLE)}
     WHERE 
       "protocol"='ormp' AND
       "ormpMsgHash" IS NULL
@@ -88,7 +88,7 @@ async function findMessagesWithoutOrmpInfo() {
 async function findMessagesWithoutOrmpSigners() {
   const result = await sql`
     SELECT *
-    FROM indexer.${sql(MESSAGE_TABLE)}
+    FROM ${sql(PONDER_PUBLISH_SCHEMA)}.${sql(MESSAGE_TABLE)}
     WHERE 
       "protocol"='ormp' AND
       "ormpMsgIndex" IS NOT NULL AND

@@ -7,7 +7,7 @@ services:
     depends_on:
       - pg
     ports:
-      - "42059:42069"
+      - "42049:42069"
     volumes:
       - ./ponder/.ponder:/app/.ponder
     environment:
@@ -25,6 +25,7 @@ services:
       - PONDER_RPC_URL_PANGORO=${PONDER_RPC_URL_PANGORO}
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pg:5432/${POSTGRES_DB}
       - PANGORO_MAX_REQUESTS_PER_SECOND=${PANGORO_MAX_REQUESTS_PER_SECOND}
+      - DEPLOYMENT_ID=${DEPLOYMENT_ID}
 
   scanner:
     build: ./scanner

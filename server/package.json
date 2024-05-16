@@ -1,0 +1,19 @@
+{
+  "name": "msgscan-server",
+  "version": "1.0.0",
+  "description": "server and api for msgscan",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "msgscan",
+    "msgport"
+  ],
+  "type": "module",
+  "author": "Aki Wu",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

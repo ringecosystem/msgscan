@@ -1,9 +1,10 @@
 import sql from './db.js'
+import { PONDER_PUBLISH_SCHEMA } from '../constants.js'
 
 async function findMessageRecvByMsgId(msgId) {
   const result = await sql`
     SELECT *
-    FROM indexer."MessageRecv"
+    FROM ${sql(PONDER_PUBLISH_SCHEMA)}."MessageRecv"
     WHERE "evMsgId"=${msgId}
   `
 

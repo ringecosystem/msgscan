@@ -1,5 +1,5 @@
 {
-  "name": "msgscan-server",
+  "name": "msgscan-ponder",
   "description": "It is the msgscan server using ponder",
   "private": true,
   "type": "module",

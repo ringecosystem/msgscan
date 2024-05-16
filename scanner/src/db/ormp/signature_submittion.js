@@ -1,10 +1,11 @@
 import sql from '../db.js'
+import { PONDER_PUBLISH_SCHEMA } from '../../constants.js'
 
 // returns [signer]
 async function findSigners(srcChainId, msgIndex) {
   const result = await sql`
     SELECT signer
-    FROM indexer."SignatureSubmittion"
+    FROM ${sql(PONDER_PUBLISH_SCHEMA)}."SignatureSubmittion"
     WHERE "srcChainId" = ${srcChainId} and "msgIndex" = ${msgIndex}
   `
 
