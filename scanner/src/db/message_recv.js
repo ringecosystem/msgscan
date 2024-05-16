@@ -1,11 +1,10 @@
-import lib from 'msgscan-lib'
-const sql = lib.sql
-const constants = lib.constants
+import sql from './db.js'
+import { PONDER_PUBLISH_SCHEMA } from '../constants.js'
 
 async function findMessageRecvByMsgId(msgId) {
   const result = await sql`
     SELECT *
-    FROM ${sql(constants.PONDER_PUBLISH_SCHEMA)}."MessageRecv"
+    FROM ${sql(PONDER_PUBLISH_SCHEMA)}."MessageRecv"
     WHERE "evMsgId"=${msgId}
   `
 

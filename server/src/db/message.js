@@ -1,6 +1,5 @@
-import lib from 'msgscan-lib'
-const sql = lib.sql
-const { MESSAGE_TABLE, PONDER_PUBLISH_SCHEMA } = lib.constants
+import sql from './db.js'
+import { PONDER_PUBLISH_SCHEMA, MESSAGE_TABLE } from '../constants.js'
 
 async function queryAll() {
   const result = await sql`

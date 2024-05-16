@@ -3,12 +3,11 @@ import { exit } from 'process';
 import { checkTableExists } from './db/prepare_tables.js'
 import syncMessages from './sync_messages.js'
 
-import lib from 'msgscan-lib'
-const constants = lib.constants
+import { PONDER_PUBLISH_SCHEMA, MESSAGE_TABLE } from './constants.js'
 
 async function main() {
-  if (!await checkTableExists(constants.PONDER_PUBLISH_SCHEMA, 'Message')) {
-    throw new Error(`Table '${constants.PONDER_PUBLISH_SCHEMA}.Message' does not exist. Please check if the server is running. It needs some time if it is the first time you are running the server.`)
+  if (!await checkTableExists(PONDER_PUBLISH_SCHEMA, MESSAGE_TABLE)) {
+    throw new Error(`Table '${PONDER_PUBLISH_SCHEMA}.${MESSAGE_TABLE}' does not exist. Please check if the server is running. It needs some time if it is the first time you are running the server.`)
   }
 
   await syncMessages([43, 45, 421614, 11155111, 2494104990])
@@ -19,7 +18,7 @@ async function main() {
     await main()
     exit(0)
   } catch (error) {
-    if (error.message.includes(`Table '${constants.PONDER_PUBLISH_SCHEMA}.Message' does not exist.`)) {
+    if (error.message.includes(`Table '${PONDER_PUBLISH_SCHEMA}.${MESSAGE_TABLE}' does not exist.`)) {
       console.error(error.message)
     } else {
       console.error(error)

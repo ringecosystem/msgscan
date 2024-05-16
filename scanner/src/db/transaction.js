@@ -1,5 +1,4 @@
-import lib from 'msgscan-lib'
-const sql = lib.sql
+import sql from './db.js'
 
 async function findTransactionByHash(chainId, transactionHash) {
   const result = await sql`

@@ -14,7 +14,6 @@
   "author": "Aki Wu",
   "license": "MIT",
   "dependencies": {
-    "msgscan-lib": "1.0.0",
     "express": "^4.19.2"
   }
 }

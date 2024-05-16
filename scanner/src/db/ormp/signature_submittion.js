@@ -1,12 +1,11 @@
-import lib from 'msgscan-lib'
-const sql = lib.sql
-const constants = lib.constants
+import sql from '../db.js'
+import { PONDER_PUBLISH_SCHEMA } from '../../constants.js'
 
 // returns [signer]
 async function findSigners(srcChainId, msgIndex) {
   const result = await sql`
     SELECT signer
-    FROM ${sql(constants.PONDER_PUBLISH_SCHEMA)}."SignatureSubmittion"
+    FROM ${sql(PONDER_PUBLISH_SCHEMA)}."SignatureSubmittion"
     WHERE "srcChainId" = ${srcChainId} and "msgIndex" = ${msgIndex}
   `
 

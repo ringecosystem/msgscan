@@ -1,6 +1,5 @@
-import lib from 'msgscan-lib'
-const sql = lib.sql
-const { MESSAGE_STATUS, MESSAGE_TABLE, PONDER_PUBLISH_SCHEMA } = lib.constants
+import sql from './db.js'
+import { MESSAGE_TABLE, PONDER_PUBLISH_SCHEMA } from '../constants.js'
 
 async function getLastMessageOf(sourceChainId) {
   const result = await sql`
