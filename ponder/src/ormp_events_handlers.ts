@@ -1,5 +1,6 @@
 import { ponder } from "@/generated";
 
+// example: https://sepolia.etherscan.io/tx/0xe7cc24f809754f65f999d8e96f028427f81c41d30b5eb02930b20fb5bfb2d7e9#eventlog
 ponder.on("ORMP:MessageAccepted", async ({ event, context }) => {
   const { MessageAccepted } = context.db;
   const message = event.args.message;
@@ -25,9 +26,42 @@ ponder.on("ORMP:MessageAccepted", async ({ event, context }) => {
       evMessageEncoded: message.encoded,
     },
   });
+
+  // console.log("--------------------------");
+  // const { msgHash } = event.args;
+  // const { fromChainId } = event.args.message;
+  //
+  // const { Message } = context.db;
+  // console.log("chain id", fromChainId)
+  // console.log("tx: ", event.log.transactionHash)
+  // const messages = await Message.findMany({
+  //   where: {
+  //     sourceChainId: BigInt(fromChainId),
+  //     sourceBlockNumber: event.block.number,
+  //     sourceTransactionIndex: event.log.transactionIndex
+  //   }
+  // });
+  // console.log(messages.items.length)
+  //
+  // if (messages.items.length > 0 && messages.items[0]) {
+  //   const message = messages.items[0];
+  //
+  //   console.log(message)
+  //   await Message.update({
+  //     id: message.id,
+  //     data: {
+  //       protocalFields: {
+  //         msgHash: msgHash,
+  //         message: event.args.message,
+  //       }
+  //     }
+  //   });
+  //
+  //   console.log("MessageAccepted", msgHash);
+  // }
 })
 
-ponder.on("SignaturePub:SignatureSubmittion" as any, async ({ event, context }) => {
+ponder.on("SignaturePub:SignatureSubmittion", async ({ event, context }) => {
   const { SignatureSubmittion } = context.db;
 
   await SignatureSubmittion.create({

@@ -1,6 +1,3 @@
-// How to link this event with port's `MessageSent` event?
-// 1. both events are in the same transaction
-// 2. port's address is the same as the event's `evMessageFrom`
 function ormpSchema(p: any) {
   return {
     MessageAccepted: p.createTable({
