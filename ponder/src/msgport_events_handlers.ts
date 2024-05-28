@@ -1,7 +1,25 @@
 import { ponder } from "@/generated";
 
+async function getMessageAccepted(context: any, event: any) {
+  const { MessageAccepted } = context.db;
+
+  const messageAccepteds = await MessageAccepted.findMany({
+    where: {
+      chainId: BigInt(context.network.chainId),
+      blockNumber: event.block.number,
+      transactionIndex: event.log.transactionIndex,
+    }
+  });
+
+  if (messageAccepteds.items.length > 0 && messageAccepteds.items[0]) {
+    return messageAccepteds.items[0];
+  } else {
+    return null;
+  }
+}
+
 ponder.on("ORMPUpgradeablePort:MessageSent", async ({ event, context }) => {
-  const { Message, MessageAccepted } = context.db;
+  const { Message } = context.db;
 
   const { msgId, fromDapp, toChainId, toDapp, message, params } = event.args;
 
@@ -26,31 +44,13 @@ ponder.on("ORMPUpgradeablePort:MessageSent", async ({ event, context }) => {
   }
 
 
-  // Add ormp fields
-  const messageAccepteds = await MessageAccepted.findMany({
-    where: {
-      chainId: BigInt(context.network.chainId),
-      blockNumber: event.block.number,
-      transactionIndex: event.log.transactionIndex,
-    }
-  });
-  if (messageAccepteds.items.length > 0 && messageAccepteds.items[0]) {
-    const messageAccepted = messageAccepteds.items[0];
+  // Link ormp info 
+  const messageAccepted = await getMessageAccepted(context, event);
+  if (messageAccepted) {
     fields = {
       ...fields,
-      protocolFields: {
-        msgHash: `${messageAccepted.evMsgHash}`,
-        message: {
-          channel: `${messageAccepted.evMessageChannel}`,
-          index: `${messageAccepted.evMessageIndex}`,
-          fromChainId: `${messageAccepted.evMessageFromChainId}`,
-          from: `${messageAccepted.evMessageFrom}`,
-          toChainId: `${messageAccepted.evMessageToChainId}`,
-          to: `${messageAccepted.evMessageTo}`,
-          gasLimit: `${messageAccepted.evMessageGasLimit}`,
-          encoded: `${messageAccepted.evMessageEncoded}`,
-        }
-      }
+      protocolInfoType: 'MessageAccepted',
+      protocolInfoId: messageAccepted.id,
     }
   }
 

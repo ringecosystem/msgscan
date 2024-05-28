@@ -34,9 +34,10 @@ function messageSchema(p: any) {
       targetPortAddress: p.string().optional(),
 
       ///////////////////////////////
-      // protocol fields 
+      // protocol info
       ///////////////////////////////
-      protocolFields: p.json().optional(),
+      protocolInfoType: p.string().optional(),
+      protocolInfoId: p.string().optional(),
     }, {
       sourceTransactionHashIndex: p.index("sourceTransactionHash"),
       sourceDappAddressIndex: p.index("sourceDappAddress"),
