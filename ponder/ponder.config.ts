@@ -205,10 +205,10 @@ export default createConfig({
     },
     SignaturePub: {
       abi: SignaturePub,
-      address: "0xb2aa34fde97ffdb6197dd5a2be23c2121405cc12",
+      address: "0x57aa601a0377f5ab313c5a955ee874f5d495fc92",
       network: {
         darwinia: {
-          startBlock: 2667533,
+          startBlock: 2795207,
         },
       },
     },
