@@ -27,8 +27,8 @@ services:
       - PANGORO_MAX_REQUESTS_PER_SECOND=${PANGORO_MAX_REQUESTS_PER_SECOND}
       - DEPLOYMENT_ID=${DEPLOYMENT_ID}
 
-  server:
-    build: ./server
+  api:
+    build: ./api
     restart: on-failure
     depends_on:
       - pg
