@@ -1,6 +1,6 @@
 function ormpSchema(p: any) {
   return {
-    MessageAccepted: p.createTable({
+    OrmpInfo: p.createTable({
       id: p.string(),
 
       chainId: p.bigint(),
@@ -10,16 +10,19 @@ function ormpSchema(p: any) {
       transactionIndex: p.int(),
       logIndex: p.int(),
 
-      evMsgHash: p.string(),
-      evMessageChannel: p.string(),
-      evMessageIndex: p.bigint(),
-      evMessageFromChainId: p.bigint(),
-      evMessageFrom: p.string(), // source port address
-      evMessageToChainId: p.bigint(),
-      evMessageTo: p.string(), // target port address
-      evMessageGasLimit: p.bigint(),
-      evMessageEncoded: p.string(),
+      msgHash: p.string(),
+      messageChannel: p.string(),
+      messageIndex: p.bigint(),
+      messageFromChainId: p.bigint(),
+      messageFrom: p.string(), // source port address
+      messageToChainId: p.bigint(),
+      messageTo: p.string(), // target port address
+      messageGasLimit: p.bigint(),
+      messageEncoded: p.string(),
+
+      msgId: p.string().optional(),
     }),
+
     SignatureSubmittion: p.createTable({ // event only on darwinia
       id: p.string(),
 
