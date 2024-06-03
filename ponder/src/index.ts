@@ -1,2 +1,2 @@
-import './msgport_events_handlers';
+import './msgport_events_handlers/index';
 import './ormp_events_handlers';

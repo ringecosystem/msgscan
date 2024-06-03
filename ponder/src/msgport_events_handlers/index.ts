@@ -1,5 +1,6 @@
 import { ponder } from "@/generated";
-import { onMessageSent, onMessageRecv } from "./msgport_helper";
+import onMessageSent from './onMessageSent'
+import onMessageRecv from './onMessageRecv'
 
 ponder.on("ORMPUpgradeablePort:MessageSent", async ({ event, context }) => {
   await onMessageSent("ormp", event, context)
