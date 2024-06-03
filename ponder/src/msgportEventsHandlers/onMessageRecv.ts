@@ -5,7 +5,7 @@ async function decreaseInflightMessagesCount(MessagesInfo: any) {
       let newValue = '0'
       const currentValue = parseInt(current.value)
       if (currentValue > 0) {
-        newValue = `${currentValue + 1}`
+        newValue = `${currentValue - 1}`
       }
       return { value: newValue }
     },
