@@ -1,10 +1,11 @@
 import { ponder } from "@/generated";
 
+// example: https://sepolia.etherscan.io/tx/0xe7cc24f809754f65f999d8e96f028427f81c41d30b5eb02930b20fb5bfb2d7e9#eventlog
 ponder.on("ORMP:MessageAccepted", async ({ event, context }) => {
-  const { MessageAccepted } = context.db;
+  const { OrmpInfo } = context.db;
   const message = event.args.message;
 
-  await MessageAccepted.create({
+  await OrmpInfo.create({
     id: `${context.network.chainId}-${event.block.number}-${event.log.transactionIndex}-${event.log.logIndex}`,
     data: {
       chainId: BigInt(context.network.chainId),
@@ -14,20 +15,20 @@ ponder.on("ORMP:MessageAccepted", async ({ event, context }) => {
       transactionIndex: event.log.transactionIndex,
       logIndex: event.log.logIndex,
 
-      evMsgHash: event.args.msgHash,
-      evMessageChannel: message.channel,
-      evMessageIndex: message.index,
-      evMessageFromChainId: message.fromChainId,
-      evMessageFrom: message.from,
-      evMessageToChainId: message.toChainId,
-      evMessageTo: message.to,
-      evMessageGasLimit: message.gasLimit,
-      evMessageEncoded: message.encoded,
+      msgHash: event.args.msgHash,
+      messageChannel: message.channel,
+      messageIndex: message.index,
+      messageFromChainId: message.fromChainId,
+      messageFrom: message.from,
+      messageToChainId: message.toChainId,
+      messageTo: message.to,
+      messageGasLimit: message.gasLimit,
+      messageEncoded: message.encoded,
     },
   });
 })
 
-ponder.on("SignaturePub:SignatureSubmittion" as any, async ({ event, context }) => {
+ponder.on("SignaturePub:SignatureSubmittion", async ({ event, context }) => {
   const { SignatureSubmittion } = context.db;
 
   await SignatureSubmittion.create({

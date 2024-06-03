@@ -13,11 +13,58 @@ export default createConfig({
     schema: process.env.DEPLOYMENT_ID ? `indexer-${process.env.DEPLOYMENT_ID}` : "indexer",
   },
   networks: {
+    // mainnets
+    arbitrum: {
+      chainId: 42161,
+      transport: http(process.env.PONDER_RPC_URL_ARBITRUM),
+      maxRequestsPerSecond: 5,
+    },
+    blast: {
+      chainId: 81457,
+      transport: http(process.env.PONDER_RPC_URL_BLAST),
+      maxRequestsPerSecond: 5,
+    },
+    crab: {
+      chainId: 44,
+      transport: http(process.env.PONDER_RPC_URL_CRAB),
+      maxRequestsPerSecond: 5,
+    },
+    darwinia: {
+      chainId: 46,
+      transport: http(process.env.PONDER_RPC_URL_DARWINIA),
+      maxRequestsPerSecond: 5,
+    },
+    ethereum: {
+      chainId: 1,
+      transport: http(process.env.PONDER_RPC_URL_ETHEREUM),
+      maxRequestsPerSecond: 5,
+    },
+    polygon: {
+      chainId: 137,
+      transport: http(process.env.PONDER_RPC_URL_POLYGON),
+      maxRequestsPerSecond: 5,
+    },
+    moonbeam: {
+      chainId: 1284,
+      transport: http(process.env.PONDER_RPC_URL_MOONBEAM),
+      maxRequestsPerSecond: 5,
+    },
+    tron: {
+      chainId: 728126428,
+      transport: http(process.env.PONDER_RPC_URL_TRON),
+      maxRequestsPerSecond: 5,
+    },
+    
     // testnets
     arbitrum_sepolia: {
       chainId: 421614,
       transport: http(process.env.PONDER_RPC_URL_ARBITRUM_SEPOLIA),
       maxRequestsPerSecond: 5,
+    },
+    sepolia: {
+      chainId: 11155111,
+      transport: http(process.env.PONDER_RPC_URL_SEPOLIA),
+      maxRequestsPerSecond: 1,
     },
     pangolin: {
       chainId: 43,
@@ -29,45 +76,67 @@ export default createConfig({
       transport: http(process.env.PONDER_RPC_URL_PANGORO),
       maxRequestsPerSecond: process.env.PANGORO_MAX_REQUESTS_PER_SECOND ? parseInt(process.env.PANGORO_MAX_REQUESTS_PER_SECOND) : 1
     },
-    sepolia: {
-      chainId: 11155111,
-      transport: http(process.env.PONDER_RPC_URL_SEPOLIA),
-      maxRequestsPerSecond: 1,
+    taiko_hekla: {
+      chainId: 167009,
+      transport: http(process.env.PONDER_RPC_URL_TAIKO_HEKLA),
+      maxRequestsPerSecond: 10,
     },
     tron_shasta: {
       chainId: 2494104990,
       transport: http(process.env.PONDER_RPC_URL_TRON_SHASTA),
       maxRequestsPerSecond: 1,
     },
-    // mainnets
-    darwinia: {
-      chainId: 46,
-      transport: http(process.env.PONDER_RPC_URL_DARWINIA),
-      maxRequestsPerSecond: 5,
-    },
-
   },
   contracts: {
     ORMPUpgradeablePort: {
       abi: IMessagePort,
-      address: "0x24A9886194A21FeCca211BE8DfCF3F281b11109E",
+      address: "0x2cd1867Fb8016f93710B6386f7f9F1D540A60812",
       network: {
-        pangolin: {
-          startBlock: 2863870,
+        arbitrum: {
+          startBlock: 217896912,
+        },
+        blast: {
+          startBlock: 4294668,
+        },
+        crab: {
+          startBlock: 2900650,
+        },
+        darwinia: {
+          startBlock: 2830148,
+        },
+        ethereum: {
+          startBlock: 20009590,
+        },
+        polygon: {
+          startBlock: 57711531,
+        },
+        moonbeam: {
+          startBlock: 6294321,
+        },
+        tron: {
+          startBlock: 62251634,
+          address: "0x3bc5362ec3a3dbc07292aed4ef18be18de02da3a",
+        },
+
+        // testnets
+        arbitrum_sepolia: {
+          startBlock: 46922296,
         },
         sepolia: {
-          startBlock: 5906285,
+          startBlock: 5958523,
         },
-        arbitrum_sepolia: {
-          startBlock: 44228847,
-        },
-        tron_shasta: {
-          startBlock: 43881710,
-          address: "0x0b159252e7a9d603e7aB1Fa264987efC78e8D538", // TAypGzHxfGZchPkSMBiiNH8aotxhzCudpS
+        pangolin: {
+          startBlock: 2915877,
         },
         pangoro: {
-          startBlock: 118897,
-          address: "0x64672778785c84a18Ec6e4858505E86D7F383774"
+          startBlock: 229000,
+        },
+        taiko_hekla: {
+          startBlock: 195443,
+        },
+        tron_shasta: {
+          startBlock: 44337583,
+          address: "0x9a80b8a27ea73bd584336c9c200bb97190865482", 
         },
       },
       filter: {
@@ -79,27 +148,54 @@ export default createConfig({
     },
     ORMP: {
       abi: ORMP,
-      address: "0xdf7b91c92Ac62447Ccb92bd39f41727466534043",
+      address: "0x13b2211a7cA45Db2808F6dB05557ce5347e3634e",
       network: {
-        // testnets
-        pangolin: {
-          startBlock: 2863861,
+        arbitrum: {
+          startBlock: 215479884,
         },
-        pangoro: {
-          startBlock: 127804,
-          address: "0xE46ed7594fFa6AD7c3b5232827EC2AF8f94beb38",
+        blast: {
+          startBlock: 3990955,
+        },
+        crab: {
+          startBlock: 2860619,
+        },
+        darwinia: {
+          startBlock: 2781584,
+        },
+        ethereum: {
+          startBlock: 19959316,
+        },
+        polygon: {
+          startBlock: 57441039,
+        },
+        moonbeam: {
+          startBlock: 6244360,
+        },
+        tron: {
+          startBlock: 62251392,
+          address: "0x5c5c383febe62f377f8c0ea1de97f2a2ba102e98",
+        },
+
+        // testnets
+        arbitrum_sepolia: {
+          startBlock: 46920328,
         },
         sepolia: {
-          startBlock: 5906285,
+          startBlock: 5958523,
         },
-        arbitrum_sepolia: {
-          startBlock: 44228309,
+        pangolin: {
+          startBlock: 2915869,
+        },
+        pangoro: {
+          startBlock: 229000,
+        },
+        taiko_hekla: {
+          startBlock: 195443,
         },
         tron_shasta: {
-          startBlock: 43958393,
-          address: "0x13c991C5BEf30c0E8600D95B8554B4DeDa4853b8", // TBmqJzYEQXJLBU4ycvMLPuqxMfEkVMeDQ8
+          startBlock: 44337374,
+          address: "0x841b6b2f3148131ac161d88edfb2c11f146e189f", 
         },
-        // mainnets
       },
       filter: {
         event: [
@@ -109,16 +205,12 @@ export default createConfig({
     },
     SignaturePub: {
       abi: SignaturePub,
-      address: "0xb2aa34fde97ffdb6197dd5a2be23c2121405cc12",
+      address: "0x57aa601a0377f5ab313c5a955ee874f5d495fc92",
       network: {
         darwinia: {
-          startBlock: 2667533,
+          startBlock: 2795207,
         },
       },
     },
   },
 });
-// https://sepolia.etherscan.io/address/0x56F423Db036F2eDD05567b1211122E0B17C3bfF4
-// https://sepolia.arbiscan.io/address/0x56F423Db036F2eDD05567b1211122E0B17C3bfF4
-// https://pangolin.subscan.io/address/0x56F423Db036F2eDD05567b1211122E0B17C3bfF4
-// https://shasta.tronscan.org/#/contract/TBmqJzYEQXJLBU4ycvMLPuqxMfEkVMeDQ8
