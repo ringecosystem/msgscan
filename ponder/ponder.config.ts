@@ -90,32 +90,32 @@ export default createConfig({
   contracts: {
     ORMPUpgradeablePort: {
       abi: IMessagePort,
-      address: "0x8d22f03a675064BFd7509c87206d33730f33e324",
+      address: "0x2cd1867Fb8016f93710B6386f7f9F1D540A60812",
       network: {
         arbitrum: {
-          startBlock: 215479999,
+          startBlock: 217896912,
         },
         blast: {
-          startBlock: 3990955,
+          startBlock: 4294668,
         },
         crab: {
-          startBlock: 2860627,
+          startBlock: 2900650,
         },
         darwinia: {
-          startBlock: 2781591,
+          startBlock: 2830148,
         },
         ethereum: {
-          startBlock: 19959316,
+          startBlock: 20009590,
         },
         polygon: {
-          startBlock: 57441039,
+          startBlock: 57711531,
         },
         moonbeam: {
-          startBlock: 6244366,
+          startBlock: 6294321,
         },
         tron: {
-          startBlock: 62048987,
-          address: "0xd5acb1876b907a954755a08d3009eedc0127065d",
+          startBlock: 62251634,
+          address: "0x3bc5362ec3a3dbc07292aed4ef18be18de02da3a",
         },
 
         // testnets
@@ -148,7 +148,7 @@ export default createConfig({
     },
     ORMP: {
       abi: ORMP,
-      address: "0xA72d283015c01807bc0788Bf22C1A774bDbFC8fA",
+      address: "0x13b2211a7cA45Db2808F6dB05557ce5347e3634e",
       network: {
         arbitrum: {
           startBlock: 215479884,
@@ -172,8 +172,8 @@ export default createConfig({
           startBlock: 6244360,
         },
         tron: {
-          startBlock: 62048666,
-          address: "0x152c6dddd0a4cfd817af7cf4cf5491d4ac44e886",
+          startBlock: 62251392,
+          address: "0x5c5c383febe62f377f8c0ea1de97f2a2ba102e98",
         },
 
         // testnets
