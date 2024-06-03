@@ -42,25 +42,25 @@ async function setMsgIdInProtocolInfo(protocolInfoPointer: any, context: any, ev
   }
 }
 
-async function increaseMessagesCount() {
+async function increaseMessagesCount(MessagesInfo: any) {
   await MessagesInfo.upsert({
     id: 'total',
     create: { value: '1' },
-    update: ({ current }) => ({ 
-      value: `${parseInt(current.value) + 1}` 
+    update: ({ current }: { current: any }) => ({
+      value: `${parseInt(current.value) + 1}`
     }),
   });
   await MessagesInfo.upsert({
     id: 'totalInflight',
     create: { value: '1' },
-    update: ({ current }) => ({ 
-      value: `${parseInt(current.value) + 1}` 
+    update: ({ current }: { current: any }) => ({
+      value: `${parseInt(current.value) + 1}`
     }),
   });
 }
 
-async function onMessageSent(protocol: string, event: any, context: any, protocolInfoType?: string) {
-  const { Message } = context.db;
+async function onMessageSent(protocol: string, event: any, context: any, protocolInfoType?: `${string}Info`) {
+  const { Message, MessagesInfo } = context.db;
   const { msgId, fromDapp, toChainId, toDapp, message, params } = event.args;
 
   // Prepare fields
@@ -84,7 +84,7 @@ async function onMessageSent(protocol: string, event: any, context: any, protoco
   }
 
 
-  // Link ormp info 
+  // Link protocol info 
   if (!protocolInfoType) {
     // capitalize first letter, then add "Info". e.g. "ormp" -> "OrmpInfo"
     protocolInfoType = protocol.charAt(0).toUpperCase() + protocol.slice(1) + "Info"
@@ -114,7 +114,7 @@ async function onMessageSent(protocol: string, event: any, context: any, protoco
         status: 0,
       }
     });
-    await increaseMessagesCount();
+    await increaseMessagesCount(MessagesInfo);
   }
 
   // Fill msgId in OrmpInfo

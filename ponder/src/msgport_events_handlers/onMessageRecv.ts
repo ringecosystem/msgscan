@@ -1,10 +1,11 @@
-async function decreaseInflightMessagesCount() {
+async function decreaseInflightMessagesCount(MessagesInfo: any) {
   await MessagesInfo.update({
     id: 'totalInflight',
-    data: ({ current }) => {
+    data: ({ current }: { current: any }) => {
       let newValue = '0'
-      if (parseInt(current.value) > 0) {
-        newValue = `${parseInt(current.value) + 1}` 
+      const currentValue = parseInt(current.value)
+      if (currentValue > 0) {
+        newValue = `${currentValue + 1}`
       }
       return { value: newValue }
     },
@@ -12,7 +13,7 @@ async function decreaseInflightMessagesCount() {
 }
 
 async function onMessageRecv(protocol: string, event: any, context: any) {
-  const { Message } = context.db;
+  const { Message, MessagesInfo } = context.db;
   const { msgId, result, returnData } = event.args;
 
   const fields = {
@@ -37,7 +38,7 @@ async function onMessageRecv(protocol: string, event: any, context: any) {
       id: `${msgId}`,
       data: fields,
     });
-    await decreaseInflightMessagesCount();
+    await decreaseInflightMessagesCount(MessagesInfo);
   } else {
     await Message.create({
       id: `${msgId}`,
