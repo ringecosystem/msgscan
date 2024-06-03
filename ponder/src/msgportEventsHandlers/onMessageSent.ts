@@ -1,4 +1,3 @@
-
 async function getProtocolInfo(protocolInfoTypeName: string, context: any, event: any) {
   const protocolInfoType = context.db[protocolInfoTypeName];
   if (!protocolInfoType) return null;
@@ -43,8 +42,25 @@ async function setMsgIdInProtocolInfo(protocolInfoPointer: any, context: any, ev
   }
 }
 
-async function onMessageSent(protocol: string, event: any, context: any, protocolInfoType?: string) {
-  const { Message } = context.db;
+async function increaseMessagesCount(MessagesInfo: any) {
+  await MessagesInfo.upsert({
+    id: 'total',
+    create: { value: '1' },
+    update: ({ current }: { current: any }) => ({
+      value: `${parseInt(current.value) + 1}`
+    }),
+  });
+  await MessagesInfo.upsert({
+    id: 'totalInflight',
+    create: { value: '1' },
+    update: ({ current }: { current: any }) => ({
+      value: `${parseInt(current.value) + 1}`
+    }),
+  });
+}
+
+async function onMessageSent(protocol: string, event: any, context: any, protocolInfoType?: `${string}Info`) {
+  const { Message, MessagesInfo } = context.db;
   const { msgId, fromDapp, toChainId, toDapp, message, params } = event.args;
 
   // Prepare fields
@@ -68,7 +84,7 @@ async function onMessageSent(protocol: string, event: any, context: any, protoco
   }
 
 
-  // Link ormp info 
+  // Link protocol info 
   if (!protocolInfoType) {
     // capitalize first letter, then add "Info". e.g. "ormp" -> "OrmpInfo"
     protocolInfoType = protocol.charAt(0).toUpperCase() + protocol.slice(1) + "Info"
@@ -81,42 +97,29 @@ async function onMessageSent(protocol: string, event: any, context: any, protoco
 
   // Update or insert
   // -------------------
-  Message.upsert({
-    id: `${msgId}`,
-    create: {
-      ...fields,
-      status: 0,
-    },
-    update: fields,
-  });
+  const existed = await Message.findUnique({
+    id: `${msgId}`
+  }) != null;
+
+  if (existed) {
+    await Message.update({
+      id: `${msgId}`,
+      data: fields,
+    });
+  } else {
+    await Message.create({
+      id: `${msgId}`,
+      data: {
+        ...fields,
+        status: 0,
+      }
+    });
+    await increaseMessagesCount(MessagesInfo);
+  }
 
   // Fill msgId in OrmpInfo
   // -------------------
   await setMsgIdInProtocolInfo(protocolInfoPointer, context, event, msgId);
 }
 
-async function onMessageRecv(protocol: string, event: any, context: any) {
-  const { Message } = context.db;
-  const { msgId, result, returnData } = event.args;
-
-  const fields = {
-    protocol: protocol,
-    status: result ? 1 : 2,
-
-    targetChainId: BigInt(context.network.chainId),
-    targetBlockNumber: event.block.number,
-    targetBlockTimestamp: event.block.timestamp,
-    targetTransactionHash: event.transaction.hash,
-    targetTransactionIndex: event.log.transactionIndex,
-    targetLogIndex: event.log.logIndex,
-    targetPortAddress: event.log.address,
-  }
-
-  Message.upsert({
-    id: msgId,
-    create: fields,
-    update: fields,
-  });
-}
-
-export { onMessageSent, onMessageRecv }
+export default onMessageSent;
