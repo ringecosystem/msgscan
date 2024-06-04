@@ -15,7 +15,7 @@ app.get('/', async (req, res) => {
   res.send('Hello Msgscan!')
 })
 
-app.get('/messages/:msgIdOrSrcTxHash', async (req, res, next) => {
+app.get('/messages/:msgIdOrSrcTxHash.json', async (req, res, next) => {
   try {
     let result = await message.findByMsgId(req.params.msgIdOrSrcTxHash)
     if (!result) {
@@ -27,7 +27,7 @@ app.get('/messages/:msgIdOrSrcTxHash', async (req, res, next) => {
   }
 })
 
-app.get('/messages/sent_by/:sourceDappAddress', async (req, res, next) => {
+app.get('/messages/sent_by/:sourceDappAddress.json', async (req, res, next) => {
   try {
     const result = await message.queryBySrcDappAddress(req.params.sourceDappAddress)
     res.json(result)
