@@ -42,6 +42,21 @@ async function queryBySrcDappAddress(sourceDappAddress) {
   return result
 }
 
+// op: gt|lt
+// unit: seconds|minutes|hours|days
+// status: list of inflight, success, failed
+async function queryByTimeSpent(op, n, unit, status) {
+  const timestampsql = `EXTRACT(EPOCH FROM (NOW() - interval '${n} ${unit}'))`
+  const result = await sql`
+    SELECT *
+    FROM ${sql(PONDER_PUBLISH_SCHEMA)}.${sql(MESSAGE_TABLE)}
+    WHERE "status" IN ${sql(status)} AND "sourceBlockTimestamp" > ${sql.unsafe(timestampsql)}
+    ORDER BY "sourceBlockTimestamp" DESC
+  `
+
+  return result
+}
+
 export {
-  queryAll, findBySrcTxHash, findByMsgId, queryBySrcDappAddress
+  queryAll, findBySrcTxHash, findByMsgId, queryBySrcDappAddress, queryByTimeSpent
 }

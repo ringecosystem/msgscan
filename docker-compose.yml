@@ -38,7 +38,7 @@ services:
       - pg
       - ponder
     ports:
-      - "3000:3000"
+      - "2049:3000"
     environment:
       - POSTGRES_HOST=pg
       - POSTGRES_PORT=5432
