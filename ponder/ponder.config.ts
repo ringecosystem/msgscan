@@ -93,9 +93,9 @@ export default createConfig({
       abi: IMessagePort,
       address: "0x2cd1867Fb8016f93710B6386f7f9F1D540A60812",
       network: {
-        arbitrum: {
-          startBlock: 217896912,
-        },
+        // arbitrum: {
+        //   startBlock: 217896912,
+        // },
         blast: {
           startBlock: 4294668,
         },
@@ -108,9 +108,9 @@ export default createConfig({
         ethereum: {
           startBlock: 20009590,
         },
-        polygon: {
-          startBlock: 57711531,
-        },
+        // polygon: {
+        //   startBlock: 57711531,
+        // },
         moonbeam: {
           startBlock: 6294321,
         },
@@ -151,9 +151,9 @@ export default createConfig({
       abi: ORMP,
       address: "0x13b2211a7cA45Db2808F6dB05557ce5347e3634e",
       network: {
-        arbitrum: {
-          startBlock: 215479884,
-        },
+        // arbitrum: {
+        //   startBlock: 215479884,
+        // },
         blast: {
           startBlock: 3990955,
         },
@@ -166,9 +166,9 @@ export default createConfig({
         ethereum: {
           startBlock: 19959316,
         },
-        polygon: {
-          startBlock: 57441039,
-        },
+        // polygon: {
+        //   startBlock: 57441039,
+        // },
         moonbeam: {
           startBlock: 6244360,
         },
