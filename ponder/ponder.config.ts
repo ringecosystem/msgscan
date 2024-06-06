@@ -10,7 +10,8 @@ export default createConfig({
     kind: "postgres",
     connectionString: process.env.DATABASE_URL || "postgres://postgres:password@pg:5432/postgres",
     publishSchema: "publish",
-    schema: process.env.DEPLOYMENT_ID ? `indexer-${process.env.DEPLOYMENT_ID}` : "indexer",
+    // schema: process.env.DEPLOYMENT_ID ? `indexer-${process.env.DEPLOYMENT_ID}` : "indexer",
+    schema: "indexer",
   },
   networks: {
     // mainnets
