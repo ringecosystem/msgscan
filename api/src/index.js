@@ -21,7 +21,12 @@ app.get('/messages/:msgIdOrSrcTxHash.json', async (req, res, next) => {
     if (!result) {
       result = await message.findBySrcTxHash(req.params.msgIdOrSrcTxHash)
     }
-    res.json(result)
+
+    if (!result) {
+      res.status(404).send(`No message found for msgIdOrSrcTxHash ${req.params.msgIdOrSrcTxHash}`)
+    } else {
+      res.json(result)
+    }
   } catch (err) {
     next(err)
   }
