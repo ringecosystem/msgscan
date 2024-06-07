@@ -53,7 +53,7 @@ jobs:
           push: true
           context: api
           tags: |
-            ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/server:sha-${{ env.SHA }
+            ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/server:sha-${{ env.SHA }}
             ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/server:staging
 
       - name: Build server with tag
@@ -63,6 +63,6 @@ jobs:
           push: true
           context: api
           tags: |
-            ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/server:${{ env.GIT_TAG_NAME }
+            ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/server:${{ env.GIT_TAG_NAME }}
             ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/server:latest
 
