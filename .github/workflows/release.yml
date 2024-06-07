@@ -33,7 +33,9 @@ jobs:
         with:
           push: true
           context: ponder
-          tags: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/ponder:sha-${{ env.SHA }}
+          tags: |
+            ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/ponder:sha-${{ env.SHA }}
+            ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/ponder:staging
 
       - name: Build ponder with tag
         uses: docker/build-push-action@v3
@@ -41,14 +43,18 @@ jobs:
         with:
           push: true
           context: ponder
-          tags: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/ponder:${{ env.GIT_TAG_NAME }}
+          tags: |
+            ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/ponder:${{ env.GIT_TAG_NAME }}
+            ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/ponder:latest
 
       - name: Build server with sha
         uses: docker/build-push-action@v3
         with:
           push: true
           context: api
-          tags: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/server:sha-${{ env.SHA }}
+          tags: |
+            ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/server:sha-${{ env.SHA }
+            ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/server:staging
 
       - name: Build server with tag
         uses: docker/build-push-action@v3
@@ -56,5 +62,7 @@ jobs:
         with:
           push: true
           context: api
-          tags: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/server:${{ env.GIT_TAG_NAME }}
+          tags: |
+            ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/server:${{ env.GIT_TAG_NAME }
+            ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/server:latest
 
