@@ -36,7 +36,7 @@ async function setMsgIdInProtocolInfo(protocolInfoPointer: any, context: any, ev
     protocolInfoType.update({
       id: protocolInfoPointer.protocolInfoId,
       data: {
-        msgId: `${msgId}`,
+        msgId: `${msgId}`, // msgId of msgport message
       },
     });
   }
