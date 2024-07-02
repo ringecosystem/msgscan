@@ -17,10 +17,6 @@ jobs:
           repository: darwinia-network/devops
           path: .github
 
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 8
-
       - uses: ./.github/actions/smart-vercel
         name: Deploy to Vercel
         with:
