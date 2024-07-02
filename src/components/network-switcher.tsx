@@ -1,4 +1,6 @@
 'use client';
+import { Suspense, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Select,
   SelectContent,
@@ -6,21 +8,21 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { useNetworkFromQuery } from '@/hooks/useNetwork';
+import useFilterStore from '@/store/filter';
 import { NetworkMap } from '@/config/network';
 import { Network } from '@/types/network';
-
-import { Suspense, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { useNetworkFromQuery } from '@/hooks/useNetwork';
 
 const NetworkSwitcher = () => {
   const network = useNetworkFromQuery();
   const router = useRouter();
+  const reset = useFilterStore((state) => state.reset);
   const handleChange = useCallback(
     (value: Network) => {
       router.push(`/?network=${value}`);
+      reset();
     },
-    [router]
+    [router, reset]
   );
 
   return (

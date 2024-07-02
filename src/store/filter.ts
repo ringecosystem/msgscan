@@ -12,6 +12,7 @@ export type Action = {
   setDate: (date: DateRange | undefined) => void;
   setSelectedSourceChains: (chains: number[]) => void;
   setSelectedTargetChains: (chains: number[]) => void;
+  reset: () => void;
 };
 
 const useFilterStore = create<State & Action>((set) => ({
@@ -22,7 +23,14 @@ const useFilterStore = create<State & Action>((set) => ({
   setSelectedStatuses: (status) => set({ selectedStatuses: status }),
   setDate: (date) => set({ date }),
   setSelectedSourceChains: (chains) => set({ selectedSourceChains: chains }),
-  setSelectedTargetChains: (chains) => set({ selectedTargetChains: chains })
+  setSelectedTargetChains: (chains) => set({ selectedTargetChains: chains }),
+  reset: () =>
+    set({
+      selectedStatuses: [],
+      date: { from: undefined, to: undefined },
+      selectedSourceChains: [],
+      selectedTargetChains: []
+    })
 }));
 
 export default useFilterStore;
