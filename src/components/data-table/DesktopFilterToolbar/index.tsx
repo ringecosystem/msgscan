@@ -30,7 +30,7 @@ const TableFilterToolbar = ({ chains, className }: TableFilterToolbarProps) => {
     handleReset,
     handleResetStatus
   } = useFilter();
-
+  const limit = CHAIN_OPTIONS?.length;
   return (
     <div className={cn('flex items-center justify-between py-5', className)}>
       <div className="text-sm font-normal leading-[1.4rem] text-foreground">Messages</div>
@@ -52,7 +52,7 @@ const TableFilterToolbar = ({ chains, className }: TableFilterToolbarProps) => {
           onChange={handleSourceChainChange}
           title="Source"
           contentClassName="w-[28rem]"
-          limit={6}
+          limit={limit}
         />
 
         <TableChainFilter
@@ -61,7 +61,7 @@ const TableFilterToolbar = ({ chains, className }: TableFilterToolbarProps) => {
           onChange={handleTargetChainChange}
           title="Target"
           contentClassName="w-[28rem]"
-          limit={6}
+          limit={limit}
         />
 
         <Button

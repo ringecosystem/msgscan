@@ -24,6 +24,8 @@ const TableFilterToolbar = ({ chains, className }: TableFilterToolbarProps) => {
     label: chain.name,
     value: chain.id
   }));
+  const limit = CHAIN_OPTIONS?.length;
+
   const [open, setOpen] = useState(false);
 
   const [currentFilterInfo, setCurrentFilterInfo] = useState<CURRENT_FILTERS_STATE>({
@@ -172,7 +174,7 @@ const TableFilterToolbar = ({ chains, className }: TableFilterToolbarProps) => {
                   options={CHAIN_OPTIONS}
                   value={selectedSourceChains}
                   onChange={handleSourceChainChange}
-                  limit={6}
+                  limit={limit}
                 />
               )}
               {currentFilterInfo?.value === CURRENT_FILTERS.TARGET_CHAIN && (
@@ -180,7 +182,7 @@ const TableFilterToolbar = ({ chains, className }: TableFilterToolbarProps) => {
                   options={CHAIN_OPTIONS}
                   value={selectedTargetChains}
                   onChange={handleTargetChainChange}
-                  limit={6}
+                  limit={limit}
                 />
               )}
             </div>
