@@ -4,7 +4,6 @@ export const chains: CHAIN[] = [
   {
     id: ChAIN_ID.ETHEREUM,
     name: 'Ethereum',
-    shortName: 'eth',
     iconUrl: '/images/chains/ethereum.svg',
     blockExplorers: {
       default: {
@@ -17,7 +16,6 @@ export const chains: CHAIN[] = [
   {
     id: ChAIN_ID.ETHEREUM_SEPOLIA,
     name: 'Sepolia',
-    shortName: 'sep',
     iconUrl: '/images/chains/ethereum.svg',
     blockExplorers: {
       default: {
@@ -31,7 +29,6 @@ export const chains: CHAIN[] = [
   {
     id: ChAIN_ID.ARBITRUM,
     name: 'Arbitrum',
-    shortName: 'arb1',
     iconUrl: '/images/chains/arbitrum.svg',
     blockExplorers: {
       default: {
@@ -44,7 +41,6 @@ export const chains: CHAIN[] = [
   {
     id: ChAIN_ID.ARBITRUM_SEPOLIA,
     name: 'Arbitrum Sepolia',
-    shortName: 'arb-sep',
     iconUrl: '/images/chains/arbitrum.svg',
     blockExplorers: {
       default: {
@@ -58,7 +54,6 @@ export const chains: CHAIN[] = [
   {
     id: ChAIN_ID.DARWINIA,
     name: 'Darwinia',
-    shortName: 'darwinia',
     iconUrl: '/images/chains/darwinia.png',
     blockExplorers: {
       default: {
@@ -70,7 +65,6 @@ export const chains: CHAIN[] = [
   {
     id: ChAIN_ID.CRAB,
     name: 'Crab',
-    shortName: 'crab',
     iconUrl: '/images/chains/crab.svg',
     blockExplorers: {
       default: {
@@ -82,7 +76,6 @@ export const chains: CHAIN[] = [
   {
     id: ChAIN_ID.POLYGON,
     name: 'Polygon',
-    shortName: 'matic',
     iconUrl: '/images/chains/polygon.svg',
     blockExplorers: {
       default: {
@@ -95,7 +88,6 @@ export const chains: CHAIN[] = [
   {
     id: ChAIN_ID.BLAST,
     name: 'Blast',
-    shortName: 'blastmainnet',
     iconUrl: '/images/chains/blast.svg',
     blockExplorers: {
       default: {
@@ -103,5 +95,76 @@ export const chains: CHAIN[] = [
         url: 'https://blastscan.io/'
       }
     }
+  },
+  // new
+  {
+    id: ChAIN_ID.TRON,
+    name: 'Tron',
+    iconUrl: '/images/chains/tron.svg',
+    blockExplorers: {
+      default: {
+        name: 'Tronscan',
+        url: 'https://tronscan.org'
+      }
+    }
+  },
+  {
+    id: ChAIN_ID.TRON_SHASTA,
+    name: 'Tron Shasta',
+    iconUrl: '/images/chains/tron.svg',
+    blockExplorers: {
+      default: {
+        name: 'Tronscan',
+        url: 'https://shasta.tronscan.org'
+      }
+    },
+    testnet: true
+  },
+  {
+    id: ChAIN_ID.MOONBEAM,
+    name: 'Moonbeam',
+    iconUrl: '/images/chains/moonbeam.svg',
+    blockExplorers: {
+      default: {
+        name: 'Moonbeam',
+        url: 'https://moonscan.io'
+      }
+    }
+  },
+  {
+    id: ChAIN_ID.TAIKO_HEKLA,
+    name: 'Taiko Hekla',
+    iconUrl: '/images/chains/taiko.svg',
+    blockExplorers: {
+      default: {
+        name: 'Taiko Hekla',
+        url: 'https://taiko.socialscan.io'
+      }
+    },
+    testnet: true
+  },
+  {
+    id: ChAIN_ID.PANGORO,
+    name: 'Pangoro',
+    iconUrl: '/images/chains/pangoro.svg',
+    blockExplorers: {
+      default: {
+        name: 'Pangoro',
+        url: 'https://evmexplorer.tanssi-chains.network'
+      }
+    },
+    testnet: true
+  },
+  {
+    id: ChAIN_ID.KOI,
+    name: 'Koi',
+    iconUrl: '/images/chains/koi.svg',
+    blockExplorers: {
+      default: {
+        name: 'Koi explorer',
+        url: 'https://koi-scan.darwinia.network'
+      }
+    },
+    testnet: true
   }
 ];

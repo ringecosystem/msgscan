@@ -10,13 +10,18 @@ export enum ChAIN_ID {
   CRAB = 44,
   PANGOLIN = 43,
   POLYGON = 137,
-  BLAST = 81457
+  BLAST = 81457,
+  TRON = 728126428,
+  TRON_SHASTA = 2494104990,
+  MOONBEAM = 1284,
+  TAIKO_HEKLA = 167009,
+  PANGORO = 45,
+  KOI = 701
 }
 
 export type CHAIN = {
   id: ChAIN_ID;
   name: string;
-  shortName: string;
   iconUrl: string;
   testnet?: boolean;
   blockExplorers?: {
