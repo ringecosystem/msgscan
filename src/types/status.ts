@@ -1,0 +1,5 @@
+export enum STATUS {
+  INFLIGHT = 'INFLIGHT',
+  SUCCESS = 'SUCCESS',
+  FAILED = 'FAILED'
+}
