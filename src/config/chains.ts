@@ -69,7 +69,7 @@ export const chains: CHAIN[] = [
     blockExplorers: {
       default: {
         name: 'Subscan',
-        url: 'https://crab.subscan.io'
+        url: 'https://crab-scan.darwinia.network'
       }
     }
   },
