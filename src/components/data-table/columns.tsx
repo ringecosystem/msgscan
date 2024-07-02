@@ -36,7 +36,7 @@ export const columns: Column[] = [
   },
   {
     dataIndex: 'id',
-    title: 'Msgid',
+    title: 'Msg ID',
     width: '10rem',
     render(value, record, index, network) {
       if (record?.status === -1) {
@@ -155,7 +155,7 @@ export const columns: Column[] = [
   },
   {
     dataIndex: 'timeSpent',
-    title: 'TimeSpent',
+    title: 'Time Spent',
     width: '5rem',
 
     render(value, record) {
