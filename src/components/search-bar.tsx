@@ -93,7 +93,7 @@ const SearchBar = () => {
         <Input
           type="search"
           name="search"
-          placeholder="Search by Source Tx Hash/ MsgId"
+          placeholder="Search by Source Tx Hash / Msg ID"
           className="pl-8 placeholder:text-xs sm:w-full lg:w-[600px]"
           value={keyword}
           onChange={handleKeywordChange}
