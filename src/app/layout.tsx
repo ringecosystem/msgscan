@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { APP_NAME } from '@/config/site';
+import { APP_DESCRIPTION, APP_NAME } from '@/config/site';
 
 import { cn } from '@/lib/utils';
 import { GlobalFont } from '@/config/font';
@@ -11,7 +11,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: APP_NAME,
-  // description: APP_NAME,
+  description: APP_DESCRIPTION,
   icons: [
     {
       url: '/images/msgport32.png',
