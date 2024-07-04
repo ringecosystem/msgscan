@@ -6,7 +6,7 @@ import HeaderLogo from './header-logo';
 
 const Header = () => {
   return (
-    <header className="fixed left-0 top-0 z-50 w-screen bg-background/50 backdrop-blur-sm">
+    <header className="fixed left-0 top-0 z-50 w-screen bg-background/80 shadow-sm backdrop-blur-sm">
       <div className="container flex h-[var(--header-height)] items-center justify-between gap-4">
         <HeaderLogo />
         <div className="flex items-center gap-[0.62rem]">
