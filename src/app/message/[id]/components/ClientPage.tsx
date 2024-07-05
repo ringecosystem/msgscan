@@ -1,6 +1,5 @@
 'use client';
 
-import { chains } from '@/config/chains';
 import { CHAIN, ChAIN_ID } from '@/types/chains';
 import { useMessage } from '@/hooks/services';
 import Pending from './Pending';
