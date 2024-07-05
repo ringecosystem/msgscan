@@ -21,7 +21,7 @@ const OrmpInfo = ({ ormpInfo }: OrmpInfoProps) => {
       value: ormpInfo?.gasLimit || '-'
     },
     {
-      title: 'playload',
+      title: 'payload',
       value: ormpInfo?.encoded || '-'
     },
     {
