@@ -31,7 +31,7 @@ const OrmpInfo = ({ ormpInfo }: OrmpInfoProps) => {
   ];
 
   return (
-    <div className="bg-background">
+    <div className="rounded bg-background">
       {data?.map((item, index) => (
         <div className={cn('flex items-center', 'border-b border-b-muted')} key={index}>
           <div className="w-[7.5rem] shrink-0 border-r border-r-muted p-5 text-xs text-muted-foreground">
