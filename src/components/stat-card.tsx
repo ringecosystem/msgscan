@@ -13,7 +13,7 @@ interface StatCardProps {
 export const StatCard: React.FC<StatCardProps> = ({ title, value, percentageChange }) => {
   const numberValue = convertToNumber(value);
   return (
-    <Card className="border-none bg-transparent py-0 sm:py-5">
+    <Card className="border-none bg-transparent py-0 shadow-none sm:py-5">
       <CardHeader className="flex flex-row items-center justify-between p-0">
         <CardTitle className="text-xs font-normal leading-[1.4rem] text-secondary-foreground sm:text-sm">
           {title}
