@@ -16,3 +16,13 @@ export const getDAppInfo = (
   }
   return { dappName: null, dappLogo: null };
 };
+
+export function getDappAddresses(address?: string) {
+  if (!address) return undefined;
+  for (const addresses of Object.values(dappConfig)) {
+    if (addresses.includes(address)) {
+      return addresses;
+    }
+  }
+  return undefined;
+}
