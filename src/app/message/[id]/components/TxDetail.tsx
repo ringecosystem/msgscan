@@ -9,7 +9,8 @@ import {
   SquareUser,
   Unplug
 } from 'lucide-react';
-import Card from './Card';
+import { capitalize } from 'lodash-es';
+
 import { FlipWords } from '@/components/ui/flip-words';
 import { cn } from '@/lib/utils';
 import { CodeFont } from '@/config/font';
@@ -18,12 +19,15 @@ import MessageStatus from '@/components/message-status';
 import { CHAIN } from '@/types/chains';
 import FadeInDown from '@/components/ui/fade-in-down';
 import BackToTop from '@/components/ui/back-to-top';
+import { getDAppInfo } from '@/utils';
 
 import TransactionHashInfo from './TransactionHashInfo';
 import AddressInfo from './AddressInfo';
-import { MessagePort } from '@/graphql/type';
 import ProtocolInfo from './ProtocolInfo';
 import OrmpInfo from './OrmpInfo';
+import Card from './Card';
+
+import { MessagePort } from '@/graphql/type';
 
 const words = ['Transaction Details'];
 
@@ -34,6 +38,10 @@ interface TxDetailProps {
   targetChain?: CHAIN;
 }
 export default function TxDetail({ iconSize, sourceChain, targetChain, message }: TxDetailProps) {
+  const { dappName: sourceDappName } = getDAppInfo(message?.sourceDappAddress);
+  const { dappName: targetDappName } = getDAppInfo(message?.targetDappAddress);
+  const capitalizeSourceDappName = sourceDappName ? capitalize(sourceDappName) : '';
+  const capitalizeTargetDappName = targetDappName ? capitalize(targetDappName) : '';
   return (
     <FadeInDown duration={0.2}>
       <div>
@@ -100,7 +108,14 @@ export default function TxDetail({ iconSize, sourceChain, targetChain, message }
             title="Source Dapp Address"
             icon={<LayoutGrid size={iconSize} strokeWidth={1.25} />}
           >
-            <AddressInfo address={message?.sourceDappAddress} chain={sourceChain} />
+            <AddressInfo
+              address={
+                capitalizeSourceDappName
+                  ? `${capitalizeSourceDappName}(${message?.sourceDappAddress})`
+                  : message?.sourceDappAddress
+              }
+              chain={sourceChain}
+            />
           </Card>
 
           <Card title="Source Port Address" icon={<Unplug size={iconSize} strokeWidth={1.25} />}>
@@ -111,7 +126,14 @@ export default function TxDetail({ iconSize, sourceChain, targetChain, message }
             title="Target Dapp Address"
             icon={<LayoutGrid size={iconSize} strokeWidth={1.25} />}
           >
-            <AddressInfo address={message?.targetDappAddress} chain={targetChain} />
+            <AddressInfo
+              address={
+                capitalizeTargetDappName
+                  ? `${capitalizeTargetDappName}(${message?.targetDappAddress})`
+                  : message?.targetDappAddress
+              }
+              chain={targetChain}
+            />
           </Card>
           <Card title="Target Port Address" icon={<Unplug size={iconSize} strokeWidth={1.25} />}>
             <AddressInfo address={message?.targetPortAddress} chain={targetChain} />
