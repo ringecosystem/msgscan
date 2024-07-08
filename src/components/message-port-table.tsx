@@ -6,7 +6,7 @@ import { MessagePortBoolExp, MessagePortQueryParams, OrderBy } from '@/graphql/t
 import { useShallow } from 'zustand/react/shallow';
 
 import DataTable from '@/components/data-table';
-import { createTimestampQuery } from '@/utils';
+import { createTimestampQuery, getDappAddresses } from '@/utils';
 import useFilterStore from '@/store/filter';
 import { useMessagePort } from '@/hooks/services';
 
@@ -61,7 +61,10 @@ const MessagePortTable = ({ chains, network, sourceAddress }: MessagePortTablePr
           }
         : undefined;
 
-    where.sourceDappAddress = sourceAddress ? { _eq: sourceAddress } : undefined;
+    if (sourceAddress) {
+      const sourceAddressList = getDappAddresses(sourceAddress) ?? [sourceAddress];
+      where.sourceDappAddress = sourceAddress ? { _in: sourceAddressList } : undefined;
+    }
 
     where.sourceChainId =
       selectedSourceChains && selectedSourceChains?.length > 0
