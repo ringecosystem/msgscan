@@ -8,13 +8,13 @@ interface AddressInfoProps {
   address?: string;
   chain?: CHAIN;
 }
-const AddressInfo = ({ address, chain }: AddressInfoProps) => {
+const AddressInfo = ({ address, chain, children }: React.PropsWithChildren<AddressInfoProps>) => {
   if (!address) return null;
 
   return (
     <div className="flex w-full items-center gap-[0.62rem]">
       <span className={cn('max-w-[calc(100vw-10rem)] truncate', CodeFont.className)}>
-        {address}
+        {children ?? address}
       </span>
       <ClipboardIconButton text={address} size={16} />
       {chain ? (

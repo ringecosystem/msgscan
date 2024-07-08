@@ -4,6 +4,7 @@ import { toShortText } from '@/utils';
 import { CHAIN } from '@/types/chains';
 import { cn } from '@/lib/utils';
 import { CodeFont } from '@/config/font';
+import AddressDisplayFilterDappRemark from './AddressDisplayFilterDappRemark';
 
 interface BlockchainAddressLinkProps {
   chain?: CHAIN;
@@ -28,7 +29,10 @@ const BlockchainAddressLink = ({
         href={href}
         className={cn('hover:underline', CodeFont.className, className)}
       >
-        {toShortText(address, frontLength, backLength)}
+        <AddressDisplayFilterDappRemark
+          address={address}
+          formatAddress={(address) => toShortText(address, frontLength, backLength)}
+        />
       </Link>
     );
   }
@@ -45,14 +49,20 @@ const BlockchainAddressLink = ({
         target="_blank"
         rel="noreferrer noopener"
       >
-        {toShortText(address, frontLength, backLength)}
+        <AddressDisplayFilterDappRemark
+          address={address}
+          formatAddress={(address) => toShortText(address, frontLength, backLength)}
+        />
       </Link>
     );
   }
 
   return (
     <span title={address} className={className}>
-      {toShortText(address, frontLength, backLength)}
+      <AddressDisplayFilterDappRemark
+        address={address}
+        formatAddress={(address) => toShortText(address, frontLength, backLength)}
+      />
     </span>
   );
 };

@@ -9,7 +9,7 @@ import {
   SquareUser,
   Unplug
 } from 'lucide-react';
-import Card from './Card';
+
 import { FlipWords } from '@/components/ui/flip-words';
 import { cn } from '@/lib/utils';
 import { CodeFont } from '@/config/font';
@@ -21,9 +21,12 @@ import BackToTop from '@/components/ui/back-to-top';
 
 import TransactionHashInfo from './TransactionHashInfo';
 import AddressInfo from './AddressInfo';
-import { MessagePort } from '@/graphql/type';
 import ProtocolInfo from './ProtocolInfo';
 import OrmpInfo from './OrmpInfo';
+import Card from './Card';
+
+import { MessagePort } from '@/graphql/type';
+import AddressDisplayFilterDappRemark from '@/components/AddressDisplayFilterDappRemark';
 
 const words = ['Transaction Details'];
 
@@ -100,7 +103,13 @@ export default function TxDetail({ iconSize, sourceChain, targetChain, message }
             title="Source Dapp Address"
             icon={<LayoutGrid size={iconSize} strokeWidth={1.25} />}
           >
-            <AddressInfo address={message?.sourceDappAddress} chain={sourceChain} />
+            <AddressInfo address={message?.sourceDappAddress} chain={sourceChain}>
+              <AddressDisplayFilterDappRemark address={message?.sourceDappAddress || ''}>
+                <span className="max-w-[calc(100vw-10rem)] truncate">
+                  ({message?.sourceDappAddress})
+                </span>
+              </AddressDisplayFilterDappRemark>
+            </AddressInfo>
           </Card>
 
           <Card title="Source Port Address" icon={<Unplug size={iconSize} strokeWidth={1.25} />}>
@@ -111,7 +120,13 @@ export default function TxDetail({ iconSize, sourceChain, targetChain, message }
             title="Target Dapp Address"
             icon={<LayoutGrid size={iconSize} strokeWidth={1.25} />}
           >
-            <AddressInfo address={message?.targetDappAddress} chain={targetChain} />
+            <AddressInfo address={message?.targetDappAddress} chain={targetChain}>
+              <AddressDisplayFilterDappRemark address={message?.targetDappAddress || ''}>
+                <span className="max-w-[calc(100vw-10rem)] truncate">
+                  ({message?.targetDappAddress})
+                </span>
+              </AddressDisplayFilterDappRemark>
+            </AddressInfo>
           </Card>
           <Card title="Target Port Address" icon={<Unplug size={iconSize} strokeWidth={1.25} />}>
             <AddressInfo address={message?.targetPortAddress} chain={targetChain} />
