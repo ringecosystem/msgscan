@@ -29,9 +29,10 @@ const BlockchainAddressLink = ({
         href={href}
         className={cn('hover:underline', CodeFont.className, className)}
       >
-        <AddressDisplayFilterDappRemark address={address}>
-          {toShortText(address, frontLength, backLength)}
-        </AddressDisplayFilterDappRemark>
+        <AddressDisplayFilterDappRemark
+          address={address}
+          formatAddress={(address) => toShortText(address, frontLength, backLength)}
+        />
       </Link>
     );
   }
@@ -48,18 +49,20 @@ const BlockchainAddressLink = ({
         target="_blank"
         rel="noreferrer noopener"
       >
-        <AddressDisplayFilterDappRemark address={address}>
-          {toShortText(address, frontLength, backLength)}
-        </AddressDisplayFilterDappRemark>
+        <AddressDisplayFilterDappRemark
+          address={address}
+          formatAddress={(address) => toShortText(address, frontLength, backLength)}
+        />
       </Link>
     );
   }
 
   return (
     <span title={address} className={className}>
-      <AddressDisplayFilterDappRemark address={address}>
-        {toShortText(address, frontLength, backLength)}
-      </AddressDisplayFilterDappRemark>
+      <AddressDisplayFilterDappRemark
+        address={address}
+        formatAddress={(address) => toShortText(address, frontLength, backLength)}
+      />
     </span>
   );
 };
