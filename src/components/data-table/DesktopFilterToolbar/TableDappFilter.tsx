@@ -7,29 +7,35 @@ import { TableFilterOption } from '@/types/helper';
 import { CheckIcon } from '@radix-ui/react-icons';
 import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
+import dappConfig from '@/dappRemark/config.json';
+import { capitalize } from 'lodash-es';
+import { DAppConfigKeys } from '@/utils';
 
-interface TableStatusFilterProps {
-  options: TableFilterOption[];
-  value: number[];
-  onChange: (newValue: number[]) => void;
+interface TableDappFilterProps {
+  value: DAppConfigKeys[];
+  onChange: (newValue: DAppConfigKeys[]) => void;
   title: React.ReactNode;
   onClearFilters?: () => void;
   buttonClassName?: string;
   contentClassName?: string;
 }
 
-const TableStatusFilter = ({
-  options,
+const TableDappFilter = ({
   value,
   onChange,
   title,
   onClearFilters,
   buttonClassName,
   contentClassName
-}: TableStatusFilterProps) => {
+}: TableDappFilterProps) => {
   const [open, setOpen] = useState(false);
 
-  const toggleItem = (itemValue: number) => {
+  const options: TableFilterOption[] = Object.keys(dappConfig)?.map((dapp) => ({
+    label: capitalize(dapp),
+    value: dapp
+  }));
+
+  const toggleItem = (itemValue: DAppConfigKeys) => {
     if (value.includes(itemValue)) {
       onChange(value.filter((s) => s !== itemValue));
     } else {
@@ -64,11 +70,11 @@ const TableStatusFilter = ({
           <CommandList>
             <CommandGroup className="p-0">
               {options.map(({ value: optionValue, label }) => {
-                const isSelected = value.includes(optionValue as number);
+                const isSelected = value.includes(optionValue as DAppConfigKeys);
                 return (
                   <CommandItem
                     key={optionValue}
-                    onSelect={() => toggleItem(optionValue as number)}
+                    onSelect={() => toggleItem(optionValue as DAppConfigKeys)}
                     className="cursor-pointer px-[1.25rem] py-[0.62rem]"
                   >
                     <div
@@ -112,4 +118,4 @@ const TableStatusFilter = ({
   );
 };
 
-export default TableStatusFilter;
+export default TableDappFilter;

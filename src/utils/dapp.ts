@@ -1,5 +1,8 @@
 import dappConfig from '@/dappRemark/config.json';
 
+type DAppConfig = typeof dappConfig;
+export type DAppConfigKeys = keyof DAppConfig;
+
 export const getDAppInfo = (
   address?: string
 ): {
@@ -25,4 +28,14 @@ export function getDappAddresses(address?: string) {
     }
   }
   return undefined;
+}
+
+export function getAllDappAddressByKeys(keys: DAppConfigKeys[]) {
+  let addresses: string[] = [];
+  keys.forEach((key) => {
+    if (dappConfig[key]) {
+      addresses = addresses.concat(dappConfig[key]);
+    }
+  });
+  return addresses;
 }

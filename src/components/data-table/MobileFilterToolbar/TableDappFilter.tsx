@@ -1,22 +1,18 @@
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { TableFilterOption } from '@/types/helper';
+import { DAppConfigKeys } from '@/utils';
 import { CheckIcon } from '@radix-ui/react-icons';
 
-interface TableStatusFilterProps {
+interface TableDappFilterProps {
+  value: DAppConfigKeys[];
   options: TableFilterOption[];
-  value: number[];
-  onChange: (newValue: number[]) => void;
+  onChange: (newValue: DAppConfigKeys[]) => void;
   onClearFilters?: () => void;
 }
 
-const TableStatusFilter = ({
-  options,
-  value,
-  onChange,
-  onClearFilters
-}: TableStatusFilterProps) => {
-  const toggleItem = (itemValue: number) => {
+const TableDappFilter = ({ value, options, onChange, onClearFilters }: TableDappFilterProps) => {
+  const toggleItem = (itemValue: DAppConfigKeys) => {
     if (value.includes(itemValue)) {
       onChange(value.filter((s) => s !== itemValue));
     } else {
@@ -28,11 +24,11 @@ const TableStatusFilter = ({
     <>
       <div className="absolute left-0 top-0 w-[calc(100vw-3rem)] bg-background">
         {options.map(({ value: optionValue, label }) => {
-          const isSelected = value.includes(optionValue as number);
+          const isSelected = value.includes(optionValue as DAppConfigKeys);
           return (
             <div
               key={optionValue}
-              onClick={() => toggleItem(optionValue as number)}
+              onClick={() => toggleItem(optionValue as DAppConfigKeys)}
               className="flex items-center gap-2 py-[0.62rem]"
             >
               <div
@@ -68,4 +64,4 @@ const TableStatusFilter = ({
   );
 };
 
-export default TableStatusFilter;
+export default TableDappFilter;

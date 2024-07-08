@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 
 import { MESSAGE_STATUS_LIST } from '@/config/status';
+import TableDappFilter from './TableDappFilter';
 import TableChainFilter from './TableChainFilter';
 import TableStatusFilter from './TableStatusFilter';
 import TableDateFilter from './TableDateFilter';
@@ -12,29 +13,43 @@ import { CHAIN } from '@/types/chains';
 export interface TableFilterToolbarProps {
   chains: CHAIN[];
   className?: string;
+  hideDappFilter?: boolean;
 }
-const TableFilterToolbar = ({ chains, className }: TableFilterToolbarProps) => {
+const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterToolbarProps) => {
   const CHAIN_OPTIONS = chains?.map((chain) => ({
     label: chain.name,
     value: chain.id
   }));
   const {
+    selectedDapps,
     selectedStatuses,
     date,
     selectedSourceChains,
     selectedTargetChains,
+    handleDappChange,
     handleStatusChange,
     handleDateChange,
     handleSourceChainChange,
     handleTargetChainChange,
     handleReset,
-    handleResetStatus
+    handleResetStatus,
+    handleResetDapps
   } = useFilter();
   const limit = CHAIN_OPTIONS?.length;
   return (
     <div className={cn('flex items-center justify-between py-5', className)}>
       <div className="text-sm font-normal leading-[1.4rem] text-foreground">Messages</div>
       <div className="flex gap-3">
+        {!hideDappFilter && (
+          <TableDappFilter
+            value={selectedDapps}
+            onChange={handleDappChange}
+            title="Dapp"
+            onClearFilters={handleResetDapps}
+            contentClassName="w-[10rem]"
+          />
+        )}
+
         <TableStatusFilter
           options={MESSAGE_STATUS_LIST}
           value={selectedStatuses}
