@@ -4,8 +4,7 @@ import type {
   MessagePortQueryParams,
   MessagePortResponse,
   MessageProgressResponse,
-  MessagePortBoolExp,
-  MessageProgressQueryParams
+  MessagePortBoolExp
 } from './type';
 import { CHAIN } from '@/types/chains';
 

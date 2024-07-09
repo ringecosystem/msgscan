@@ -187,7 +187,7 @@ export interface MessagePort {
   sourceTransactionHash?: string;
   sourceTransactionIndex?: number;
   status: number;
-  sender: string;
+  sender?: string;
   targetBlockNumber?: number;
   targetBlockTimestamp?: number;
   targetChainId?: number;
