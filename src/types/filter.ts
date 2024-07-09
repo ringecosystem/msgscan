@@ -1,4 +1,5 @@
 export enum CURRENT_FILTERS {
+  DAPP = 'dapp',
   STATUS = 'status',
   DATE = 'date',
   SOURCE_CHAIN = 'source_chain',
@@ -7,6 +8,7 @@ export enum CURRENT_FILTERS {
 }
 
 export const CURRENT_FILTERS_LIST = {
+  [CURRENT_FILTERS.DAPP]: 'Dapp',
   [CURRENT_FILTERS.STATUS]: 'Status',
   [CURRENT_FILTERS.DATE]: 'Date',
   [CURRENT_FILTERS.SOURCE_CHAIN]: 'Source',

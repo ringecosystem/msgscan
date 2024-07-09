@@ -18,6 +18,7 @@ import MessageStatus from '@/components/message-status';
 import { CHAIN } from '@/types/chains';
 import FadeInDown from '@/components/ui/fade-in-down';
 import BackToTop from '@/components/ui/back-to-top';
+import AddressDisplayFilterDappRemark from '@/components/address-display-filter-dapp-remark';
 
 import TransactionHashInfo from './TransactionHashInfo';
 import AddressInfo from './AddressInfo';
@@ -26,7 +27,6 @@ import OrmpInfo from './OrmpInfo';
 import Card from './Card';
 
 import { MessagePort } from '@/graphql/type';
-import AddressDisplayFilterDappRemark from '@/components/AddressDisplayFilterDappRemark';
 
 const words = ['Transaction Details'];
 

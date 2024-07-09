@@ -1,12 +1,6 @@
 import SelectedLabels from '@/components/selected-labels';
 import { Button } from '@/components/ui/button';
-import {
-  Command,
-  CommandGroup,
-  CommandItem,
-  CommandList,
-  CommandSeparator
-} from '@/components/ui/command';
+import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { TableFilterOption } from '@/types/helper';
@@ -14,17 +8,17 @@ import { CheckIcon } from '@radix-ui/react-icons';
 import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 
-interface TableStatusFilterProps {
+interface TableMultiSelectFilterProps<T> {
   options: TableFilterOption[];
-  value: number[];
-  onChange: (newValue: number[]) => void;
+  value: T[];
+  onChange: (newValue: T[]) => void;
   title: React.ReactNode;
   onClearFilters?: () => void;
   buttonClassName?: string;
   contentClassName?: string;
 }
 
-const TableStatusFilter = ({
+const TableMultiSelectFilter = <T extends string | number>({
   options,
   value,
   onChange,
@@ -32,10 +26,10 @@ const TableStatusFilter = ({
   onClearFilters,
   buttonClassName,
   contentClassName
-}: TableStatusFilterProps) => {
+}: TableMultiSelectFilterProps<T>) => {
   const [open, setOpen] = useState(false);
 
-  const toggleItem = (itemValue: number) => {
+  const toggleItem = (itemValue: T) => {
     if (value.includes(itemValue)) {
       onChange(value.filter((s) => s !== itemValue));
     } else {
@@ -70,11 +64,11 @@ const TableStatusFilter = ({
           <CommandList>
             <CommandGroup className="p-0">
               {options.map(({ value: optionValue, label }) => {
-                const isSelected = value.includes(optionValue);
+                const isSelected = value.includes(optionValue as T);
                 return (
                   <CommandItem
                     key={optionValue}
-                    onSelect={() => toggleItem(optionValue)}
+                    onSelect={() => toggleItem(optionValue as T)}
                     className="cursor-pointer px-[1.25rem] py-[0.62rem]"
                   >
                     <div
@@ -118,4 +112,4 @@ const TableStatusFilter = ({
   );
 };
 
-export default TableStatusFilter;
+export default TableMultiSelectFilter;

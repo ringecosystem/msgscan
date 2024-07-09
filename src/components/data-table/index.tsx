@@ -35,6 +35,7 @@ interface TableProps {
 }
 
 interface TableProps {
+  hideDappFilter?: boolean;
   loading: boolean;
   network: string;
   chains: CHAIN[];
@@ -45,6 +46,7 @@ interface TableProps {
 }
 
 const DataTable = ({
+  hideDappFilter,
   loading,
   network,
   chains,
@@ -83,8 +85,16 @@ const DataTable = ({
 
   return (
     <div className="relative">
-      <MobileFilterToolbar className="flex lg:hidden" chains={chains} />
-      <DesktopFilterToolbar className="hidden lg:flex" chains={chains} />
+      <MobileFilterToolbar
+        className="flex lg:hidden"
+        chains={chains}
+        hideDappFilter={hideDappFilter}
+      />
+      <DesktopFilterToolbar
+        className="hidden lg:flex"
+        chains={chains}
+        hideDappFilter={hideDappFilter}
+      />
       <Separator />
       <Table className="table-fixed">
         <TableHeader>

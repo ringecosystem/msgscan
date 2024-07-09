@@ -6,7 +6,7 @@ import { MessagePortBoolExp, MessagePortQueryParams, OrderBy } from '@/graphql/t
 import { useShallow } from 'zustand/react/shallow';
 
 import DataTable from '@/components/data-table';
-import { createTimestampQuery, getDappAddresses } from '@/utils';
+import { createTimestampQuery, getAllDappAddressByKeys, getDappAddresses } from '@/utils';
 import useFilterStore from '@/store/filter';
 import { useMessagePort } from '@/hooks/services';
 
@@ -40,16 +40,18 @@ const MessagePortTable = ({ chains, network, sourceAddress }: MessagePortTablePr
       })
     );
   };
-  const { selectedStatuses, date, selectedSourceChains, selectedTargetChains } = useFilterStore(
-    useShallow((state) => {
-      return {
-        selectedStatuses: state.selectedStatuses,
-        date: state.date,
-        selectedSourceChains: state.selectedSourceChains,
-        selectedTargetChains: state.selectedTargetChains
-      };
-    })
-  );
+  const { selectedDapps, selectedStatuses, date, selectedSourceChains, selectedTargetChains } =
+    useFilterStore(
+      useShallow((state) => {
+        return {
+          selectedDapps: state.selectedDapps,
+          selectedStatuses: state.selectedStatuses,
+          date: state.date,
+          selectedSourceChains: state.selectedSourceChains,
+          selectedTargetChains: state.selectedTargetChains
+        };
+      })
+    );
 
   useEffect(() => {
     const where: Partial<MessagePortBoolExp> = {};
@@ -64,6 +66,10 @@ const MessagePortTable = ({ chains, network, sourceAddress }: MessagePortTablePr
     if (sourceAddress) {
       const sourceAddressList = getDappAddresses(sourceAddress) ?? [sourceAddress];
       where.sourceDappAddress = sourceAddress ? { _in: sourceAddressList } : undefined;
+    } else if (selectedDapps && selectedDapps?.length > 0) {
+      where.sourceDappAddress = {
+        _in: getAllDappAddressByKeys(selectedDapps)
+      };
     }
 
     where.sourceChainId =
@@ -101,6 +107,7 @@ const MessagePortTable = ({ chains, network, sourceAddress }: MessagePortTablePr
     });
   }, [
     queryClient,
+    selectedDapps,
     selectedStatuses,
     date,
     selectedSourceChains,
@@ -140,6 +147,7 @@ const MessagePortTable = ({ chains, network, sourceAddress }: MessagePortTablePr
       offset={queryVariables?.offset}
       onPreviousPageClick={handlePreviousPageClick}
       onNextPageClick={handleNextPageClick}
+      hideDappFilter={Boolean(sourceAddress)}
     />
   );
 };

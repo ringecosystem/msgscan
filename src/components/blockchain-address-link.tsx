@@ -4,7 +4,7 @@ import { toShortText } from '@/utils';
 import { CHAIN } from '@/types/chains';
 import { cn } from '@/lib/utils';
 import { CodeFont } from '@/config/font';
-import AddressDisplayFilterDappRemark from './AddressDisplayFilterDappRemark';
+import AddressDisplayFilterDappRemark from './address-display-filter-dapp-remark';
 
 interface BlockchainAddressLinkProps {
   chain?: CHAIN;

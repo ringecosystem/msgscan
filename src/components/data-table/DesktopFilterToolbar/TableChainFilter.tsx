@@ -81,11 +81,11 @@ const TableChainFilter = ({
         <Separator />
         <div className="flex flex-col px-[1.25rem] lg:grid lg:grid-cols-3">
           {sortedOptions.map(({ value: optionValue, label }) => {
-            const isSelected = value.includes(optionValue);
+            const isSelected = value.includes(optionValue as number);
             return (
               <div
                 key={optionValue}
-                onClick={() => toggleItem(optionValue)}
+                onClick={() => toggleItem(optionValue as number)}
                 className={cn(
                   'flex items-center gap-[0.62rem] py-[0.62rem]',
                   value.length < limit || isSelected ? 'cursor-pointer' : 'cursor-not-allowed'

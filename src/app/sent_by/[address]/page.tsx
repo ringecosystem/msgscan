@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { FlipWords } from '@/components/ui/flip-words';
 import { getChainsByNetwork } from '@/utils/network';
 import MessagePortTable from '@/components/message-port-table';
-import AddressDisplayFilterDappRemark from '@/components/AddressDisplayFilterDappRemark';
+import AddressDisplayFilterDappRemark from '@/components/address-display-filter-dapp-remark';
 import { CodeFont } from '@/config/font';
 import { cn } from '@/lib/utils';
 import { getDAppInfo } from '@/utils';

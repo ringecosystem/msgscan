@@ -34,7 +34,7 @@ function useChainFilterLogic({ options, value, onChange, limit }: UseChainFilter
       const newValue = new Set(value);
       for (const option of sortedOptions) {
         if (newValue.size >= limit) break;
-        newValue.add(option.value);
+        newValue.add(option.value as number);
       }
       onChange(Array.from(newValue));
     }

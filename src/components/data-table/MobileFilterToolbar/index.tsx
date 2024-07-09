@@ -1,25 +1,31 @@
-import { Button } from '@/components/ui/button';
-
-import { MESSAGE_STATUS_LIST } from '@/config/status';
 import { useCallback, useMemo, useState } from 'react';
-import MobileTableStatusFilter from './TableStatusFilter';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { SlidersHorizontal } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { MESSAGE_STATUS_LIST } from '@/config/status';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
+import { getDappOptions } from '@/utils';
 import { cn } from '@/lib/utils';
+
+import useFilter from '../hooks/useFilter';
 import DropdownButton from './DropdownButton';
 import MobileFilterBack from './FilterBack';
 import MobileTableChainFilter from './TableChainFilter';
 import MobileTableDateFilter from './TableDateFilter';
-import useFilter from '../hooks/useFilter';
+import MobileTableMultiSelectFilter from './TableMultiSelectFilter';
+
 import { CURRENT_FILTERS, CURRENT_FILTERS_LIST, CURRENT_FILTERS_STATE } from '@/types/filter';
 import { CHAIN } from '@/types/chains';
+
+const dappOptions = getDappOptions();
 
 export interface TableFilterToolbarProps {
   chains: CHAIN[];
   className?: string;
+  hideDappFilter?: boolean;
 }
-const TableFilterToolbar = ({ chains, className }: TableFilterToolbarProps) => {
+const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterToolbarProps) => {
   const CHAIN_OPTIONS = chains?.map((chain) => ({
     label: chain.name,
     value: chain.id
@@ -34,18 +40,27 @@ const TableFilterToolbar = ({ chains, className }: TableFilterToolbarProps) => {
   });
 
   const {
+    selectedDapps,
     selectedStatuses,
     date,
     selectedSourceChains,
     selectedTargetChains,
+    handleDappChange,
     handleStatusChange,
     handleDateChange,
     handleSourceChainChange,
     handleTargetChainChange,
     handleReset,
-    handleResetStatus
+    handleResetStatus,
+    handleResetDapps
   } = useFilter();
 
+  const handleDappOpen = useCallback(() => {
+    setCurrentFilterInfo({
+      title: CURRENT_FILTERS_LIST[CURRENT_FILTERS.DAPP],
+      value: CURRENT_FILTERS.DAPP
+    });
+  }, []);
   const handleStatusOpen = useCallback(() => {
     setCurrentFilterInfo({
       title: CURRENT_FILTERS_LIST[CURRENT_FILTERS.STATUS],
@@ -82,14 +97,19 @@ const TableFilterToolbar = ({ chains, className }: TableFilterToolbarProps) => {
   }, []);
 
   const selectedNumber = useMemo(() => {
+    const dappNumber = selectedDapps?.length ? 1 : 0;
     const dateNumber = date?.from || date?.to ? 1 : 0;
     const selectedStatusesNumber = selectedStatuses?.length ? 1 : 0;
     const selectedSourceChainsNumber = selectedSourceChains?.length ? 1 : 0;
     const selectedTargetChainsNumber = selectedTargetChains?.length ? 1 : 0;
     return (
-      dateNumber + selectedStatusesNumber + selectedSourceChainsNumber + selectedTargetChainsNumber
+      dappNumber +
+      dateNumber +
+      selectedStatusesNumber +
+      selectedSourceChainsNumber +
+      selectedTargetChainsNumber
     );
-  }, [date, selectedStatuses, selectedSourceChains, selectedTargetChains]);
+  }, [selectedDapps, date, selectedStatuses, selectedSourceChains, selectedTargetChains]);
 
   return (
     <>
@@ -111,6 +131,19 @@ const TableFilterToolbar = ({ chains, className }: TableFilterToolbarProps) => {
             <div className="relative mt-[4.375rem] flex flex-col items-start gap-3">
               {currentFilterInfo?.value === CURRENT_FILTERS.DEFAULT && (
                 <>
+                  {!hideDappFilter && (
+                    <>
+                      <DropdownButton
+                        title="Dapp"
+                        options={dappOptions}
+                        value={selectedDapps}
+                        onOpenChange={handleDappOpen}
+                        className="w-full justify-between px-0 hover:bg-transparent hover:text-foreground/80"
+                      />
+                      <Separator />
+                    </>
+                  )}
+
                   <DropdownButton
                     title="Status"
                     options={MESSAGE_STATUS_LIST}
@@ -156,8 +189,16 @@ const TableFilterToolbar = ({ chains, className }: TableFilterToolbarProps) => {
                 </>
               )}
 
+              {currentFilterInfo?.value === CURRENT_FILTERS.DAPP && (
+                <MobileTableMultiSelectFilter
+                  options={dappOptions}
+                  value={selectedDapps}
+                  onChange={handleDappChange}
+                  onClearFilters={handleResetDapps}
+                />
+              )}
               {currentFilterInfo?.value === CURRENT_FILTERS.STATUS && (
-                <MobileTableStatusFilter
+                <MobileTableMultiSelectFilter
                   options={MESSAGE_STATUS_LIST}
                   value={selectedStatuses}
                   onChange={handleStatusChange}

@@ -1,4 +1,16 @@
 import dappConfig from '@/dappRemark/config.json';
+import { TableFilterOption } from '@/types/helper';
+import { capitalize } from 'lodash-es';
+
+type DAppConfig = typeof dappConfig;
+export type DAppConfigKeys = keyof DAppConfig;
+
+export const getDappOptions = (): TableFilterOption[] => {
+  return Object.keys(dappConfig)?.map((dapp) => ({
+    label: capitalize(dapp),
+    value: dapp
+  }));
+};
 
 export const getDAppInfo = (
   address?: string
@@ -25,4 +37,14 @@ export function getDappAddresses(address?: string) {
     }
   }
   return undefined;
+}
+
+export function getAllDappAddressByKeys(keys: DAppConfigKeys[]) {
+  let addresses: string[] = [];
+  keys.forEach((key) => {
+    if (dappConfig[key]) {
+      addresses = addresses.concat(dappConfig[key]);
+    }
+  });
+  return addresses;
 }
