@@ -56,7 +56,7 @@ export const columns: Column[] = [
   {
     dataIndex: 'protocol',
     title: 'Protocol',
-    width: '7.78rem',
+    width: '7rem',
     render(value, record) {
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;
@@ -74,9 +74,25 @@ export const columns: Column[] = [
     }
   },
   {
+    dataIndex: 'sender',
+    title: 'Original Sender',
+    width: '8rem',
+    render(value, record, index, network) {
+      if (record?.status === -1) {
+        return <Skeleton className="h-[22px] w-full rounded-full" />;
+      }
+      if (!value) return '';
+      const chain = chains?.find(
+        (chain) => chain.id === (Number(record?.sourceChainId) as unknown as ChAIN_ID)
+      );
+      const href = `/sender/${value}?network=${getNetwork(network)}`;
+      return <BlockchainAddressLink chain={chain} address={value} href={href} />;
+    }
+  },
+  {
     dataIndex: 'sourceTransactionHash',
     title: 'Source Tx Hash',
-    width: '10rem',
+    width: '8rem',
     render(value, record, index, network) {
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;
@@ -96,8 +112,22 @@ export const columns: Column[] = [
     }
   },
   {
+    dataIndex: 'targetTransactionHash',
+    title: 'Target Tx Hash',
+    width: '8rem',
+    render(value, record) {
+      if (record?.status === -1) {
+        return <Skeleton className="h-[22px] w-full rounded-full" />;
+      }
+      const chain = chains?.find(
+        (chain) => chain.id === (Number(record?.targetChainId) as unknown as ChAIN_ID)
+      );
+      return <ChainTxDisplay chain={chain} value={value} isLink />;
+    }
+  },
+  {
     dataIndex: 'sourceDappAddress',
-    title: 'From',
+    title: 'Dapp',
     width: '8rem',
     render(value, record, index, network) {
       if (record?.status === -1) {
@@ -112,38 +142,9 @@ export const columns: Column[] = [
     }
   },
   {
-    dataIndex: 'targetTransactionHash',
-    title: 'Target Tx Hash',
-    width: '10rem',
-    render(value, record) {
-      if (record?.status === -1) {
-        return <Skeleton className="h-[22px] w-full rounded-full" />;
-      }
-      const chain = chains?.find(
-        (chain) => chain.id === (Number(record?.targetChainId) as unknown as ChAIN_ID)
-      );
-      return <ChainTxDisplay chain={chain} value={value} isLink />;
-    }
-  },
-  {
-    dataIndex: 'targetDappAddress',
-    title: 'To',
-    width: '8rem',
-    render(value, record) {
-      if (record?.status === -1) {
-        return <Skeleton className="h-[22px] w-full rounded-full" />;
-      }
-      if (!value) return '';
-      const chain = chains?.find(
-        (chain) => chain.id === (Number(record?.targetChainId) as unknown as ChAIN_ID)
-      );
-      return <BlockchainAddressLink chain={chain} address={value} />;
-    }
-  },
-  {
     dataIndex: 'age',
     title: 'Age',
-    width: '5rem',
+    width: '6rem',
     render(value, record) {
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;

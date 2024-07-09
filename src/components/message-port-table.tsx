@@ -26,8 +26,9 @@ interface MessagePortTableProps {
   chains: CHAIN[];
   network: string;
   sourceAddress?: string;
+  sender?: string;
 }
-const MessagePortTable = ({ chains, network, sourceAddress }: MessagePortTableProps) => {
+const MessagePortTable = ({ chains, network, sourceAddress, sender }: MessagePortTableProps) => {
   const queryClient = useQueryClient();
 
   const [queryVariables, setQueryVariables] =
@@ -72,6 +73,12 @@ const MessagePortTable = ({ chains, network, sourceAddress }: MessagePortTablePr
       };
     }
 
+    if (sender) {
+      where.sender = {
+        _eq: sender
+      };
+    }
+
     where.sourceChainId =
       selectedSourceChains && selectedSourceChains?.length > 0
         ? {
@@ -112,7 +119,8 @@ const MessagePortTable = ({ chains, network, sourceAddress }: MessagePortTablePr
     date,
     selectedSourceChains,
     selectedTargetChains,
-    sourceAddress
+    sourceAddress,
+    sender
   ]);
 
   const { data, isFetching } = useMessagePort(queryVariables, chains);
