@@ -100,6 +100,13 @@ export default function TxDetail({ iconSize, sourceChain, targetChain, message }
           </Card>
 
           <Card
+            title="Original Sender Address"
+            icon={<LayoutGrid size={iconSize} strokeWidth={1.25} />}
+          >
+            <AddressInfo address={message?.sender} chain={sourceChain}></AddressInfo>
+          </Card>
+
+          <Card
             title="Source Dapp Address"
             icon={<LayoutGrid size={iconSize} strokeWidth={1.25} />}
           >

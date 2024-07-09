@@ -72,6 +72,7 @@ export interface MessagePortBoolExp {
   sourceBlockTimestamp?: NumericComparisonExp;
   sourceChainId?: NumericComparisonExp;
   sourceDappAddress?: StringComparisonExp;
+  sender?: StringComparisonExp;
   sourceLogIndex?: IntComparisonExp;
   sourcePortAddress?: StringComparisonExp;
   sourceTransactionHash?: StringComparisonExp;
@@ -186,6 +187,7 @@ export interface MessagePort {
   sourceTransactionHash?: string;
   sourceTransactionIndex?: number;
   status: number;
+  sender: string;
   targetBlockNumber?: number;
   targetBlockTimestamp?: number;
   targetChainId?: number;
