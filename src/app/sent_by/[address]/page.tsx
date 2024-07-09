@@ -30,7 +30,7 @@ export default function Page({ params, searchParams }: PageProps) {
         <SearchBar />
       </div>
       <div className="py-4">
-        <span className="text-sm text-muted-foreground">Address</span>
+        <span className="text-sm text-muted-foreground">{dappName ? 'Dapp' : 'Address'}</span>
         <header className={cn('text-base font-light text-foreground', CodeFont.className)}>
           {dappName ? (
             <AddressDisplayFilterDappRemark address={params?.address} className="gap-2" />
