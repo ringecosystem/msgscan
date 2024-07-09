@@ -1,28 +1,25 @@
-import { Button } from '@/components/ui/button';
-
-import { MESSAGE_STATUS_LIST } from '@/config/status';
 import { useCallback, useMemo, useState } from 'react';
-import MobileTableStatusFilter from './TableStatusFilter';
-import MobileTableDappFilter from './TableDappFilter';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { SlidersHorizontal } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { MESSAGE_STATUS_LIST } from '@/config/status';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
+import { getDappOptions } from '@/utils';
 import { cn } from '@/lib/utils';
+
+import useFilter from '../hooks/useFilter';
 import DropdownButton from './DropdownButton';
 import MobileFilterBack from './FilterBack';
 import MobileTableChainFilter from './TableChainFilter';
 import MobileTableDateFilter from './TableDateFilter';
-import useFilter from '../hooks/useFilter';
+import MobileTableMultiSelectFilter from './TableMultiSelectFilter';
+
 import { CURRENT_FILTERS, CURRENT_FILTERS_LIST, CURRENT_FILTERS_STATE } from '@/types/filter';
 import { CHAIN } from '@/types/chains';
-import { TableFilterOption } from '@/types/helper';
-import { capitalize } from 'lodash-es';
-import dappConfig from '@/dappRemark/config.json';
 
-const dappOptions: TableFilterOption[] = Object.keys(dappConfig)?.map((dapp) => ({
-  label: capitalize(dapp),
-  value: dapp
-}));
+const dappOptions = getDappOptions();
+
 export interface TableFilterToolbarProps {
   chains: CHAIN[];
   className?: string;
@@ -100,14 +97,19 @@ const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterTo
   }, []);
 
   const selectedNumber = useMemo(() => {
+    const dappNumber = selectedDapps?.length ? 1 : 0;
     const dateNumber = date?.from || date?.to ? 1 : 0;
     const selectedStatusesNumber = selectedStatuses?.length ? 1 : 0;
     const selectedSourceChainsNumber = selectedSourceChains?.length ? 1 : 0;
     const selectedTargetChainsNumber = selectedTargetChains?.length ? 1 : 0;
     return (
-      dateNumber + selectedStatusesNumber + selectedSourceChainsNumber + selectedTargetChainsNumber
+      dappNumber +
+      dateNumber +
+      selectedStatusesNumber +
+      selectedSourceChainsNumber +
+      selectedTargetChainsNumber
     );
-  }, [date, selectedStatuses, selectedSourceChains, selectedTargetChains]);
+  }, [selectedDapps, date, selectedStatuses, selectedSourceChains, selectedTargetChains]);
 
   return (
     <>
@@ -188,15 +190,15 @@ const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterTo
               )}
 
               {currentFilterInfo?.value === CURRENT_FILTERS.DAPP && (
-                <MobileTableDappFilter
-                  value={selectedDapps}
+                <MobileTableMultiSelectFilter
                   options={dappOptions}
+                  value={selectedDapps}
                   onChange={handleDappChange}
                   onClearFilters={handleResetDapps}
                 />
               )}
               {currentFilterInfo?.value === CURRENT_FILTERS.STATUS && (
-                <MobileTableStatusFilter
+                <MobileTableMultiSelectFilter
                   options={MESSAGE_STATUS_LIST}
                   value={selectedStatuses}
                   onChange={handleStatusChange}

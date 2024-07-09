@@ -1,14 +1,16 @@
 import { Button } from '@/components/ui/button';
 
 import { MESSAGE_STATUS_LIST } from '@/config/status';
-import TableDappFilter from './TableDappFilter';
 import TableChainFilter from './TableChainFilter';
-import TableStatusFilter from './TableStatusFilter';
 import TableDateFilter from './TableDateFilter';
 
 import useFilter from '../hooks/useFilter';
 import { cn } from '@/lib/utils';
 import { CHAIN } from '@/types/chains';
+import TableMultiSelectFilter from './TableMultiSelectFilter';
+import { getDappOptions } from '@/utils';
+
+const dappOptions = getDappOptions();
 
 export interface TableFilterToolbarProps {
   chains: CHAIN[];
@@ -41,7 +43,8 @@ const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterTo
       <div className="text-sm font-normal leading-[1.4rem] text-foreground">Messages</div>
       <div className="flex gap-3">
         {!hideDappFilter && (
-          <TableDappFilter
+          <TableMultiSelectFilter
+            options={dappOptions}
             value={selectedDapps}
             onChange={handleDappChange}
             title="Dapp"
@@ -50,7 +53,7 @@ const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterTo
           />
         )}
 
-        <TableStatusFilter
+        <TableMultiSelectFilter
           options={MESSAGE_STATUS_LIST}
           value={selectedStatuses}
           onChange={handleStatusChange}

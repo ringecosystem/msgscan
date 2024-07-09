@@ -3,20 +3,20 @@ import { cn } from '@/lib/utils';
 import { TableFilterOption } from '@/types/helper';
 import { CheckIcon } from '@radix-ui/react-icons';
 
-interface TableStatusFilterProps {
+interface TableMultiSelectFilterProps<T> {
   options: TableFilterOption[];
-  value: number[];
-  onChange: (newValue: number[]) => void;
+  value: T[];
+  onChange: (newValue: T[]) => void;
   onClearFilters?: () => void;
 }
 
-const TableStatusFilter = ({
+const TableMultiSelectFilter = <T extends number | string>({
   options,
   value,
   onChange,
   onClearFilters
-}: TableStatusFilterProps) => {
-  const toggleItem = (itemValue: number) => {
+}: TableMultiSelectFilterProps<T>) => {
+  const toggleItem = (itemValue: T) => {
     if (value.includes(itemValue)) {
       onChange(value.filter((s) => s !== itemValue));
     } else {
@@ -28,11 +28,11 @@ const TableStatusFilter = ({
     <>
       <div className="absolute left-0 top-0 w-[calc(100vw-3rem)] bg-background">
         {options.map(({ value: optionValue, label }) => {
-          const isSelected = value.includes(optionValue as number);
+          const isSelected = value.includes(optionValue as T);
           return (
             <div
               key={optionValue}
-              onClick={() => toggleItem(optionValue as number)}
+              onClick={() => toggleItem(optionValue as T)}
               className="flex items-center gap-2 py-[0.62rem]"
             >
               <div
@@ -68,4 +68,4 @@ const TableStatusFilter = ({
   );
 };
 
-export default TableStatusFilter;
+export default TableMultiSelectFilter;
