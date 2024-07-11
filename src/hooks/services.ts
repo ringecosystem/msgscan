@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 export function useMessagePort(variables: MessagePortQueryParams = {}, chains: CHAIN[]) {
   return useQuery({
     queryKey: ['messagePort', variables, chains],
-    queryFn: async () => fetchMessagePort(variables, chains),
+    queryFn: async ({ signal }) => fetchMessagePort(variables, chains, signal),
     refetchInterval: REFRESH_INTERVAL,
     placeholderData(prevData) {
       const hasRealData = prevData?.MessagePort?.some((item) => item.status !== -1);
@@ -17,7 +17,7 @@ export function useMessagePort(variables: MessagePortQueryParams = {}, chains: C
         : {
             MessagePort: Array.from({ length: variables.limit || 10 }).map((_, index) => ({
               id: index.toString(),
-              protocol: 'eth',
+              protocol: 'ormp',
               status: -1
             }))
           };
