@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Table,
@@ -207,4 +207,4 @@ const DataTable = ({
   );
 };
 
-export default DataTable;
+export default memo(DataTable);
