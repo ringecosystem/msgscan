@@ -122,7 +122,9 @@ export default function TxDetail({ iconSize, sourceChain, targetChain, message }
           <Card title="Source Port Address" icon={<Unplug size={iconSize} strokeWidth={1.25} />}>
             <AddressInfo address={message?.sourcePortAddress} chain={sourceChain} />
           </Card>
-
+          <Card title="Target Port Address" icon={<Unplug size={iconSize} strokeWidth={1.25} />}>
+            <AddressInfo address={message?.targetPortAddress} chain={targetChain} />
+          </Card>
           <Card
             title="Target Dapp Address"
             icon={<LayoutGrid size={iconSize} strokeWidth={1.25} />}
@@ -135,10 +137,6 @@ export default function TxDetail({ iconSize, sourceChain, targetChain, message }
               </AddressDisplayFilterDappRemark>
             </AddressInfo>
           </Card>
-          <Card title="Target Port Address" icon={<Unplug size={iconSize} strokeWidth={1.25} />}>
-            <AddressInfo address={message?.targetPortAddress} chain={targetChain} />
-          </Card>
-
           <Card title="ORMP Info" icon={<OrmpIcon />}>
             {message?.ormp ? <OrmpInfo ormpInfo={message?.ormp} /> : null}
           </Card>
