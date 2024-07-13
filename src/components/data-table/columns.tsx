@@ -27,7 +27,7 @@ export const columns: Column[] = [
   {
     dataIndex: 'status',
     title: 'Status',
-    width: '8.7rem',
+    width: '6rem',
     render(value, record) {
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;
@@ -57,7 +57,7 @@ export const columns: Column[] = [
   {
     dataIndex: 'protocol',
     title: 'Protocol',
-    width: '7rem',
+    width: '5rem',
     render(value, record) {
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;
@@ -158,7 +158,7 @@ export const columns: Column[] = [
   {
     dataIndex: 'timeSpent',
     title: 'Time Spent',
-    width: '5rem',
+    width: '6rem',
 
     render(value, record) {
       if (record?.status === -1) {

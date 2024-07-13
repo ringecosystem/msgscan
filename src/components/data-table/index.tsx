@@ -107,7 +107,7 @@ const DataTable = ({
                 className={cn(
                   'h-14',
                   'px-0',
-                  'pr-[1.88rem]',
+                  'pr-[1rem]',
                   index === 0 && 'pl-5',
                   index === columns.length - 1 && 'pr-5'
                 )}
@@ -132,7 +132,7 @@ const DataTable = ({
                     className={cn(
                       'border-none',
                       'px-0',
-                      'pr-[1.88rem]',
+                      'pr-[1rem]',
                       index === 0 && 'pl-5',
                       index === columns.length - 1 && 'pr-5',
                       index === 0 && 'rounded-[var(--radius)_0_0_var(--radius)]',
