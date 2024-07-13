@@ -1,0 +1,24 @@
+{
+  "name": "Msgport scan",
+  "short_name": "Msgport",
+  "icons": [
+    {
+      "src": "/images/msgport192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/msgport512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "description": "The Msgport Scan is a one-stop solution for tracking the cross-chain message status and execution results for applications integrated with the Msgport protocol.",
+  "iconPath": "/images/msgport512.png"
+}

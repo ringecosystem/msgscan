@@ -5,14 +5,34 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import AppProvider from '@/provider/AppProvider';
 
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 
 import './globals.css';
 
 export const metadata: Metadata = {
+  applicationName: APP_NAME,
   title: APP_NAME,
   description: APP_DESCRIPTION,
   keywords: APP_KEYWORDS,
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: APP_NAME
+  },
+  formatDetection: {
+    telephone: false
+  },
+  openGraph: {
+    type: 'website',
+    siteName: APP_NAME,
+    title: APP_NAME,
+    description: APP_DESCRIPTION
+  },
+  twitter: {
+    card: 'summary',
+    title: APP_NAME,
+    description: APP_DESCRIPTION
+  },
   icons: [
     {
       url: '/images/msgport32.png',
@@ -59,6 +79,9 @@ export const metadata: Metadata = {
   ]
 };
 
+export const viewport: Viewport = {
+  themeColor: '#FFFFFF'
+};
 export default function RootLayout({
   children
 }: Readonly<{

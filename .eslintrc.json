@@ -27,6 +27,9 @@
   "plugins": [
     "@typescript-eslint"
   ],
+  "include": [
+    "next.config.mjs",
+  ],
   "parser": "@typescript-eslint/parser",
   "rules": {
     "@typescript-eslint/no-explicit-any": "warn",
