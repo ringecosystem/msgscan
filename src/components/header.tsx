@@ -1,5 +1,4 @@
 import { ModeToggle } from './mode-toggle';
-
 import SearchBar from './search-bar';
 import NetworkSwitcher from './network-switcher';
 import HeaderLogo from './header-logo';

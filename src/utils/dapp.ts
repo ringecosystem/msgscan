@@ -1,6 +1,8 @@
-import dappConfig from '@/dappRemark/config.json';
-import { TableFilterOption } from '@/types/helper';
 import { capitalize } from 'lodash-es';
+
+import dappConfig from '@/dappRemark/config.json';
+
+import type { TableFilterOption } from '@/types/helper';
 
 type DAppConfig = typeof dappConfig;
 export type DAppConfigKeys = keyof DAppConfig;

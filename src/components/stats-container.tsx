@@ -1,5 +1,7 @@
-import { MessageProgress } from '@/graphql/type';
 import { StatCard } from './stat-card';
+
+import type { MessageProgress } from '@/graphql/type';
+
 
 interface StatsContainerProps {
   data?: MessageProgress[];

@@ -1,4 +1,5 @@
 import { useSearchParams } from 'next/navigation';
+
 import { Network } from '@/types/network';
 import { getNetwork } from '@/utils';
 

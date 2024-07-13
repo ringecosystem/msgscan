@@ -1,11 +1,13 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'; // 假设shadcn已经提供了Tooltip组件
 import { cn } from '@/lib/utils';
-import { CHAIN } from '@/types/chains';
 import { toShortText } from '@/utils';
 import { CodeFont } from '@/config/font';
+
+import type { CHAIN } from '@/types/chains';
 
 interface ChainTxDisplayProps {
   chain?: CHAIN;

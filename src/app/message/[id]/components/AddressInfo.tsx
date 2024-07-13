@@ -2,7 +2,8 @@ import ClipboardIconButton from '@/components/clipboard-icon-button';
 import ExplorerLinkButton from '@/components/explorer-link-button';
 import { CodeFont } from '@/config/font';
 import { cn } from '@/lib/utils';
-import { CHAIN } from '@/types/chains';
+
+import type { CHAIN } from '@/types/chains';
 
 interface AddressInfoProps {
   address?: string;

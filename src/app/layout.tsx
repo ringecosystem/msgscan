@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
 import { APP_DESCRIPTION, APP_KEYWORDS, APP_NAME } from '@/config/site';
-
 import { cn } from '@/lib/utils';
 import { GlobalFont } from '@/config/font';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import AppProvider from '@/provider/AppProvider';
+
+import type { Metadata } from 'next';
 
 import './globals.css';
 

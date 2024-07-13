@@ -1,6 +1,6 @@
 import React from 'react';
-import { Badge } from '@/components/ui/badge'; // 确保路径正确
-import { TableFilterOption } from '@/types/helper';
+
+import type { TableFilterOption } from '@/types/helper';
 
 interface SelectedLabelsProps {
   options: TableFilterOption[];

@@ -1,12 +1,12 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 import { APP_NAME } from '@/config/site';
 import { useNetworkFromQuery } from '@/hooks/useNetwork';
 
 import Logo from './icon/logo';
-import { Suspense } from 'react';
 
 const HeaderLogo = () => {
   const network = useNetworkFromQuery();

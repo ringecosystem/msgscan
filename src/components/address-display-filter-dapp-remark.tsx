@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { capitalize } from 'lodash-es';
+
 import { dappRemark } from '@/config/dapp_remark';
 import { getDAppInfo } from '@/utils/dapp';
 import { cn } from '@/lib/utils';

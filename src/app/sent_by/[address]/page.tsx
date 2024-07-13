@@ -1,7 +1,6 @@
 'use client';
 
 import SearchBar from '@/components/search-bar';
-
 import { Separator } from '@/components/ui/separator';
 import { FlipWords } from '@/components/ui/flip-words';
 import { getChainsByNetwork } from '@/utils/network';

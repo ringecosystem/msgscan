@@ -1,5 +1,4 @@
-import { Inter } from 'next/font/google';
-import { JetBrains_Mono } from 'next/font/google';
+import { Inter , JetBrains_Mono } from 'next/font/google';
 
 export const GlobalFont = Inter({
   subsets: ['latin'],

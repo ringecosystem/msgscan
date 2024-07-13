@@ -1,6 +1,7 @@
 import { CodeFont } from '@/config/font';
-import { ORMPMessageAccepted } from '@/graphql/type';
 import { cn } from '@/lib/utils';
+
+import type { ORMPMessageAccepted } from '@/graphql/type';
 
 interface OrmpInfoProps {
   ormpInfo: ORMPMessageAccepted;

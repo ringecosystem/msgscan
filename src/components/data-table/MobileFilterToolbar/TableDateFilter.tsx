@@ -1,7 +1,8 @@
-import { Calendar } from '@/components/ui/calendar';
-import { DateRange, SelectRangeEventHandler } from 'react-day-picker';
-
 import { useCallback } from 'react';
+
+import { Calendar } from '@/components/ui/calendar';
+
+import type { DateRange, SelectRangeEventHandler } from 'react-day-picker';
 
 interface TableDateFilterProps {
   date?: DateRange;

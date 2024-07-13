@@ -1,9 +1,10 @@
 import { useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { DateRange } from 'react-day-picker';
 
 import useFilterStore from '@/store/filter';
-import { DAppConfigKeys } from '@/utils';
+
+import type { DateRange } from 'react-day-picker';
+import type { DAppConfigKeys } from '@/utils';
 
 function useFilter() {
   const queryClient = useQueryClient();

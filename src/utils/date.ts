@@ -1,15 +1,16 @@
-import dayjs from 'dayjs';
+import dayjs, { extend, unix } from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
-import { MessagePortBoolExp } from '@/graphql/type';
-import { DateRange } from 'react-day-picker';
 
-dayjs.extend(relativeTime);
-dayjs.extend(duration);
+import type { DateRange } from 'react-day-picker';
+import type { MessagePortBoolExp } from '@/graphql/type';
+
+extend(relativeTime);
+extend(duration);
 
 export function formatTimeDifference(timestamp1: string, timestamp2: string) {
-  const date1 = dayjs.unix(Number(timestamp1));
-  const date2 = dayjs.unix(Number(timestamp2));
+  const date1 = unix(Number(timestamp1));
+  const date2 = unix(Number(timestamp2));
   const diff = date2.diff(date1);
 
   const durationObj = dayjs.duration(diff);
@@ -28,7 +29,7 @@ export function formatTimeDifference(timestamp1: string, timestamp2: string) {
 }
 
 export function formatTimeAgo(timestamp: string) {
-  const date = dayjs.unix(Number(timestamp));
+  const date = unix(Number(timestamp));
   return dayjs().from(date);
 }
 

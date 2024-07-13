@@ -1,12 +1,14 @@
+
 import { client } from './client';
 import { GET_MESSAGE_PORT, GET_MESSAGE_PORT_DETAIL, GET_MESSAGE_PROGRESS } from './queries';
+
+import type { CHAIN } from '@/types/chains';
 import type {
   MessagePortQueryParams,
   MessagePortResponse,
   MessageProgressResponse,
   MessagePortBoolExp
 } from './type';
-import { CHAIN } from '@/types/chains';
 
 export async function fetchMessagePort(
   variables: MessagePortQueryParams = {},

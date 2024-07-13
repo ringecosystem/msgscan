@@ -1,6 +1,7 @@
 'use client';
 import { memo, useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+
 import {
   Table,
   TableBody,
@@ -18,11 +19,13 @@ import {
 } from '@/components/ui/pagination';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { MessagePort, MessagePortQueryParams } from '@/graphql/type';
+
 import { columns } from './columns';
 import DesktopFilterToolbar from './DesktopFilterToolbar';
 import MobileFilterToolbar from './MobileFilterToolbar';
-import { CHAIN } from '@/types/chains';
+
+import type { CHAIN } from '@/types/chains';
+import type { MessagePort, MessagePortQueryParams } from '@/graphql/type';
 
 const fadeInOut = {
   hidden: { opacity: 0 },

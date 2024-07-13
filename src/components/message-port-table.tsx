@@ -1,15 +1,16 @@
 'use client';
 import { memo, useCallback, useEffect, useState } from 'react';
 import { produce } from 'immer';
-import { MessagePortBoolExp, MessagePortQueryParams, OrderBy } from '@/graphql/type';
 import { useShallow } from 'zustand/react/shallow';
 
+import { OrderBy } from '@/graphql/type';
 import DataTable from '@/components/data-table';
 import { createTimestampQuery, getAllDappAddressByKeys, getDappAddresses } from '@/utils';
 import useFilterStore from '@/store/filter';
 import { useMessagePort } from '@/hooks/services';
 
-import { CHAIN } from '@/types/chains';
+import type { MessagePortBoolExp, MessagePortQueryParams} from '@/graphql/type';
+import type { CHAIN } from '@/types/chains';
 
 const defaultQueryVariables: MessagePortQueryParams = {
   offset: 0,
@@ -99,7 +100,7 @@ const MessagePortTable = ({ chains, network, sourceAddress, sender }: MessagePor
       where.sourceBlockTimestamp = undefined;
     }
 
-    let params: MessagePortQueryParams = {
+    const params: MessagePortQueryParams = {
       where: Object.values(where).some((value) => value !== undefined) ? where : undefined
     };
     if (params.where) {

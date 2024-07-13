@@ -1,9 +1,11 @@
+import { useQuery } from '@tanstack/react-query';
+
 import { REFRESH_INTERVAL } from '@/config/site';
 import { fetchMessage, fetchMessagePort, fetchMessageProgress } from '@/graphql/services';
-import { MessagePortQueryParams } from '@/graphql/type';
-import { CHAIN } from '@/types/chains';
 import { MESSAGE_STATUS } from '@/types/message';
-import { useQuery } from '@tanstack/react-query';
+
+import type { MessagePortQueryParams } from '@/graphql/type';
+import type { CHAIN } from '@/types/chains';
 
 export function useMessagePort(variables: MessagePortQueryParams = {}, chains: CHAIN[]) {
   return useQuery({

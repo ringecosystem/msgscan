@@ -1,5 +1,6 @@
 import { protocols } from '@/config/protocols';
-import { MessagePort } from '@/graphql/type';
+
+import type { MessagePort } from '@/graphql/type';
 
 interface ProtocolInfoProps {
   protocol?: MessagePort['protocol'];

@@ -1,9 +1,9 @@
 'use client';
 
 import { useMessageProgress } from '@/hooks/services';
-
 import StatsContainer from '@/components/stats-container';
-import { CHAIN } from '@/types/chains';
+
+import type { CHAIN } from '@/types/chains';
 
 interface MessageProgressStatsProps {
   chains: CHAIN[];

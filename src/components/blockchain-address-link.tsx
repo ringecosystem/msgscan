@@ -1,10 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
+
 import { toShortText } from '@/utils';
-import { CHAIN } from '@/types/chains';
 import { cn } from '@/lib/utils';
 import { CodeFont } from '@/config/font';
+
 import AddressDisplayFilterDappRemark from './address-display-filter-dapp-remark';
+
+import type { CHAIN } from '@/types/chains';
 
 interface BlockchainAddressLinkProps {
   chain?: CHAIN;

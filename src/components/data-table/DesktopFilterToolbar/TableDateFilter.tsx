@@ -1,11 +1,13 @@
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import { DateRange, SelectRangeEventHandler } from 'react-day-picker';
-
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
 import { ChevronDown } from 'lucide-react';
 import { useCallback, useState } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+
+import type { DateRange, SelectRangeEventHandler } from 'react-day-picker';
+
 
 interface TableDateFilterProps {
   date?: DateRange;

@@ -1,12 +1,14 @@
+import { CheckIcon } from '@radix-ui/react-icons';
+import { ChevronDown } from 'lucide-react';
+import { useState } from 'react';
+
 import SelectedLabels from '@/components/selected-labels';
 import { Button } from '@/components/ui/button';
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { TableFilterOption } from '@/types/helper';
-import { CheckIcon } from '@radix-ui/react-icons';
-import { ChevronDown } from 'lucide-react';
-import { useState } from 'react';
+
+import type { TableFilterOption } from '@/types/helper';
 
 interface TableMultiSelectFilterProps<T> {
   options: TableFilterOption[];

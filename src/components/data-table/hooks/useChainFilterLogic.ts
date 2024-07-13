@@ -1,6 +1,7 @@
-import { TableFilterOption } from '@/types/helper';
-import { CheckedState } from '@radix-ui/react-checkbox';
 import { useMemo, useCallback } from 'react';
+
+import type { CheckedState } from '@radix-ui/react-checkbox';
+import type { TableFilterOption } from '@/types/helper';
 
 type UseChainFilterLogicType = {
   options: TableFilterOption[];

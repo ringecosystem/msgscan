@@ -1,6 +1,6 @@
 import { isString } from 'lodash-es';
 
-export function toShortText(text: any, frontLength: number, backLength: number): string {
+export function toShortText(text: string, frontLength: number, backLength: number): string {
   if (!isString(text)) {
     return '';
   }

@@ -1,12 +1,15 @@
 'use client';
 
-import { CHAIN, ChAIN_ID } from '@/types/chains';
+import { useEffect, useState } from 'react';
+
 import { useMessage } from '@/hooks/services';
+import useBreakpoint from '@/hooks/breakpoint';
+
 import Pending from './Pending';
 import TxDetail from './TxDetail';
 import NotFound from './NotFound';
-import { useEffect, useState } from 'react';
-import useBreakpoint from '@/hooks/breakpoint';
+
+import type { CHAIN, ChAIN_ID } from '@/types/chains';
 
 interface ClientPageProps {
   id: string;
