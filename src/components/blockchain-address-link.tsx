@@ -34,7 +34,13 @@ const BlockchainAddressLink = ({
       >
         <AddressDisplayFilterDappRemark
           address={address}
-          formatAddress={(address) => toShortText(address, frontLength, backLength)}
+          formatAddress={(address) =>
+            toShortText({
+              text: address,
+              frontLength,
+              backLength
+            })
+          }
         />
       </Link>
     );
@@ -54,7 +60,13 @@ const BlockchainAddressLink = ({
       >
         <AddressDisplayFilterDappRemark
           address={address}
-          formatAddress={(address) => toShortText(address, frontLength, backLength)}
+          formatAddress={(address) =>
+            toShortText({
+              text: address,
+              frontLength,
+              backLength
+            })
+          }
         />
       </Link>
     );
@@ -64,7 +76,13 @@ const BlockchainAddressLink = ({
     <span title={address} className={className}>
       <AddressDisplayFilterDappRemark
         address={address}
-        formatAddress={(address) => toShortText(address, frontLength, backLength)}
+        formatAddress={(address) =>
+          toShortText({
+            text: address,
+            frontLength,
+            backLength
+          })
+        }
       />
     </span>
   );
