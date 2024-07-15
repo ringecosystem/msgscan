@@ -7,16 +7,20 @@ import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
 import { getDappOptions } from '@/utils';
 import { cn } from '@/lib/utils';
+import { CURRENT_FILTERS, CURRENT_FILTERS_LIST } from '@/types/filter';
+
 
 import useFilter from '../hooks/useFilter';
+
 import DropdownButton from './DropdownButton';
 import MobileFilterBack from './FilterBack';
 import MobileTableChainFilter from './TableChainFilter';
 import MobileTableDateFilter from './TableDateFilter';
 import MobileTableMultiSelectFilter from './TableMultiSelectFilter';
 
-import { CURRENT_FILTERS, CURRENT_FILTERS_LIST, CURRENT_FILTERS_STATE } from '@/types/filter';
-import { CHAIN } from '@/types/chains';
+import type { CHAIN } from '@/types/chains';
+import type { CURRENT_FILTERS_STATE } from '@/types/filter';
+
 
 const dappOptions = getDappOptions();
 

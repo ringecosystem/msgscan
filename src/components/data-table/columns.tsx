@@ -1,13 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+
 import MessageStatus from '@/components/message-status';
-import { MessagePort } from '@/graphql/type';
 import { chains } from '@/config/chains';
-import { ChAIN_ID } from '@/types/chains';
 import { protocols } from '@/config/protocols';
 import { formatTimeAgo, formatTimeDifference } from '@/utils';
-
 import ChainTxDisplay from '@/components/chain-tx-display';
 import BlockchainAddressLink from '@/components/blockchain-address-link';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -15,18 +13,21 @@ import { CodeFont } from '@/config/font';
 import { cn } from '@/lib/utils';
 import { getNetwork } from '@/utils/network';
 
+import type { ChAIN_ID } from '@/types/chains';
+import type { MessagePort } from '@/graphql/type';
+
 export type Column = {
   dataIndex: string;
   title: string;
   width?: string;
-  render: (value: any, record: MessagePort, index: number, network: string) => any;
+  render: (value: any, record: MessagePort, index: number, network: string) => React.ReactNode;
 };
 
 export const columns: Column[] = [
   {
     dataIndex: 'status',
     title: 'Status',
-    width: '8.7rem',
+    width: '6rem',
     render(value, record) {
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;
@@ -56,7 +57,7 @@ export const columns: Column[] = [
   {
     dataIndex: 'protocol',
     title: 'Protocol',
-    width: '7rem',
+    width: '5rem',
     render(value, record) {
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;
@@ -157,7 +158,7 @@ export const columns: Column[] = [
   {
     dataIndex: 'timeSpent',
     title: 'Time Spent',
-    width: '5rem',
+    width: '6rem',
 
     render(value, record) {
       if (record?.status === -1) {

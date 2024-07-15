@@ -1,16 +1,16 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { produce } from 'immer';
-import { useQueryClient } from '@tanstack/react-query';
-import { MessagePortBoolExp, MessagePortQueryParams, OrderBy } from '@/graphql/type';
 import { useShallow } from 'zustand/react/shallow';
 
+import { OrderBy } from '@/graphql/type';
 import DataTable from '@/components/data-table';
 import { createTimestampQuery, getAllDappAddressByKeys, getDappAddresses } from '@/utils';
 import useFilterStore from '@/store/filter';
 import { useMessagePort } from '@/hooks/services';
 
-import { CHAIN } from '@/types/chains';
+import type { MessagePortBoolExp, MessagePortQueryParams} from '@/graphql/type';
+import type { CHAIN } from '@/types/chains';
 
 const defaultQueryVariables: MessagePortQueryParams = {
   offset: 0,
@@ -29,18 +29,17 @@ interface MessagePortTableProps {
   sender?: string;
 }
 const MessagePortTable = ({ chains, network, sourceAddress, sender }: MessagePortTableProps) => {
-  const queryClient = useQueryClient();
-
   const [queryVariables, setQueryVariables] =
     useState<MessagePortQueryParams>(defaultQueryVariables);
 
-  const updateQueryVariables = (updates: Partial<MessagePortQueryParams>) => {
+  const updateQueryVariables = useCallback((variables: Partial<MessagePortQueryParams>) => {
     setQueryVariables((prev) =>
       produce(prev, (draft) => {
-        Object.assign(draft, updates);
+        Object.assign(draft, variables);
       })
     );
-  };
+  }, []);
+
   const { selectedDapps, selectedStatuses, date, selectedSourceChains, selectedTargetChains } =
     useFilterStore(
       useShallow((state) => {
@@ -101,7 +100,7 @@ const MessagePortTable = ({ chains, network, sourceAddress, sender }: MessagePor
       where.sourceBlockTimestamp = undefined;
     }
 
-    let params: MessagePortQueryParams = {
+    const params: MessagePortQueryParams = {
       where: Object.values(where).some((value) => value !== undefined) ? where : undefined
     };
     if (params.where) {
@@ -109,11 +108,8 @@ const MessagePortTable = ({ chains, network, sourceAddress, sender }: MessagePor
     }
 
     updateQueryVariables(params);
-    queryClient.resetQueries({
-      queryKey: ['messagePort']
-    });
   }, [
-    queryClient,
+    updateQueryVariables,
     selectedDapps,
     selectedStatuses,
     date,
@@ -130,21 +126,18 @@ const MessagePortTable = ({ chains, network, sourceAddress, sender }: MessagePor
     const limit = queryVariables?.limit || 10;
     if (offset === undefined) return;
     updateQueryVariables({ offset: Math.max(0, offset - limit) });
-  }, [queryVariables]);
+  }, [queryVariables, updateQueryVariables]);
 
   const handleNextPageClick = useCallback(() => {
     const offset = queryVariables?.offset;
     const limit = queryVariables?.limit || 10;
     if (offset === undefined) return;
     updateQueryVariables({ offset: offset + limit });
-  }, [queryVariables]);
+  }, [queryVariables, updateQueryVariables]);
 
   useEffect(() => {
-    queryClient.resetQueries({
-      queryKey: ['messagePort']
-    });
     updateQueryVariables({ offset: 0 });
-  }, [queryClient, network]);
+  }, [network, updateQueryVariables]);
 
   return (
     <DataTable
@@ -160,4 +153,4 @@ const MessagePortTable = ({ chains, network, sourceAddress, sender }: MessagePor
   );
 };
 
-export default MessagePortTable;
+export default memo(MessagePortTable);

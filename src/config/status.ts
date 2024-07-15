@@ -1,5 +1,6 @@
-import { TableFilterOption } from '@/types/helper';
 import { MESSAGE_STATUS } from '@/types/message';
+
+import type { TableFilterOption } from '@/types/helper';
 
 // export const STATUS_MAP = {
 //   [STATUS.INFLIGHT]: {

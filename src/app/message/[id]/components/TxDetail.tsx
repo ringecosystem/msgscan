@@ -15,10 +15,10 @@ import { cn } from '@/lib/utils';
 import { CodeFont } from '@/config/font';
 import OrmpIcon from '@/components/icon/ormp';
 import MessageStatus from '@/components/message-status';
-import { CHAIN } from '@/types/chains';
 import FadeInDown from '@/components/ui/fade-in-down';
 import BackToTop from '@/components/ui/back-to-top';
 import AddressDisplayFilterDappRemark from '@/components/address-display-filter-dapp-remark';
+
 
 import TransactionHashInfo from './TransactionHashInfo';
 import AddressInfo from './AddressInfo';
@@ -26,7 +26,9 @@ import ProtocolInfo from './ProtocolInfo';
 import OrmpInfo from './OrmpInfo';
 import Card from './Card';
 
-import { MessagePort } from '@/graphql/type';
+import type { MessagePort } from '@/graphql/type';
+import type { CHAIN } from '@/types/chains';
+
 
 const words = ['Transaction Details'];
 
@@ -122,7 +124,9 @@ export default function TxDetail({ iconSize, sourceChain, targetChain, message }
           <Card title="Source Port Address" icon={<Unplug size={iconSize} strokeWidth={1.25} />}>
             <AddressInfo address={message?.sourcePortAddress} chain={sourceChain} />
           </Card>
-
+          <Card title="Target Port Address" icon={<Unplug size={iconSize} strokeWidth={1.25} />}>
+            <AddressInfo address={message?.targetPortAddress} chain={targetChain} />
+          </Card>
           <Card
             title="Target Dapp Address"
             icon={<LayoutGrid size={iconSize} strokeWidth={1.25} />}
@@ -135,10 +139,6 @@ export default function TxDetail({ iconSize, sourceChain, targetChain, message }
               </AddressDisplayFilterDappRemark>
             </AddressInfo>
           </Card>
-          <Card title="Target Port Address" icon={<Unplug size={iconSize} strokeWidth={1.25} />}>
-            <AddressInfo address={message?.targetPortAddress} chain={targetChain} />
-          </Card>
-
           <Card title="ORMP Info" icon={<OrmpIcon />}>
             {message?.ormp ? <OrmpInfo ormpInfo={message?.ormp} /> : null}
           </Card>

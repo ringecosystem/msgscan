@@ -2,21 +2,26 @@
 import {
   useState,
   useCallback,
-  ChangeEventHandler,
   Suspense,
-  FormEventHandler,
   useEffect
 } from 'react';
 import { Search } from 'lucide-react';
-import { Input } from './ui/input';
-import Spin from './ui/spin';
 import { useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
+
 import { fetchMessage } from '@/graphql/services';
 import { getChainsByNetwork, getNetwork } from '@/utils/network';
 import { useNetworkFromQuery } from '@/hooks/useNetwork';
-import { useQuery } from '@tanstack/react-query';
 import { REFRESH_INTERVAL } from '@/config/site';
-import { CHAIN } from '@/types/chains';
+
+
+import Spin from './ui/spin';
+import { Input } from './ui/input';
+
+import type { CHAIN } from '@/types/chains';
+import type {
+  ChangeEventHandler,
+  FormEventHandler} from 'react';
 
 const fetchMessageWithDelay = async (id: string, chains: CHAIN[]) => {
   const startTime = Date.now();

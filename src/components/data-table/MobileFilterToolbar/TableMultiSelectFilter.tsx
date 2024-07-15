@@ -1,7 +1,9 @@
+import { CheckIcon } from '@radix-ui/react-icons';
+
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { TableFilterOption } from '@/types/helper';
-import { CheckIcon } from '@radix-ui/react-icons';
+
+import type { TableFilterOption } from '@/types/helper';
 
 interface TableMultiSelectFilterProps<T> {
   options: TableFilterOption[];

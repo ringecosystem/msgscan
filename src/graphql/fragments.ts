@@ -1,29 +1,33 @@
 import { gql } from 'graphql-request';
 
-export const MESSAGE_FIELDS = gql`
-  fragment MessageFields on Message {
+export const MESSAGE_PORT_FIELDS = gql`
+  fragment BasicMessagePortInfo on MessagePort {
     id
-    protocol
-    status
-    payload
+    sender
     params
-    sourceChainId
+    payload
+    protocol
     sourceBlockNumber
     sourceBlockTimestamp
-    sourceTransactionHash
-    sourceTransactionIndex
-    sourceLogIndex
+    sourceChainId
     sourceDappAddress
     sourcePortAddress
-    targetChainId
-    targetBlockNumber
+    sourceTransactionHash
+    status
     targetBlockTimestamp
-    targetTransactionHash
-    targetTransactionIndex
-    targetLogIndex
+    targetChainId
     targetDappAddress
     targetPortAddress
-    protocolInfoType
-    protocolInfoId
+    targetTransactionHash
+  }
+`;
+
+export const ORMP_DETAILS = gql`
+  fragment OrmpDetails on ORMP_MessageAccepted {
+    msgHash
+    index
+    gasLimit
+    encoded
+    channel
   }
 `;

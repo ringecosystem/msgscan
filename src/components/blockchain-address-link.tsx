@@ -1,10 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
+
 import { toShortText } from '@/utils';
-import { CHAIN } from '@/types/chains';
 import { cn } from '@/lib/utils';
 import { CodeFont } from '@/config/font';
+
 import AddressDisplayFilterDappRemark from './address-display-filter-dapp-remark';
+
+import type { CHAIN } from '@/types/chains';
 
 interface BlockchainAddressLinkProps {
   chain?: CHAIN;
@@ -31,7 +34,13 @@ const BlockchainAddressLink = ({
       >
         <AddressDisplayFilterDappRemark
           address={address}
-          formatAddress={(address) => toShortText(address, frontLength, backLength)}
+          formatAddress={(address) =>
+            toShortText({
+              text: address,
+              frontLength,
+              backLength
+            })
+          }
         />
       </Link>
     );
@@ -51,7 +60,13 @@ const BlockchainAddressLink = ({
       >
         <AddressDisplayFilterDappRemark
           address={address}
-          formatAddress={(address) => toShortText(address, frontLength, backLength)}
+          formatAddress={(address) =>
+            toShortText({
+              text: address,
+              frontLength,
+              backLength
+            })
+          }
         />
       </Link>
     );
@@ -61,7 +76,13 @@ const BlockchainAddressLink = ({
     <span title={address} className={className}>
       <AddressDisplayFilterDappRemark
         address={address}
-        formatAddress={(address) => toShortText(address, frontLength, backLength)}
+        formatAddress={(address) =>
+          toShortText({
+            text: address,
+            frontLength,
+            backLength
+          })
+        }
       />
     </span>
   );

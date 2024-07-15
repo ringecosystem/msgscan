@@ -1,4 +1,6 @@
-import { ChAIN_ID, CHAIN } from '@/types/chains';
+import { ChAIN_ID } from '@/types/chains';
+
+import type { CHAIN } from '@/types/chains';
 
 export const chains: CHAIN[] = [
   {

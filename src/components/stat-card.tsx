@@ -1,16 +1,17 @@
 import React from 'react';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { convertToNumber } from '@/utils';
+
 import Counter from './counter';
 import { Separator } from './ui/separator';
 
 interface StatCardProps {
   title: string;
   value?: number | string;
-  percentageChange: number;
 }
 
-export const StatCard: React.FC<StatCardProps> = ({ title, value, percentageChange }) => {
+export const StatCard: React.FC<StatCardProps> = ({ title, value }) => {
   const numberValue = convertToNumber(value);
   return (
     <Card className="border-none bg-transparent py-0 shadow-none sm:py-5">

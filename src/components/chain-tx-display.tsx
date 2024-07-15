@@ -1,11 +1,13 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'; // 假设shadcn已经提供了Tooltip组件
 import { cn } from '@/lib/utils';
-import { CHAIN } from '@/types/chains';
 import { toShortText } from '@/utils';
 import { CodeFont } from '@/config/font';
+
+import type { CHAIN } from '@/types/chains';
 
 interface ChainTxDisplayProps {
   chain?: CHAIN;
@@ -39,7 +41,13 @@ const ChainTxDisplay = ({
             className={cn('truncate hover:underline', CodeFont.className, className)}
             title={value}
           >
-            {isFullText ? value : toShortText(value, 6, 4)}
+            {isFullText
+              ? value
+              : toShortText({
+                  text: value,
+                  frontLength: 6,
+                  backLength: 4
+                })}
           </Link>
         );
       }
@@ -51,13 +59,25 @@ const ChainTxDisplay = ({
           target="_blank"
           rel="noreferrer noopener"
         >
-          {isFullText ? value : toShortText(value, 6, 4)}
+          {isFullText
+            ? value
+            : toShortText({
+                text: value,
+                frontLength: 6,
+                backLength: 4
+              })}
         </Link>
       );
     } else {
       return (
         <span className={cn('truncate', CodeFont.className, className)} title={value}>
-          {isFullText ? value : toShortText(value, 6, 4)}
+          {isFullText
+            ? value
+            : toShortText({
+                text: value,
+                frontLength: 6,
+                backLength: 4
+              })}
         </span>
       );
     }

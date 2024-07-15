@@ -1,8 +1,10 @@
 import { Copy, Check } from 'lucide-react';
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { useCopyToClipboard } from 'react-use';
-import { Tooltip, TooltipTrigger, TooltipContent } from './ui/tooltip';
+
 import { cn } from '@/lib/utils';
+
+import { Tooltip, TooltipTrigger, TooltipContent } from './ui/tooltip';
 
 interface ClipboardIconButtonProps {
   text?: string;

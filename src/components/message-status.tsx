@@ -1,7 +1,6 @@
-import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
-
 import { MESSAGE_STATUS } from '@/types/message';
+
 import Inflight from './icon/inflight';
 import Success from './icon/success';
 import Failed from './icon/failed';

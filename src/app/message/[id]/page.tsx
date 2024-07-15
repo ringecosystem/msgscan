@@ -1,7 +1,9 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import ClientPage from './components/ClientPage';
+
 import { fetchMessage } from '@/graphql/services';
 import { getChainsByNetwork } from '@/utils/network';
+
+import ClientPage from './components/ClientPage';
 
 interface PageProps {
   params: {

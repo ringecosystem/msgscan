@@ -1,6 +1,7 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+
 import {
   Table,
   TableBody,
@@ -18,11 +19,13 @@ import {
 } from '@/components/ui/pagination';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { MessagePort, MessagePortQueryParams } from '@/graphql/type';
+
 import { columns } from './columns';
 import DesktopFilterToolbar from './DesktopFilterToolbar';
 import MobileFilterToolbar from './MobileFilterToolbar';
-import { CHAIN } from '@/types/chains';
+
+import type { CHAIN } from '@/types/chains';
+import type { MessagePort, MessagePortQueryParams } from '@/graphql/type';
 
 const fadeInOut = {
   hidden: { opacity: 0 },
@@ -104,7 +107,7 @@ const DataTable = ({
                 className={cn(
                   'h-14',
                   'px-0',
-                  'pr-[1.88rem]',
+                  'pr-[1rem]',
                   index === 0 && 'pl-5',
                   index === columns.length - 1 && 'pr-5'
                 )}
@@ -129,7 +132,7 @@ const DataTable = ({
                     className={cn(
                       'border-none',
                       'px-0',
-                      'pr-[1.88rem]',
+                      'pr-[1rem]',
                       index === 0 && 'pl-5',
                       index === columns.length - 1 && 'pr-5',
                       index === 0 && 'rounded-[var(--radius)_0_0_var(--radius)]',
@@ -207,4 +210,4 @@ const DataTable = ({
   );
 };
 
-export default DataTable;
+export default memo(DataTable);

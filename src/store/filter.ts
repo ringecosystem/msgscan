@@ -1,6 +1,7 @@
-import { DAppConfigKeys } from '@/utils';
-import { DateRange } from 'react-day-picker';
 import { create } from 'zustand';
+
+import type { DateRange } from 'react-day-picker';
+import type { DAppConfigKeys } from '@/utils';
 
 export type State = {
   selectedDapps: DAppConfigKeys[];

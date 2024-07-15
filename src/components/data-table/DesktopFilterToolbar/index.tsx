@@ -1,14 +1,16 @@
 import { Button } from '@/components/ui/button';
-
 import { MESSAGE_STATUS_LIST } from '@/config/status';
-import TableChainFilter from './TableChainFilter';
-import TableDateFilter from './TableDateFilter';
+import { cn } from '@/lib/utils';
+import { getDappOptions } from '@/utils';
 
 import useFilter from '../hooks/useFilter';
-import { cn } from '@/lib/utils';
-import { CHAIN } from '@/types/chains';
+
+import TableChainFilter from './TableChainFilter';
+import TableDateFilter from './TableDateFilter';
 import TableMultiSelectFilter from './TableMultiSelectFilter';
-import { getDappOptions } from '@/utils';
+
+import type { CHAIN } from '@/types/chains';
+
 
 const dappOptions = getDappOptions();
 

@@ -1,9 +1,14 @@
 import { useCallback } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+
 import useFilterStore from '@/store/filter';
-import { DateRange } from 'react-day-picker';
-import { DAppConfigKeys } from '@/utils';
+
+import type { DateRange } from 'react-day-picker';
+import type { DAppConfigKeys } from '@/utils';
 
 function useFilter() {
+  const queryClient = useQueryClient();
+
   const {
     selectedDapps,
     selectedStatuses,
@@ -30,40 +35,58 @@ function useFilter() {
 
   const handleDappChange = useCallback(
     (newDapps: DAppConfigKeys[]) => {
+      queryClient.resetQueries({
+        queryKey: ['messagePort']
+      });
       setSelectedDapps(newDapps);
     },
-    [setSelectedDapps]
+    [setSelectedDapps, queryClient]
   );
 
   const handleStatusChange = useCallback(
     (newStatuses: number[]) => {
+      queryClient.resetQueries({
+        queryKey: ['messagePort']
+      });
       setSelectedStatuses(newStatuses);
     },
-    [setSelectedStatuses]
+    [setSelectedStatuses, queryClient]
   );
 
   const handleDateChange = useCallback(
     (newDate: DateRange) => {
+      queryClient.resetQueries({
+        queryKey: ['messagePort']
+      });
       setDate(newDate);
     },
-    [setDate]
+    [setDate, queryClient]
   );
 
   const handleSourceChainChange = useCallback(
     (newSourceChains: number[]) => {
+      queryClient.resetQueries({
+        queryKey: ['messagePort']
+      });
       setSelectedSourceChains(newSourceChains);
     },
-    [setSelectedSourceChains]
+    [setSelectedSourceChains, queryClient]
   );
 
   const handleTargetChainChange = useCallback(
     (newTargetChains: number[]) => {
+      queryClient.resetQueries({
+        queryKey: ['messagePort']
+      });
       setSelectedTargetChains(newTargetChains);
     },
-    [setSelectedTargetChains]
+    [setSelectedTargetChains, queryClient]
   );
 
   const handleReset = useCallback(() => {
+    queryClient.resetQueries({
+      queryKey: ['messagePort']
+    });
     setSelectedDapps([]);
     setSelectedStatuses([]);
     setSelectedSourceChains([]);
@@ -74,16 +97,24 @@ function useFilter() {
     setDate,
     setSelectedSourceChains,
     setSelectedStatuses,
-    setSelectedTargetChains
+    setSelectedTargetChains,
+    queryClient
   ]);
 
   const handleResetStatus = useCallback(() => {
+    queryClient.resetQueries({
+      queryKey: ['messagePort']
+    });
     setSelectedStatuses([]);
-  }, [setSelectedStatuses]);
+  }, [setSelectedStatuses, queryClient]);
 
   const handleResetDapps = useCallback(() => {
+    queryClient.resetQueries({
+      queryKey: ['messagePort']
+    });
     setSelectedDapps([]);
-  }, [setSelectedDapps]);
+  }, [setSelectedDapps, queryClient]);
+
   return {
     selectedDapps,
     selectedStatuses,

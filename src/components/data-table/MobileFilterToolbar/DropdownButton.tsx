@@ -1,8 +1,10 @@
+import { ChevronDown } from 'lucide-react';
+
 import SelectedLabels from '@/components/selected-labels';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { TableFilterOption } from '@/types/helper';
-import { ChevronDown } from 'lucide-react';
+
+import type { TableFilterOption } from '@/types/helper';
 
 interface DropdownButtonProps {
   onOpenChange?: (open: boolean) => void;

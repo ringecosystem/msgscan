@@ -1,13 +1,16 @@
+import { ChevronDown } from 'lucide-react';
+import { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { TableFilterOption } from '@/types/helper';
-import { ChevronDown } from 'lucide-react';
-import { useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import SelectedLabels from '@/components/selected-labels';
+
 import useChainFilterLogic from '../hooks/useChainFilterLogic';
+
+import type { TableFilterOption } from '@/types/helper';
 
 interface TableChainFilterProps {
   options: TableFilterOption[];

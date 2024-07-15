@@ -1,16 +1,19 @@
+
 import { client } from './client';
-import { GET_MESSAGE_PORT, GET_MESSAGE_PROGRESS } from './queries';
+import { GET_MESSAGE_PORT, GET_MESSAGE_PORT_DETAIL, GET_MESSAGE_PROGRESS } from './queries';
+
+import type { CHAIN } from '@/types/chains';
 import type {
   MessagePortQueryParams,
   MessagePortResponse,
   MessageProgressResponse,
   MessagePortBoolExp
 } from './type';
-import { CHAIN } from '@/types/chains';
 
 export async function fetchMessagePort(
   variables: MessagePortQueryParams = {},
-  chains: CHAIN[]
+  chains: CHAIN[],
+  signal?: AbortSignal
 ): Promise<MessagePortResponse | null> {
   const defaultSourceChainId: MessagePortBoolExp['sourceChainId'] = {
     _in: chains?.map((chain) => chain.id)
@@ -23,13 +26,13 @@ export async function fetchMessagePort(
         sourceChainId: variables.where?.sourceChainId || defaultSourceChainId
       }
     };
-    const response = await client.request<MessagePortResponse, MessagePortQueryParams>(
-      GET_MESSAGE_PORT,
-      effectiveVariables
-    );
+    const response = await client.request<MessagePortResponse, MessagePortQueryParams>({
+      document: GET_MESSAGE_PORT,
+      variables: effectiveVariables,
+      signal
+    });
     return response;
   } catch (error) {
-    console.error('messagePort request failed:', error);
     return null;
   }
 }
@@ -43,7 +46,7 @@ export async function fetchMessage(
   };
   try {
     const response = await client.request<MessagePortResponse, MessagePortQueryParams>(
-      GET_MESSAGE_PORT,
+      GET_MESSAGE_PORT_DETAIL,
       {
         where: {
           sourceChainId: defaultSourceChainId,

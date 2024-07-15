@@ -1,8 +1,10 @@
 import { cn } from '@/lib/utils';
-import { TableFilterOption } from '@/types/helper';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
+
 import useChainFilterLogic from '../hooks/useChainFilterLogic';
+
+import type { TableFilterOption } from '@/types/helper';
 
 interface TableChainFilterProps {
   options: TableFilterOption[];

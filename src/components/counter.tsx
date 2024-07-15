@@ -2,7 +2,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { animate } from 'framer-motion';
+
 import { formatNumber } from '@/utils';
+
+import type { MutableRefObject } from 'react';
+import type { AnimationPlaybackControls } from 'framer-motion';
 
 interface CounterProps {
   target: number;
@@ -10,7 +14,7 @@ interface CounterProps {
 
 function Counter({ target }: CounterProps) {
   const [displayValue, setDisplayValue] = useState(0);
-  const controls = useRef<any>(null);
+  const controls: MutableRefObject<AnimationPlaybackControls | null> = useRef(null);
   const prevTargetRef = useRef(0);
 
   useEffect(() => {

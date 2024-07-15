@@ -2,6 +2,7 @@ import React from 'react';
 import { useWindowScroll } from 'react-use';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
+
 import useMounted from '@/hooks/useMounted';
 import { cn } from '@/lib/utils';
 
