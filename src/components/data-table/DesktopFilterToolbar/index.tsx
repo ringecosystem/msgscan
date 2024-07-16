@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { MESSAGE_STATUS_LIST } from '@/config/status';
 import { cn } from '@/lib/utils';
 import { getDappOptions } from '@/utils';
-import useUrlParams from '@/hooks/urlParams';
+import useQueryParamState from '@/hooks/useQueryParamState';
 
 import useFilter from '../hooks/useFilter';
 
@@ -42,7 +42,7 @@ const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterTo
     dateTo,
     selectedSourceChains,
     selectedTargetChains
-  } = useUrlParams();
+  } = useQueryParamState();
 
   const limit = CHAIN_OPTIONS?.length;
   return (

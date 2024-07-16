@@ -7,7 +7,7 @@ import { OrderBy } from '@/graphql/type';
 import DataTable from '@/components/data-table';
 import { createTimestampQuery, getAllDappAddressByKeys, getDappAddresses } from '@/utils';
 import { useMessagePort } from '@/hooks/services';
-import useUrlParams from '@/hooks/urlParams';
+import useQueryParamState from '@/hooks/useQueryParamState';
 
 import type { MessagePortBoolExp, MessagePortQueryParams } from '@/graphql/type';
 import type { CHAIN } from '@/types/chains';
@@ -47,7 +47,7 @@ const MessagePortTable = ({ chains, network, sourceAddress, sender }: MessagePor
     selectedTargetChains,
     dateFrom,
     dateTo
-  } = useUrlParams();
+  } = useQueryParamState();
 
   useDeepCompareEffect(() => {
     const where: Partial<MessagePortBoolExp> = {};

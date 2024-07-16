@@ -10,7 +10,7 @@ import {
 
 import type { DAppConfigKeys } from '@/utils';
 
-const useUrlParams = () => {
+const useQueryParamState = () => {
   const [selectedDapps, setSelectedDapps] = useQueryState('dapp', parseAsArrayOf(parseAsString));
   const [selectedStatuses, setSelectedStatuses] = useQueryState(
     'status',
@@ -42,4 +42,4 @@ const useUrlParams = () => {
     setSelectedTargetChains
   };
 };
-export default useUrlParams;
+export default useQueryParamState;

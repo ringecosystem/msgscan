@@ -8,7 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { getDappOptions } from '@/utils';
 import { cn } from '@/lib/utils';
 import { CURRENT_FILTERS, CURRENT_FILTERS_LIST } from '@/types/filter';
-import useUrlParams from '@/hooks/urlParams';
+import useQueryParamState from '@/hooks/useQueryParamState';
 
 import useFilter from '../hooks/useFilter';
 
@@ -59,7 +59,7 @@ const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterTo
     dateTo,
     selectedSourceChains,
     selectedTargetChains
-  } = useUrlParams();
+  } = useQueryParamState();
 
   const handleDappOpen = useCallback(() => {
     setCurrentFilterInfo({

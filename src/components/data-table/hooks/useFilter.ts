@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
-import useUrlParams from '@/hooks/urlParams';
+import useQueryParamState from '@/hooks/useQueryParamState';
 
 import type { DateRange } from 'react-day-picker';
 import type { DAppConfigKeys } from '@/utils';
@@ -16,7 +16,7 @@ function useFilter() {
     setDateTo,
     setSelectedSourceChains,
     setSelectedTargetChains
-  } = useUrlParams();
+  } = useQueryParamState();
 
   const handleDappChange = useCallback(
     (newDapps: DAppConfigKeys[]) => {
