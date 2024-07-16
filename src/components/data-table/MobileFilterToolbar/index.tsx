@@ -8,7 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { getDappOptions } from '@/utils';
 import { cn } from '@/lib/utils';
 import { CURRENT_FILTERS, CURRENT_FILTERS_LIST } from '@/types/filter';
-
+import useQueryParamState from '@/hooks/useQueryParamState';
 
 import useFilter from '../hooks/useFilter';
 
@@ -20,7 +20,6 @@ import MobileTableMultiSelectFilter from './TableMultiSelectFilter';
 
 import type { CHAIN } from '@/types/chains';
 import type { CURRENT_FILTERS_STATE } from '@/types/filter';
-
 
 const dappOptions = getDappOptions();
 
@@ -44,11 +43,6 @@ const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterTo
   });
 
   const {
-    selectedDapps,
-    selectedStatuses,
-    date,
-    selectedSourceChains,
-    selectedTargetChains,
     handleDappChange,
     handleStatusChange,
     handleDateChange,
@@ -58,6 +52,14 @@ const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterTo
     handleResetStatus,
     handleResetDapps
   } = useFilter();
+  const {
+    selectedDapps,
+    selectedStatuses,
+    dateFrom,
+    dateTo,
+    selectedSourceChains,
+    selectedTargetChains
+  } = useQueryParamState();
 
   const handleDappOpen = useCallback(() => {
     setCurrentFilterInfo({
@@ -102,7 +104,7 @@ const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterTo
 
   const selectedNumber = useMemo(() => {
     const dappNumber = selectedDapps?.length ? 1 : 0;
-    const dateNumber = date?.from || date?.to ? 1 : 0;
+    const dateNumber = dateFrom || dateTo ? 1 : 0;
     const selectedStatusesNumber = selectedStatuses?.length ? 1 : 0;
     const selectedSourceChainsNumber = selectedSourceChains?.length ? 1 : 0;
     const selectedTargetChainsNumber = selectedTargetChains?.length ? 1 : 0;
@@ -113,7 +115,14 @@ const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterTo
       selectedSourceChainsNumber +
       selectedTargetChainsNumber
     );
-  }, [selectedDapps, date, selectedStatuses, selectedSourceChains, selectedTargetChains]);
+  }, [
+    selectedDapps,
+    dateFrom,
+    dateTo,
+    selectedStatuses,
+    selectedSourceChains,
+    selectedTargetChains
+  ]);
 
   return (
     <>
@@ -161,9 +170,9 @@ const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterTo
                     onOpenChange={handleDateOpen}
                     className="w-full justify-between px-0 hover:bg-transparent hover:text-foreground/80"
                   >
-                    {!date?.from && !date?.to
+                    {!dateFrom && !dateTo
                       ? 'All'
-                      : `${date.from?.toLocaleDateString() ?? ''} - ${date.to?.toLocaleDateString() ?? ''}`}
+                      : `${dateFrom?.toLocaleDateString() ?? ''} - ${dateTo?.toLocaleDateString() ?? ''}`}
                   </DropdownButton>
                   <Separator />
 
@@ -211,7 +220,13 @@ const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterTo
               )}
 
               {currentFilterInfo?.value === CURRENT_FILTERS.DATE && (
-                <MobileTableDateFilter date={date} onChange={handleDateChange} />
+                <MobileTableDateFilter
+                  date={{
+                    from: dateFrom,
+                    to: dateTo
+                  }}
+                  onChange={handleDateChange}
+                />
               )}
 
               {currentFilterInfo?.value === CURRENT_FILTERS.SOURCE_CHAIN && (

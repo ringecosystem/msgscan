@@ -32,10 +32,10 @@ const TableMultiSelectFilter = <T extends string | number>({
   const [open, setOpen] = useState(false);
 
   const toggleItem = (itemValue: T) => {
-    if (value.includes(itemValue)) {
-      onChange(value.filter((s) => s !== itemValue));
+    if (value?.includes(itemValue)) {
+      onChange(value?.filter((s) => s !== itemValue));
     } else {
-      onChange([...value, itemValue]);
+      onChange([...(value || []), itemValue]);
     }
   };
 
@@ -66,7 +66,7 @@ const TableMultiSelectFilter = <T extends string | number>({
           <CommandList>
             <CommandGroup className="p-0">
               {options.map(({ value: optionValue, label }) => {
-                const isSelected = value.includes(optionValue as T);
+                const isSelected = value?.includes(optionValue as T);
                 return (
                   <CommandItem
                     key={optionValue}
@@ -95,7 +95,7 @@ const TableMultiSelectFilter = <T extends string | number>({
                 );
               })}
             </CommandGroup>
-            {value.length > 0 && (
+            {value?.length > 0 && (
               <>
                 <CommandGroup>
                   <CommandItem

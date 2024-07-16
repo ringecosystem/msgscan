@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
-import useFilterStore from '@/store/filter';
+import useQueryParamState from '@/hooks/useQueryParamState';
 
 import type { DateRange } from 'react-day-picker';
 import type { DAppConfigKeys } from '@/utils';
@@ -10,28 +10,13 @@ function useFilter() {
   const queryClient = useQueryClient();
 
   const {
-    selectedDapps,
-    selectedStatuses,
-    date,
-    selectedSourceChains,
-    selectedTargetChains,
     setSelectedDapps,
     setSelectedStatuses,
-    setDate,
+    setDateFrom,
+    setDateTo,
     setSelectedSourceChains,
     setSelectedTargetChains
-  } = useFilterStore((state) => ({
-    selectedDapps: state.selectedDapps,
-    selectedStatuses: state.selectedStatuses,
-    date: state.date,
-    selectedSourceChains: state.selectedSourceChains,
-    selectedTargetChains: state.selectedTargetChains,
-    setSelectedDapps: state.setSelectedDapps,
-    setSelectedStatuses: state.setSelectedStatuses,
-    setDate: state.setDate,
-    setSelectedSourceChains: state.setSelectedSourceChains,
-    setSelectedTargetChains: state.setSelectedTargetChains
-  }));
+  } = useQueryParamState();
 
   const handleDappChange = useCallback(
     (newDapps: DAppConfigKeys[]) => {
@@ -58,9 +43,10 @@ function useFilter() {
       queryClient.resetQueries({
         queryKey: ['messagePort']
       });
-      setDate(newDate);
+      setDateFrom(newDate?.from ?? null);
+      setDateTo(newDate?.to ?? null);
     },
-    [setDate, queryClient]
+    [setDateFrom, setDateTo, queryClient]
   );
 
   const handleSourceChainChange = useCallback(
@@ -87,14 +73,16 @@ function useFilter() {
     queryClient.resetQueries({
       queryKey: ['messagePort']
     });
-    setSelectedDapps([]);
-    setSelectedStatuses([]);
-    setSelectedSourceChains([]);
-    setSelectedTargetChains([]);
-    setDate({ from: undefined, to: undefined });
+    setSelectedDapps(null);
+    setSelectedStatuses(null);
+    setSelectedSourceChains(null);
+    setSelectedTargetChains(null);
+    setDateFrom(null);
+    setDateTo(null);
   }, [
     setSelectedDapps,
-    setDate,
+    setDateFrom,
+    setDateTo,
     setSelectedSourceChains,
     setSelectedStatuses,
     setSelectedTargetChains,
@@ -116,11 +104,6 @@ function useFilter() {
   }, [setSelectedDapps, queryClient]);
 
   return {
-    selectedDapps,
-    selectedStatuses,
-    date,
-    selectedSourceChains,
-    selectedTargetChains,
     handleDappChange,
     handleStatusChange,
     handleDateChange,
@@ -128,8 +111,7 @@ function useFilter() {
     handleTargetChainChange,
     handleReset,
     handleResetStatus,
-    handleResetDapps,
-    setDate
+    handleResetDapps
   };
 }
 

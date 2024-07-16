@@ -38,11 +38,11 @@ type TimestampQuery = MessagePortBoolExp['sourceBlockTimestamp'];
 export function createTimestampQuery(date?: DateRange): TimestampQuery {
   const query: TimestampQuery = {};
 
-  if (date?.from) {
-    query._gte = Math.floor(date.from.getTime() / 1000);
+  if (date?.from && dayjs(date.from).isValid()) {
+    query._gte = Math.floor(date?.from.getTime() / 1000);
   }
 
-  if (date?.to) {
+  if (date?.to && dayjs(date.to).isValid()) {
     const endOfDay = new Date(date.to);
     endOfDay.setDate(endOfDay.getDate() + 1);
     endOfDay.setMilliseconds(-1);

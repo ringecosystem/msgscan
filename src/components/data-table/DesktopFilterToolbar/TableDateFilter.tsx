@@ -8,7 +8,6 @@ import { cn } from '@/lib/utils';
 
 import type { DateRange, SelectRangeEventHandler } from 'react-day-picker';
 
-
 interface TableDateFilterProps {
   date?: DateRange;
   onChange?: (date: DateRange) => void;

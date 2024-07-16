@@ -22,7 +22,7 @@ const TableMultiSelectFilter = <T extends number | string>({
     if (value.includes(itemValue)) {
       onChange(value.filter((s) => s !== itemValue));
     } else {
-      onChange([...value, itemValue]);
+      onChange([...(value || []), itemValue]);
     }
   };
 
