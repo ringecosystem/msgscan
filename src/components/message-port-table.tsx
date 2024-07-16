@@ -1,15 +1,15 @@
 'use client';
 import { memo, useCallback, useEffect, useState } from 'react';
 import { produce } from 'immer';
-import { useShallow } from 'zustand/react/shallow';
+import { useDeepCompareEffect } from 'react-use';
 
 import { OrderBy } from '@/graphql/type';
 import DataTable from '@/components/data-table';
 import { createTimestampQuery, getAllDappAddressByKeys, getDappAddresses } from '@/utils';
-import useFilterStore from '@/store/filter';
 import { useMessagePort } from '@/hooks/services';
+import useUrlParams from '@/hooks/urlParams';
 
-import type { MessagePortBoolExp, MessagePortQueryParams} from '@/graphql/type';
+import type { MessagePortBoolExp, MessagePortQueryParams } from '@/graphql/type';
 import type { CHAIN } from '@/types/chains';
 
 const defaultQueryVariables: MessagePortQueryParams = {
@@ -40,20 +40,16 @@ const MessagePortTable = ({ chains, network, sourceAddress, sender }: MessagePor
     );
   }, []);
 
-  const { selectedDapps, selectedStatuses, date, selectedSourceChains, selectedTargetChains } =
-    useFilterStore(
-      useShallow((state) => {
-        return {
-          selectedDapps: state.selectedDapps,
-          selectedStatuses: state.selectedStatuses,
-          date: state.date,
-          selectedSourceChains: state.selectedSourceChains,
-          selectedTargetChains: state.selectedTargetChains
-        };
-      })
-    );
+  const {
+    selectedDapps,
+    selectedStatuses,
+    selectedSourceChains,
+    selectedTargetChains,
+    dateFrom,
+    dateTo
+  } = useUrlParams();
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     const where: Partial<MessagePortBoolExp> = {};
 
     where.status =
@@ -71,13 +67,11 @@ const MessagePortTable = ({ chains, network, sourceAddress, sender }: MessagePor
         _in: getAllDappAddressByKeys(selectedDapps)
       };
     }
-
     if (sender) {
       where.sender = {
         _eq: sender
       };
     }
-
     where.sourceChainId =
       selectedSourceChains && selectedSourceChains?.length > 0
         ? {
@@ -92,29 +86,31 @@ const MessagePortTable = ({ chains, network, sourceAddress, sender }: MessagePor
           }
         : undefined;
 
-    if (date && (date?.from || date?.to)) {
+    if (dateFrom || dateTo) {
       Object.assign(where, {
-        sourceBlockTimestamp: createTimestampQuery(date)
+        sourceBlockTimestamp: createTimestampQuery({
+          from: dateFrom,
+          to: dateTo
+        })
       });
     } else {
       where.sourceBlockTimestamp = undefined;
     }
-
     const params: MessagePortQueryParams = {
       where: Object.values(where).some((value) => value !== undefined) ? where : undefined
     };
     if (params.where) {
       params.offset = 0;
     }
-
     updateQueryVariables(params);
   }, [
     updateQueryVariables,
     selectedDapps,
     selectedStatuses,
-    date,
     selectedSourceChains,
     selectedTargetChains,
+    dateFrom,
+    dateTo,
     sourceAddress,
     sender
   ]);

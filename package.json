@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3200",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -22,6 +22,7 @@
     "@serwist/next": "^9.0.3",
     "@tanstack/react-query": "^5.40.0",
     "@tanstack/react-table": "^8.17.3",
+    "add": "^2.0.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
@@ -33,6 +34,8 @@
     "lucide-react": "^0.379.0",
     "next": "14.2.3",
     "next-themes": "^0.3.0",
+    "nuqs": "^1.17.4",
+    "pnpm": "^9.5.0",
     "react": "^18",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",

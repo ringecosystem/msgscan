@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { MESSAGE_STATUS_LIST } from '@/config/status';
 import { cn } from '@/lib/utils';
 import { getDappOptions } from '@/utils';
+import useUrlParams from '@/hooks/urlParams';
 
 import useFilter from '../hooks/useFilter';
 
@@ -10,7 +11,6 @@ import TableDateFilter from './TableDateFilter';
 import TableMultiSelectFilter from './TableMultiSelectFilter';
 
 import type { CHAIN } from '@/types/chains';
-
 
 const dappOptions = getDappOptions();
 
@@ -25,11 +25,6 @@ const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterTo
     value: chain.id
   }));
   const {
-    selectedDapps,
-    selectedStatuses,
-    date,
-    selectedSourceChains,
-    selectedTargetChains,
     handleDappChange,
     handleStatusChange,
     handleDateChange,
@@ -39,6 +34,16 @@ const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterTo
     handleResetStatus,
     handleResetDapps
   } = useFilter();
+
+  const {
+    selectedDapps,
+    selectedStatuses,
+    dateFrom,
+    dateTo,
+    selectedSourceChains,
+    selectedTargetChains
+  } = useUrlParams();
+
   const limit = CHAIN_OPTIONS?.length;
   return (
     <div className={cn('flex items-center justify-between py-5', className)}>
@@ -64,7 +69,14 @@ const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterTo
           contentClassName="w-[10rem]"
         />
 
-        <TableDateFilter onChange={handleDateChange} date={date} contentClassName="w-[35rem]" />
+        <TableDateFilter
+          onChange={handleDateChange}
+          date={{
+            from: dateFrom,
+            to: dateTo
+          }}
+          contentClassName="w-[35rem]"
+        />
 
         <TableChainFilter
           options={CHAIN_OPTIONS}
