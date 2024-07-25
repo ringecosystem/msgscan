@@ -138,7 +138,7 @@ export const columns: Column[] = [
       const chain = chains?.find(
         (chain) => chain.id === (Number(record?.sourceChainId) as unknown as ChAIN_ID)
       );
-      const href = `/sent_by/${value}?network=${getNetwork(network)}`;
+      const href = `/dapp/${value}?network=${getNetwork(network)}`;
       return <BlockchainAddressLink chain={chain} address={value} href={href} />;
     }
   },
