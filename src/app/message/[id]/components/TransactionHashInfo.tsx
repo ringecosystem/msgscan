@@ -10,6 +10,10 @@ interface TransactionHashInfoProps {
 }
 
 const TransactionHashInfo = ({ chain, hash }: TransactionHashInfoProps) => {
+  let _url = `${chain?.blockExplorers?.default?.url}/tx/${hash}`;
+  if (chain?.name.includes("Tron")) {
+    _url = `${chain?.blockExplorers?.default?.url}/#/transaction/${hash?.replace('0x', '')}`
+  }
   return (
     <div className="flex items-center">
       <ChainTxDisplay
@@ -22,7 +26,7 @@ const TransactionHashInfo = ({ chain, hash }: TransactionHashInfoProps) => {
       >
         {hash && <ClipboardIconButton text={hash} size={16} />}
         {hash && chain ? (
-          <ExplorerLinkButton url={`${chain?.blockExplorers?.default?.url}/tx/${hash}`} />
+          <ExplorerLinkButton url={`${_url}`} />
         ) : null}
       </ChainTxDisplay>
     </div>

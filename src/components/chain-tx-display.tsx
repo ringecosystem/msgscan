@@ -32,7 +32,11 @@ const ChainTxDisplay = ({
   children
 }: React.PropsWithChildren<ChainTxDisplayProps>) => {
   const renderContent = () => {
-    const txLink = `${chain?.blockExplorers?.default?.url}/tx/${value}`;
+    let txLink = `${chain?.blockExplorers?.default?.url}/tx/${value}`;
+
+    if (chain?.name.includes("Tron")) {
+      txLink = `${chain?.blockExplorers?.default?.url}/#/transaction/${value?.replace('0x', '')}`
+    }
     if (isLink) {
       if (href) {
         return (
@@ -44,10 +48,10 @@ const ChainTxDisplay = ({
             {isFullText
               ? value
               : toShortText({
-                  text: value,
-                  frontLength: 6,
-                  backLength: 4
-                })}
+                text: value,
+                frontLength: 6,
+                backLength: 4
+              })}
           </Link>
         );
       }
@@ -62,10 +66,10 @@ const ChainTxDisplay = ({
           {isFullText
             ? value
             : toShortText({
-                text: value,
-                frontLength: 6,
-                backLength: 4
-              })}
+              text: value,
+              frontLength: 6,
+              backLength: 4
+            })}
         </Link>
       );
     } else {
@@ -74,10 +78,10 @@ const ChainTxDisplay = ({
           {isFullText
             ? value
             : toShortText({
-                text: value,
-                frontLength: 6,
-                backLength: 4
-              })}
+              text: value,
+              frontLength: 6,
+              backLength: 4
+            })}
         </span>
       );
     }
