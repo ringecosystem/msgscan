@@ -1,1 +1,1 @@
-export const APP_BASE_API_URL = 'https://indexer.bigdevenergy.link/ed7db02/v1/graphql';
+export const APP_BASE_API_URL = 'https://indexer.bigdevenergy.link/10bd058/v1/graphql';
