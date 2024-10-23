@@ -168,5 +168,16 @@ export const chains: CHAIN[] = [
       }
     },
     testnet: true
-  }
+  },
+  {
+    id: ChAIN_ID.MORPH,
+    name: 'Morph',
+    iconUrl: '/images/chains/morph.svg',
+    blockExplorers: {
+      default: {
+        name: 'Morph',
+        url: 'https://explorer.morphl2.io/'
+      }
+    }
+  },
 ];

@@ -16,7 +16,8 @@ export enum ChAIN_ID {
   MOONBEAM = 1284,
   TAIKO_HEKLA = 167009,
   PANGORO = 45,
-  KOI = 701
+  KOI = 701,
+  MORPH = 2818
 }
 
 export type CHAIN = {
