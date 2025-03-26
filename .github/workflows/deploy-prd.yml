@@ -19,7 +19,7 @@ jobs:
           vercel_group: itering
           preview_output: true
           script_run: false
-          dist_path: .
+          dist_path: packages/web
           project_name: msgscan
           prod_mode: true
           enable_cache: true
