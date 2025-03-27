@@ -1,8 +1,147 @@
-type UsdcTransfer @entity {
+
+type ORMPHashImported @entity {
   id: ID!
-  block: Int!
-  from: String! @index
-  to: String! @index
-  value: BigInt!
-  txnHash: String! @index
+  blockNumber: BigInt!
+  transactionHash: String!
+  blockTimestamp: BigInt!
+
+  srcChainId: BigInt!
+  targetChainId: BigInt!
+  oracle: String!
+  channel: String!
+  msgIndex: BigInt!
+  hash: String!
 }
+
+type ORMPMessageAccepted @entity{
+  id: ID!
+  blockNumber: BigInt!
+  transactionHash: String!
+  blockTimestamp: BigInt!
+
+  msgHash: String!
+  channel: String!
+  index: BigInt!
+  fromChainId: BigInt!
+  from: String!
+  toChainId: BigInt!
+  to: String!
+  gasLimit: BigInt!
+  encoded: String!
+
+  # extra
+  oracle: String
+  oracleAssigned: Boolean
+  oracleAssignedFee: BigInt
+
+  relayer: String
+  relayerAssigned: Boolean
+  relayerAssignedFee: BigInt
+}
+
+type ORMPMessageAssigned @entity {
+  id: ID!
+  blockNumber: BigInt!
+  transactionHash: String!
+  blockTimestamp: BigInt!
+
+  msgHash: String!
+  oracle: String!
+  relayer: String!
+  oracleFee: BigInt!
+  relayerFee: BigInt!
+  params: String!
+}
+
+type ORMPMessageDispatched @entity {
+  id: ID!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+
+  targetChainId: BigInt!
+  msgHash: String!
+  dispatchResult: Boolean!
+}
+
+type ORMPUpgradeablePortMessageRecv @entity {
+  id: ID!
+  blockNumber: BigInt!
+  transactionHash: String!
+  blockTimestamp: BigInt!
+
+  chainId: BigInt!
+  msgId: String!
+  result: Boolean!
+  returnData: String!
+}
+
+type ORMPUpgradeablePortMessageSent @entity {
+  id: ID!
+  blockNumber: BigInt!
+  transactionHash: String!
+  blockTimestamp: BigInt!
+
+  chainId: BigInt!
+  msgId: String!
+  fromDapp: String!
+  toChainId: BigInt!
+  toDapp: String!
+  message: String!
+  params: String!
+}
+
+type SignaturePubSignatureSubmittion @entity {
+  id: ID!
+  blockNumber: BigInt!
+  transactionHash: String!
+  blockTimestamp: BigInt!
+
+  chainId: BigInt!
+  channel: String!
+  signer: String!
+  msgIndex: BigInt!
+  signature: String!
+  data: String!
+}
+
+## custom
+
+type MessagePort @entity {
+  id: ID!
+  protocol: String!
+  payload: String
+  params: String
+  status: Int! # 0: inflight, 1: success, 2: failed
+
+  sender: String
+
+  # source
+  sourceChainId: BigInt
+  sourceBlockNumber: BigInt
+  sourceBlockTimestamp: BigInt
+  sourceTransactionHash: String
+  sourceTransactionIndex: Int
+  sourceLogIndex: Int
+  sourceDappAddress: String
+  sourcePortAddress: String
+
+  # target
+  targetChainId: BigInt
+  targetBlockNumber: BigInt
+  targetBlockTimestamp: BigInt
+  targetTransactionHash: String
+  targetTransactionIndex: Int
+  targetLogIndex: Int
+  targetDappAddress: String
+  targetPortAddress: String
+
+  # relation
+  ormp: ORMPMessageAccepted
+}
+
+type MessageProgress @entity {
+  id: ID!
+  amount: BigInt!
+}
+
