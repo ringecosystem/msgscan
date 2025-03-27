@@ -9,6 +9,7 @@ import {
   Log as TronLog,
 } from "@subsquid/tron-processor";
 import { OrmpContractChain, OrmpContractConfig } from "../config";
+import * as msgportAbi from "../abi/ormpupgradeableport";
 
 export class MsgportEvmHandler {
   constructor(
@@ -18,7 +19,14 @@ export class MsgportEvmHandler {
   ) {}
 
   async handle(eventLog: EvmLog<EvmFieldSelection>) {
-    // this.ctx._chain.client.
+    const isMessageRecv =
+      eventLog.topics.findIndex(
+        (item) => item === msgportAbi.events.MessageRecv.topic
+      ) !== -1;
+    const isMessageSend =
+      eventLog.topics.findIndex(
+        (item) => item === msgportAbi.events.MessageSent.topic
+      ) !== -1;
   }
 }
 
@@ -29,5 +37,16 @@ export class MsgportTronHandler {
     private readonly ormpContractConfig: OrmpContractConfig
   ) {}
 
-  async handle(eventLog: TronLog<TronFieldSelection>) {}
+  async handle(eventLog: TronLog<TronFieldSelection>) {
+    const isMessageRecv =
+      eventLog.topics?.findIndex(
+        (item) => item === msgportAbi.events.MessageRecv.topic
+      ) !== -1;
+    const isMessageSend =
+      eventLog.topics?.findIndex(
+        (item) => item === msgportAbi.events.MessageSent.topic
+      ) !== -1;
+  }
 }
+
+class MsgportHandler {}
