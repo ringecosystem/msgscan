@@ -7,6 +7,7 @@ import {
   ADDRESS_ORACLE,
   ADDRESS_RELAYER,
   EvmFieldSelection,
+  ProgressId,
   TronFieldSelection,
 } from "../types";
 import {
@@ -16,6 +17,8 @@ import {
 import * as ormpAbi from "../abi/ormp";
 import { OrmpContractChain, OrmpContractConfig } from "../config";
 import {
+  MessagePort,
+  MessageProgress,
   ORMPHashImported,
   ORMPMessageAccepted,
   ORMPMessageAssigned,
@@ -289,5 +292,63 @@ class OrmpHandler {
 
   async storeMessageDispatched(event: ORMPMessageDispatched) {
     this.store.insert(event);
+
+    const storedMessageAccepted = await this.store.findOne(
+      ORMPMessageAccepted,
+      {
+        where: { id: event.msgHash },
+      }
+    );
+
+    // message port
+    const storedMessagePort = await this.store.findOne(MessagePort, {
+      where: { id: event.msgHash },
+    });
+    const currentMessagePort = storedMessagePort ?? new MessagePort();
+    currentMessagePort.ormp = storedMessageAccepted;
+    currentMessagePort.protocol = "ormp";
+    currentMessagePort.status = event.dispatchResult ? 1 : 2;
+    if (storedMessagePort) {
+      this.store.save(currentMessagePort);
+    } else {
+      this.store.insert(currentMessagePort);
+    }
+
+    // message progress
+    const storedProgressInflight = await this.store.findOne(MessageProgress, {
+      where: { id: ProgressId.inflight },
+    });
+    const currentProgressInflight =
+      storedProgressInflight ??
+      new MessageProgress({
+        id: ProgressId.inflight,
+        amount: 0n,
+      });
+
+    currentProgressInflight.amount -= 1n;
+
+    if (storedProgressInflight) {
+      this.store.save(currentProgressInflight);
+    } else {
+      this.store.insert(currentProgressInflight);
+    }
+
+    if (!event.dispatchResult) {
+      const storedProgressFailed = await this.store.findOne(MessageProgress, {
+        where: { id: ProgressId.failed },
+      });
+      const currentProgressFailed =
+        storedProgressFailed ??
+        new MessageProgress({
+          id: ProgressId.failed,
+          amount: 0n,
+        });
+      currentProgressFailed.amount += 1n;
+      if (storedProgressFailed) {
+        this.store.save(currentProgressFailed);
+      } else {
+        this.store.insert(currentProgressFailed);
+      }
+    }
   }
 }

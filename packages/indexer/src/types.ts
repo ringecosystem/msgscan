@@ -42,4 +42,5 @@ export type TronFieldSelection = typeof tronFieldSelection;
 export enum ProgressId {
   total = "total",
   inflight = "inflight",
+  failed = "failed",
 }
