@@ -92,7 +92,7 @@ export class MsgportTronHandler {
 
   async handle(eventLog: TronLog<TronFieldSelection>) {
     if (!eventLog.topics) {
-      this.ctx.log.warn(`no topics in event log: ${eventLog}`);
+      this.ctx.log.warn(`[msgport] no topics in event log: ${eventLog}`);
       return;
     }
     const isMessageRecv =
