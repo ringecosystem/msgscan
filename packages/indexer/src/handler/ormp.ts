@@ -3,7 +3,12 @@ import {
   Log as EvmLog,
 } from "@subsquid/evm-processor";
 import { Store } from "@subsquid/typeorm-store";
-import { EvmFieldSelection, TronFieldSelection } from "../types";
+import {
+  ADDRESS_ORACLE,
+  ADDRESS_RELAYER,
+  EvmFieldSelection,
+  TronFieldSelection,
+} from "../types";
 import {
   DataHandlerContext as TronDataHandlerContext,
   Log as TronLog,
@@ -73,9 +78,9 @@ export class OrmpEvmHandler {
         channel: event.message.channel,
         index: event.message.index,
         fromChainId: event.message.fromChainId,
-        from: event.message.from,
+        from: event.message.from.toLowerCase(),
         toChainId: event.message.toChainId,
-        to: event.message.to,
+        to: event.message.to.toLowerCase(),
         gasLimit: event.message.gasLimit,
         encoded: event.message.encoded,
         // oracle: undefined,
@@ -97,7 +102,7 @@ export class OrmpEvmHandler {
 
         msgHash: event.msgHash,
         oracle: event.oracle,
-        relayer: event.relayer,
+        relayer: event.relayer.toLowerCase(),
         oracleFee: event.oracleFee,
         relayerFee: event.relayerFee,
         params: event.params,
@@ -188,9 +193,9 @@ export class OrmpTronHandler {
         channel: event.message.channel,
         index: event.message.index,
         fromChainId: event.message.fromChainId,
-        from: event.message.from,
+        from: event.message.from.toLowerCase(),
         toChainId: event.message.toChainId,
-        to: event.message.to,
+        to: event.message.to.toLowerCase(),
         gasLimit: event.message.gasLimit,
         encoded: event.message.encoded,
         // oracle: undefined,
@@ -212,7 +217,7 @@ export class OrmpTronHandler {
 
         msgHash: event.msgHash,
         oracle: event.oracle,
-        relayer: event.relayer,
+        relayer: event.relayer.toLowerCase(),
         oracleFee: event.oracleFee,
         relayerFee: event.relayerFee,
         params: event.params,
@@ -249,6 +254,37 @@ class OrmpHandler {
 
   async storeMessageAssigned(event: ORMPMessageAssigned) {
     this.store.insert(event);
+
+    const relayer = event.relayer;
+    if (ADDRESS_RELAYER.includes(relayer)) {
+      const storedMessageAccepted = await this.store.findOne(
+        ORMPMessageAccepted,
+        {
+          where: { id: event.msgHash },
+        }
+      );
+      if (storedMessageAccepted) {
+        storedMessageAccepted.relayer = event.relayer;
+        storedMessageAccepted.relayerAssigned = true;
+        storedMessageAccepted.relayerAssignedFee = event.relayerFee;
+        await this.store.save(storedMessageAccepted);
+      }
+    }
+
+    if (ADDRESS_ORACLE.includes(relayer)) {
+      const storedMessageAccepted = await this.store.findOne(
+        ORMPMessageAccepted,
+        {
+          where: { id: event.msgHash },
+        }
+      );
+      if (storedMessageAccepted) {
+        storedMessageAccepted.oracle = event.oracle;
+        storedMessageAccepted.oracleAssigned = true;
+        storedMessageAccepted.oracleAssignedFee = event.oracleFee;
+        await this.store.save(storedMessageAccepted);
+      }
+    }
   }
 
   async storeMessageDispatched(event: ORMPMessageDispatched) {
