@@ -38,3 +38,8 @@ export const ADDRESS_SIGNATURE = [
 
 export type EvmFieldSelection = typeof evmFieldSelection;
 export type TronFieldSelection = typeof tronFieldSelection;
+
+export enum ProgressId {
+  total = "total",
+  inflight = "inflight",
+}

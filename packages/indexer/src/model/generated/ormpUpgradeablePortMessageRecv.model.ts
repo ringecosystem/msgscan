@@ -2,6 +2,9 @@ import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, B
 
 @Entity_()
 export class ORMPUpgradeablePortMessageRecv {
+    logIndex: number | null | undefined
+    srcAddress: string | null | undefined
+    transaction: any
     constructor(props?: Partial<ORMPUpgradeablePortMessageRecv>) {
         Object.assign(this, props)
     }
