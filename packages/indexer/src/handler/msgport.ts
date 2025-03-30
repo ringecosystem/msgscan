@@ -174,32 +174,32 @@ class MsgportHandler {
   ) {
     await this.store.insert(event);
 
-    // msgport
-    const storedMessagePort = await this.store.findOne(MessagePort, {
-      where: { id: helpers.stdHashString(event.msgId) },
-    });
-    const storedMessageAccept = await this.store.findOne(ORMPMessageAccepted, {
-      where: { id: helpers.stdHashString(event.msgId) },
-    });
-    const currentMessagePort = new MessagePort({
-      ...storedMessagePort,
-      id: helpers.stdHashString(event.msgId),
-      ormp: storedMessageAccept,
-      protocol: "ormp",
-      status: storedMessagePort?.status ?? (event.result ? 1 : 2),
-      targetBlockNumber: event.blockNumber,
-      targetBlockTimestamp: event.blockTimestamp,
-      targetChainId: event.chainId,
-      targetLogIndex: eventInfo.logIndex,
-      targetPortAddress: eventInfo.address,
-      targetTransactionHash: event.transactionHash,
-      targetTransactionIndex: eventInfo.transactionIndex,
-    });
-    if (storedMessagePort) {
-      await this.store.save(currentMessagePort);
-    } else {
-      await this.store.insert(currentMessagePort);
-    }
+    // // msgport
+    // const storedMessagePort = await this.store.findOne(MessagePort, {
+    //   where: { id: helpers.stdHashString(event.msgId) },
+    // });
+    // const storedMessageAccept = await this.store.findOne(ORMPMessageAccepted, {
+    //   where: { id: helpers.stdHashString(event.msgId) },
+    // });
+    // const currentMessagePort = new MessagePort({
+    //   ...storedMessagePort,
+    //   id: helpers.stdHashString(event.msgId),
+    //   ormp: storedMessageAccept,
+    //   protocol: "ormp",
+    //   status: storedMessagePort?.status ?? (event.result ? 1 : 2),
+    //   targetBlockNumber: event.blockNumber,
+    //   targetBlockTimestamp: event.blockTimestamp,
+    //   targetChainId: event.chainId,
+    //   targetLogIndex: eventInfo.logIndex,
+    //   targetPortAddress: eventInfo.address,
+    //   targetTransactionHash: event.transactionHash,
+    //   targetTransactionIndex: eventInfo.transactionIndex,
+    // });
+    // if (storedMessagePort) {
+    //   await this.store.save(currentMessagePort);
+    // } else {
+    //   await this.store.insert(currentMessagePort);
+    // }
   }
 
   async storeMessageSent(
@@ -208,42 +208,42 @@ class MsgportHandler {
   ) {
     await this.store.insert(event);
 
-    // msgport
-    const storedMessagePort = await this.store.findOne(MessagePort, {
-      where: { id: helpers.stdHashString(event.msgId) },
-    });
-    const storedMessageAccept = await this.store.findOne(ORMPMessageAccepted, {
-      where: { id: helpers.stdHashString(event.msgId) },
-    });
-    const currentMessagePort = new MessagePort({
-      ...storedMessagePort,
-      id: helpers.stdHashString(event.msgId),
-      ormp: storedMessageAccept,
-      protocol: "ormp",
-      payload: event.message,
-      params: event.params,
+    // // msgport
+    // const storedMessagePort = await this.store.findOne(MessagePort, {
+    //   where: { id: helpers.stdHashString(event.msgId) },
+    // });
+    // const storedMessageAccept = await this.store.findOne(ORMPMessageAccepted, {
+    //   where: { id: helpers.stdHashString(event.msgId) },
+    // });
+    // const currentMessagePort = new MessagePort({
+    //   ...storedMessagePort,
+    //   id: helpers.stdHashString(event.msgId),
+    //   ormp: storedMessageAccept,
+    //   protocol: "ormp",
+    //   payload: event.message,
+    //   params: event.params,
 
-      sender: eventInfo.transactionFrom,
+    //   sender: eventInfo.transactionFrom,
 
-      sourceChainId: event.chainId,
-      sourceBlockNumber: event.blockNumber,
-      sourceBlockTimestamp: event.blockTimestamp,
-      sourceTransactionHash: event.transactionHash,
-      sourceTransactionIndex: eventInfo.transactionIndex,
-      sourceLogIndex: eventInfo.logIndex,
-      sourceDappAddress: event.fromDapp,
-      sourcePortAddress: eventInfo.address,
+    //   sourceChainId: event.chainId,
+    //   sourceBlockNumber: event.blockNumber,
+    //   sourceBlockTimestamp: event.blockTimestamp,
+    //   sourceTransactionHash: event.transactionHash,
+    //   sourceTransactionIndex: eventInfo.transactionIndex,
+    //   sourceLogIndex: eventInfo.logIndex,
+    //   sourceDappAddress: event.fromDapp,
+    //   sourcePortAddress: eventInfo.address,
 
-      targetChainId: event.toChainId,
-      targetDappAddress: event.toDapp,
+    //   targetChainId: event.toChainId,
+    //   targetDappAddress: event.toDapp,
 
-      status: storedMessagePort ? storedMessagePort.status : 0,
-    });
-    if (storedMessagePort) {
-      await this.store.save(currentMessagePort);
-    } else {
-      await this.store.insert(currentMessagePort);
-    }
+    //   status: storedMessagePort ? storedMessagePort.status : 0,
+    // });
+    // if (storedMessagePort) {
+    //   await this.store.save(currentMessagePort);
+    // } else {
+    //   await this.store.insert(currentMessagePort);
+    // }
 
     // // store progress
     // const { messageProgressCount } = this.lifecycle;

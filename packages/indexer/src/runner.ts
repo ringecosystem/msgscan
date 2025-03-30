@@ -28,6 +28,7 @@ export class MsgscanIndexerTronRunner {
     const db = new TypeormDatabase({
       supportHotBlocks: true,
       stateSchema: `chain_${ormpContractChain.chainId}_processor`,
+      isolationLevel: 'READ COMMITTED',
     });
     let controlRerunLog: Record<number, boolean> = {};
 
@@ -125,6 +126,7 @@ export class MsgscanIndexerEvmRunner {
     const db = new TypeormDatabase({
       supportHotBlocks: true,
       stateSchema: `chain_${ormpContractChain.chainId}_processor`,
+      isolationLevel: 'READ COMMITTED',
     });
     let controlRerunLog: Record<number, boolean> = {};
 

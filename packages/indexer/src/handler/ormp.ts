@@ -69,7 +69,7 @@ export class OrmpEvmHandler {
         id: helpers.stdHashString(event.hash),
         blockNumber: BigInt(eventLog.block.height),
         blockTimestamp: BigInt(eventLog.block.timestamp),
-        transactionHash: eventLog.transactionHash,
+        transactionHash: helpers.stdHashString(eventLog.transactionHash),
 
         srcChainId: event.chainId,
         channel: event.channel,
@@ -330,19 +330,23 @@ class OrmpHandler {
       }
     );
 
-    // message port
-    const storedMessagePort = await this.store.findOne(MessagePort, {
-      where: { id: event.msgHash },
-    });
-    const currentMessagePort = storedMessagePort ?? new MessagePort();
-    currentMessagePort.ormp = storedMessageAccepted;
-    currentMessagePort.protocol = "ormp";
-    currentMessagePort.status = event.dispatchResult ? 1 : 2;
-    if (storedMessagePort) {
-      await this.store.save(currentMessagePort);
-    } else {
-      await this.store.insert(currentMessagePort);
-    }
+    // // message port
+    // const storedMessagePort = await this.store.findOne(MessagePort, {
+    //   where: { id: event.msgHash },
+    // });
+    // const currentMessagePort =
+    //   storedMessagePort ??
+    //   new MessagePort({
+    //     id: event.msgHash,
+    //   });
+    // currentMessagePort.ormp = storedMessageAccepted;
+    // currentMessagePort.protocol = "ormp";
+    // currentMessagePort.status = event.dispatchResult ? 1 : 2;
+    // if (storedMessagePort) {
+    //   await this.store.save(currentMessagePort);
+    // } else {
+    //   await this.store.insert(currentMessagePort);
+    // }
 
     // // message progress
     // const { messageProgressCount } = this.lifecycle;
