@@ -188,7 +188,7 @@ class MsgportHandler {
     //   protocol: "ormp",
     //   status: storedMessagePort?.status ?? (event.result ? 1 : 2),
     //   targetBlockNumber: event.blockNumber,
-    //   targetBlockTimestamp: event.blockTimestamp,
+    //   targetBlockTimestamp: event.b,
     //   targetChainId: event.chainId,
     //   targetLogIndex: eventInfo.logIndex,
     //   targetPortAddress: eventInfo.address,
