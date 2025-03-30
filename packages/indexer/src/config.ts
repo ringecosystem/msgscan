@@ -39,13 +39,13 @@ export const ormpContractChains: OrmpContractChain[] = [
   //   contracts: defaultOrmpContracts,
   // },
   // // crab
-  // {
-  //   chainId: 44,
-  //   rpcs: ["wss://crab-rpc.darwinia.network"],
-  //   finalityConfirmation: 10,
-  //   startBlock: 2900642,
-  //   contracts: defaultOrmpContracts,
-  // },
+  {
+    chainId: 44,
+    rpcs: ["wss://crab-rpc.darwinia.network"],
+    finalityConfirmation: 10,
+    startBlock: 2900642,
+    contracts: defaultOrmpContracts,
+  },
   // // darwinia
   {
     chainId: 46,

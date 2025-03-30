@@ -6,8 +6,10 @@ import { Store } from "@subsquid/typeorm-store";
 import {
   ADDRESS_ORACLE,
   ADDRESS_RELAYER,
+  EventInfo,
   EvmFieldSelection,
-  ProgressId,
+  HandlerLifecycle,
+  ProgressType,
   TronFieldSelection,
 } from "../types";
 import {
@@ -29,13 +31,13 @@ export class OrmpEvmHandler {
   private readonly ormpHandler: OrmpHandler;
   constructor(
     private readonly ctx: EvmTronDataHandlerContext<Store, EvmFieldSelection>,
-    private readonly ormpContractChain: OrmpContractChain,
-    private readonly ormpContractConfig: OrmpContractConfig
+    private readonly lifecycle: HandlerLifecycle
   ) {
-    this.ormpHandler = new OrmpHandler(this.ctx.store);
+    this.ormpHandler = new OrmpHandler(this.ctx.store, this.lifecycle);
   }
 
   async handle(eventLog: EvmLog<EvmFieldSelection>) {
+    const { ormpContractChain } = this.lifecycle;
     const isHashImported =
       eventLog.topics.findIndex(
         (item) => item === ormpAbi.events.HashImported.topic
@@ -52,6 +54,15 @@ export class OrmpEvmHandler {
       eventLog.topics.findIndex(
         (item) => item === ormpAbi.events.MessageDispatched.topic
       ) !== -1;
+    const eventInfo: EventInfo = {
+      id: eventLog.id,
+      chainId: BigInt(ormpContractChain.chainId),
+      logIndex: eventLog.logIndex,
+      address: eventLog.address,
+      transactionIndex: eventLog.transactionIndex,
+      transactionFrom: eventLog.getTransaction().from,
+    };
+
     if (isHashImported) {
       const event = ormpAbi.events.HashImported.decode(eventLog);
       const entity = new ORMPHashImported({
@@ -120,11 +131,11 @@ export class OrmpEvmHandler {
         blockTimestamp: BigInt(eventLog.block.timestamp),
         transactionHash: eventLog.transactionHash,
 
-        targetChainId: BigInt(this.ormpContractChain.chainId),
+        targetChainId: BigInt(ormpContractChain.chainId),
         msgHash: event.msgHash,
         dispatchResult: event.dispatchResult,
       });
-      await this.ormpHandler.storeMessageDispatched(entity);
+      await this.ormpHandler.storeMessageDispatched(entity, eventInfo);
     }
   }
 }
@@ -133,10 +144,9 @@ export class OrmpTronHandler {
   private readonly ormpHandler: OrmpHandler;
   constructor(
     private readonly ctx: TronDataHandlerContext<Store, TronFieldSelection>,
-    private readonly ormpContractChain: OrmpContractChain,
-    private readonly ormpContractConfig: OrmpContractConfig
+    private readonly lifecycle: HandlerLifecycle
   ) {
-    this.ormpHandler = new OrmpHandler(this.ctx.store);
+    this.ormpHandler = new OrmpHandler(this.ctx.store, this.lifecycle);
   }
 
   async handle(eventLog: TronLog<TronFieldSelection>) {
@@ -144,6 +154,7 @@ export class OrmpTronHandler {
       this.ctx.log.warn(`[ormp] no topics in event log: ${eventLog}`);
       return;
     }
+    const { ormpContractChain } = this.lifecycle;
     const isHashImported =
       eventLog.topics.findIndex(
         (item) => item === ormpAbi.events.HashImported.topic
@@ -165,6 +176,14 @@ export class OrmpTronHandler {
     let eventEvm = {
       topics: eventLog.topics.map((t) => "0x" + t),
       data: "0x" + eventLog.data,
+    };
+    const eventInfo: EventInfo = {
+      id: eventLog.id,
+      chainId: BigInt(ormpContractChain.chainId),
+      logIndex: eventLog.logIndex,
+      address: eventLog.address,
+      transactionIndex: tx.transactionIndex,
+      transactionFrom: "FAKE-TRON-TRANSACTION-FROM",
     };
 
     if (isHashImported) {
@@ -235,120 +254,97 @@ export class OrmpTronHandler {
         blockTimestamp: BigInt(eventLog.block.timestamp),
         transactionHash: tx.hash,
 
-        targetChainId: BigInt(this.ormpContractChain.chainId),
+        targetChainId: BigInt(ormpContractChain.chainId),
         msgHash: event.msgHash,
         dispatchResult: event.dispatchResult,
       });
-      await this.ormpHandler.storeMessageDispatched(entity);
+      await this.ormpHandler.storeMessageDispatched(entity, eventInfo);
     }
   }
 }
 
 class OrmpHandler {
-  constructor(private readonly store: Store) {}
+  constructor(
+    private readonly store: Store,
+    private readonly lifecycle: HandlerLifecycle
+  ) {}
 
   async storeHashImported(event: ORMPHashImported) {
-    this.store.insert(event);
+    await this.store.insert(event);
   }
 
   async storeMessageAccepted(event: ORMPMessageAccepted) {
-    this.store.insert(event);
+    await this.store.insert(event);
   }
 
   async storeMessageAssigned(event: ORMPMessageAssigned) {
-    this.store.insert(event);
+    await this.store.insert(event);
 
-    const relayer = event.relayer;
-    if (ADDRESS_RELAYER.includes(relayer)) {
-      const storedMessageAccepted = await this.store.findOne(
-        ORMPMessageAccepted,
-        {
-          where: { id: event.msgHash },
-        }
-      );
-      if (storedMessageAccepted) {
-        storedMessageAccepted.relayer = event.relayer;
-        storedMessageAccepted.relayerAssigned = true;
-        storedMessageAccepted.relayerAssignedFee = event.relayerFee;
-        await this.store.save(storedMessageAccepted);
-      }
-    }
+    // const relayer = event.relayer;
+    // if (ADDRESS_RELAYER.includes(relayer)) {
+    //   const storedMessageAccepted = await this.store.findOne(
+    //     ORMPMessageAccepted,
+    //     {
+    //       where: { id: event.msgHash },
+    //     }
+    //   );
+    //   if (storedMessageAccepted) {
+    //     storedMessageAccepted.relayer = event.relayer;
+    //     storedMessageAccepted.relayerAssigned = true;
+    //     storedMessageAccepted.relayerAssignedFee = event.relayerFee;
+    //     await this.store.save(storedMessageAccepted);
+    //   }
+    // }
 
-    if (ADDRESS_ORACLE.includes(relayer)) {
-      const storedMessageAccepted = await this.store.findOne(
-        ORMPMessageAccepted,
-        {
-          where: { id: event.msgHash },
-        }
-      );
-      if (storedMessageAccepted) {
-        storedMessageAccepted.oracle = event.oracle;
-        storedMessageAccepted.oracleAssigned = true;
-        storedMessageAccepted.oracleAssignedFee = event.oracleFee;
-        await this.store.save(storedMessageAccepted);
-      }
-    }
+    // if (ADDRESS_ORACLE.includes(relayer)) {
+    //   const storedMessageAccepted = await this.store.findOne(
+    //     ORMPMessageAccepted,
+    //     {
+    //       where: { id: event.msgHash },
+    //     }
+    //   );
+    //   if (storedMessageAccepted) {
+    //     storedMessageAccepted.oracle = event.oracle;
+    //     storedMessageAccepted.oracleAssigned = true;
+    //     storedMessageAccepted.oracleAssignedFee = event.oracleFee;
+    //     await this.store.save(storedMessageAccepted);
+    //   }
+    // }
   }
 
-  async storeMessageDispatched(event: ORMPMessageDispatched) {
-    this.store.insert(event);
+  async storeMessageDispatched(
+    event: ORMPMessageDispatched,
+    eventInfo: EventInfo
+  ) {
+    await this.store.insert(event);
 
-    const storedMessageAccepted = await this.store.findOne(
-      ORMPMessageAccepted,
-      {
-        where: { id: event.msgHash },
-      }
-    );
+    // const storedMessageAccepted = await this.store.findOne(
+    //   ORMPMessageAccepted,
+    //   {
+    //     where: { id: event.msgHash },
+    //   }
+    // );
 
-    // message port
-    const storedMessagePort = await this.store.findOne(MessagePort, {
-      where: { id: event.msgHash },
-    });
-    const currentMessagePort = storedMessagePort ?? new MessagePort();
-    currentMessagePort.ormp = storedMessageAccepted;
-    currentMessagePort.protocol = "ormp";
-    currentMessagePort.status = event.dispatchResult ? 1 : 2;
-    if (storedMessagePort) {
-      this.store.save(currentMessagePort);
-    } else {
-      this.store.insert(currentMessagePort);
-    }
+    // // message port
+    // const storedMessagePort = await this.store.findOne(MessagePort, {
+    //   where: { id: event.msgHash },
+    // });
+    // const currentMessagePort = storedMessagePort ?? new MessagePort();
+    // currentMessagePort.ormp = storedMessageAccepted;
+    // currentMessagePort.protocol = "ormp";
+    // currentMessagePort.status = event.dispatchResult ? 1 : 2;
+    // if (storedMessagePort) {
+    //   await this.store.save(currentMessagePort);
+    // } else {
+    //   await this.store.insert(currentMessagePort);
+    // }
 
-    // message progress
-    const storedProgressInflight = await this.store.findOne(MessageProgress, {
-      where: { id: ProgressId.inflight },
-    });
-    const currentProgressInflight =
-      storedProgressInflight ??
-      new MessageProgress({
-        id: ProgressId.inflight,
-        amount: 0n,
-      });
+    // // message progress
+    // const { messageProgressCount } = this.lifecycle;
 
-    currentProgressInflight.amount -= 1n;
-
-    if (storedProgressInflight) {
-      this.store.save(currentProgressInflight);
-    } else {
-      this.store.insert(currentProgressInflight);
-    }
-
-    if (!event.dispatchResult) {
-      const storedProgressFailed = await this.store.findOne(MessageProgress, {
-        where: { id: ProgressId.failed },
-      });
-      const currentProgressFailed =
-        storedProgressFailed ??
-        new MessageProgress({
-          id: ProgressId.failed,
-          amount: 0n,
-        });
-      currentProgressFailed.amount += 1n;
-      if (storedProgressFailed) {
-        this.store.save(currentProgressFailed);
-      } else {
-        this.store.insert(currentProgressFailed);
-      }
-    }
+    // messageProgressCount.inflight -= 1n;
+    // if (!event.dispatchResult) {
+    //   messageProgressCount.failed += 1n;
+    // }
   }
 }

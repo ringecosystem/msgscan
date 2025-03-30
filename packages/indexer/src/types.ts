@@ -1,3 +1,6 @@
+import { OrmpContractChain, OrmpContractConfig } from "./config";
+import { MessageProgress } from "./model";
+
 export const evmFieldSelection = {
   transaction: {
     from: true,
@@ -39,8 +42,29 @@ export const ADDRESS_SIGNATURE = [
 export type EvmFieldSelection = typeof evmFieldSelection;
 export type TronFieldSelection = typeof tronFieldSelection;
 
-export enum ProgressId {
+export enum ProgressType {
   total = "total",
   inflight = "inflight",
   failed = "failed",
+}
+
+export interface EventInfo {
+  id: string;
+  chainId: bigint;
+  logIndex: number;
+  address: string;
+  transactionIndex: number;
+  transactionFrom: string;
+}
+
+export interface HandlerLifecycle {
+  ormpContractChain: OrmpContractChain;
+  ormpContractConfig: OrmpContractConfig;
+  messageProgressCount: MessageProgressCount;
+}
+
+export interface MessageProgressCount {
+  total: bigint;
+  inflight: bigint;
+  failed: bigint;
 }

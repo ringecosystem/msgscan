@@ -1,7 +1,6 @@
 import { DataHandlerContext, Log } from "@subsquid/evm-processor";
 import { Store } from "@subsquid/typeorm-store";
-import { EvmFieldSelection } from "../types";
-import { OrmpContractChain, OrmpContractConfig } from "../config";
+import { EvmFieldSelection, HandlerLifecycle } from "../types";
 import * as signcribeAbi from "../abi/signaturepub";
 import { SignaturePubSignatureSubmittion } from "../model";
 
@@ -9,8 +8,7 @@ export class SigncribeEvmHandler {
   private readonly signcribeHandler: SigncribeHandler;
   constructor(
     private readonly ctx: DataHandlerContext<Store, EvmFieldSelection>,
-    private readonly ormpContractChain: OrmpContractChain,
-    private readonly ormpContractConfig: OrmpContractConfig
+    private readonly lifecycle: HandlerLifecycle
   ) {
     this.signcribeHandler = new SigncribeHandler(this.ctx.store);
   }
@@ -35,7 +33,7 @@ export class SigncribeEvmHandler {
         signature: event.signature,
         data: event.data,
       });
-      this.signcribeHandler.storeSignatureSubmittion(entity);
+      await this.signcribeHandler.storeSignatureSubmittion(entity);
     }
   }
 }
@@ -43,7 +41,7 @@ export class SigncribeEvmHandler {
 class SigncribeHandler {
   constructor(private readonly store: Store) {}
 
-  storeSignatureSubmittion(entity: SignaturePubSignatureSubmittion) {
-    this.store.insert(entity);
+  async storeSignatureSubmittion(entity: SignaturePubSignatureSubmittion) {
+    await this.store.insert(entity);
   }
 }
