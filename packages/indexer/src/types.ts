@@ -24,6 +24,9 @@ export const tronFieldSelection = {
     data: true,
     topics: true,
   },
+  internalTransaction: {
+    transferToAddress: true
+  }
 };
 
 export const ADDRESS_RELAYER = [
@@ -42,7 +45,7 @@ export const ADDRESS_SIGNATURE = [
 export type EvmFieldSelection = typeof evmFieldSelection;
 export type TronFieldSelection = typeof tronFieldSelection;
 
-export enum ProgressType {
+export enum ProgressId {
   total = "total",
   inflight = "inflight",
   failed = "failed",
@@ -60,7 +63,7 @@ export interface EventInfo {
 export interface HandlerLifecycle {
   ormpContractChain: OrmpContractChain;
   ormpContractConfig: OrmpContractConfig;
-  messageProgressCount: MessageProgressCount;
+  // messageProgressCount: MessageProgressCount;
 }
 
 export interface MessageProgressCount {

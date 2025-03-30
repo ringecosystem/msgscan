@@ -39,21 +39,21 @@ export const ormpContractChains: OrmpContractChain[] = [
   //   contracts: defaultOrmpContracts,
   // },
   // // crab
-  {
-    chainId: 44,
-    rpcs: ["wss://crab-rpc.darwinia.network"],
-    finalityConfirmation: 10,
-    startBlock: 2900642,
-    contracts: defaultOrmpContracts,
-  },
+  // {
+  //   chainId: 44,
+  //   rpcs: ["wss://crab-rpc.darwinia.network"],
+  //   finalityConfirmation: 10,
+  //   startBlock: 2900642,
+  //   contracts: defaultOrmpContracts,
+  // },
   // // darwinia
-  {
-    chainId: 46,
-    rpcs: ["wss://rpc.darwinia.network"],
-    finalityConfirmation: 10,
-    startBlock: 2830139,
-    contracts: [...defaultOrmpContracts, signaturePub],
-  },
+  // {
+  //   chainId: 46,
+  //   rpcs: ["wss://rpc.darwinia.network"],
+  //   finalityConfirmation: 10,
+  //   startBlock: 2830139,
+  //   contracts: [...defaultOrmpContracts, signaturePub],
+  // },
   // // polygon
   // {
   //   chainId: 137,
@@ -125,26 +125,26 @@ export const ormpContractChains: OrmpContractChain[] = [
   //   contracts: defaultOrmpContracts,
   // },
   // // tron
-  // {
-  //   chainId: 728126428,
-  //   rpcs: ["https://api.trongrid.io/jsonrpc"],
-  //   gateway: "https://v2.archive.subsquid.io/network/tron-mainnet",
-  //   startBlock: 62251337,
-  //   contracts: [
-  //     {
-  //       name: "ORMPUpgradeablePort",
-  //       address: "0x3Bc5362EC3a3DBc07292aEd4ef18Be18De02DA3a",
-  //     },
-  //     {
-  //       name: "ORMP",
-  //       address: "0x5C5c383FEbE62F377F8c0eA1de97F2a2Ba102e98",
-  //     },
-  //   ],
-  // },
+  {
+    chainId: 728126428,
+    rpcs: ["https://api.trongrid.io"],
+    gateway: "https://v2.archive.subsquid.io/network/tron-mainnet",
+    startBlock: 65689643, // start block: 62251337
+    contracts: [
+      {
+        name: "ORMPUpgradeablePort",
+        address: "0x3Bc5362EC3a3DBc07292aEd4ef18Be18De02DA3a", // TFRF7t9m7pGLnwwX8TFsZvj85EvQ6gSBCm
+      },
+      {
+        name: "ORMP",
+        address: "0x5C5c383FEbE62F377F8c0eA1de97F2a2Ba102e98", // TJPZeFEdc4TBEcNbku5xVZLQ6B2Q1oGnd1
+      },
+    ],
+  },
   // // 2494104990 tron-shasta
   // {
   //   chainId: 2494104990,
-  //   rpcs: ["https://api.shasta.trongrid.io/jsonrpc"],
+  //   rpcs: ["https://api.shasta.trongrid.io"],
   //   startBlock: 44847100,
   //   contracts: [
   //     {

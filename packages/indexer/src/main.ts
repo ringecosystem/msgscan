@@ -3,6 +3,7 @@ import { MsgscanIndexerEvmRunner, MsgscanIndexerTronRunner } from "./runner";
 import { OrmpContractChain, ormpContractChains } from "./config";
 import { TronBatchProcessor } from "@subsquid/tron-processor";
 import { evmFieldSelection, tronFieldSelection } from "./types";
+import * as helpers from "./helpers";
 
 interface RunProcessorOptions {
   ormpContract: OrmpContractChain;
@@ -44,8 +45,16 @@ async function runProcessorTron(options: RunProcessorOptions) {
   processor.addLog({
     range: { from: ormpContract.startBlock ?? 0 },
     where: {
-      address: ormpContract.contracts.map((c) => c.address.toLowerCase()),
+      address: ormpContract.contracts.map((c) =>
+        helpers.stdHashString(c.address).replace("0x", "")
+      ),
     },
+    include: {
+      transaction: true,
+    },
+  });
+  processor.addInternalTransaction({
+    range: { from: ormpContract.startBlock ?? 0 },
     include: {
       transaction: true,
     },
@@ -72,3 +81,7 @@ main()
     console.error(err);
     process.exit(1);
   });
+
+process.on("uncaughtException", (error) => {
+  console.error(error);
+});

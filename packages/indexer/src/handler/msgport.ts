@@ -7,14 +7,13 @@ import {
   EventInfo,
   EvmFieldSelection,
   HandlerLifecycle,
-  ProgressType,
+  ProgressId,
   TronFieldSelection,
 } from "../types";
 import {
   DataHandlerContext as TronDataHandlerContext,
   Log as TronLog,
 } from "@subsquid/tron-processor";
-import { OrmpContractChain, OrmpContractConfig } from "../config";
 import * as msgportAbi from "../abi/ormpupgradeableport";
 import {
   MessagePort,
@@ -23,6 +22,7 @@ import {
   ORMPUpgradeablePortMessageRecv,
   ORMPUpgradeablePortMessageSent,
 } from "../model";
+import * as helpers from "../helpers";
 
 export class MsgportEvmHandler {
   private readonly msgportHandler: MsgportHandler;
@@ -37,32 +37,32 @@ export class MsgportEvmHandler {
   async handle(eventLog: EvmLog<EvmFieldSelection>) {
     const { ormpContractChain } = this.lifecycle;
     const isMessageRecv =
-      eventLog.topics.findIndex(
-        (item) => item === msgportAbi.events.MessageRecv.topic
+      eventLog.topics.findIndex((item) =>
+        helpers.compareHashString(item, msgportAbi.events.MessageRecv.topic)
       ) !== -1;
     const isMessageSend =
-      eventLog.topics.findIndex(
-        (item) => item === msgportAbi.events.MessageSent.topic
+      eventLog.topics.findIndex((item) =>
+        helpers.compareHashString(item, msgportAbi.events.MessageSent.topic)
       ) !== -1;
     const eventInfo: EventInfo = {
       id: eventLog.id,
       chainId: BigInt(ormpContractChain.chainId),
       logIndex: eventLog.logIndex,
-      address: eventLog.address,
+      address: helpers.stdHashString(eventLog.address),
       transactionIndex: eventLog.transactionIndex,
-      transactionFrom: eventLog.getTransaction().from,
+      transactionFrom: helpers.stdHashString(eventLog.getTransaction().from),
     };
     if (isMessageRecv) {
       const event = msgportAbi.events.MessageRecv.decode(eventLog);
       const entity = new ORMPUpgradeablePortMessageRecv({
         id: eventLog.id,
         chainId: eventInfo.chainId,
-        msgId: event.msgId,
+        msgId: helpers.stdHashString(event.msgId),
         result: event.result,
         returnData: event.returnData,
         blockNumber: BigInt(eventLog.block.height),
         blockTimestamp: BigInt(eventLog.block.timestamp),
-        transactionHash: eventLog.transactionHash,
+        transactionHash: helpers.stdHashString(eventLog.transactionHash),
       });
       await this.msgportHandler.storeMessageRecv(entity, eventInfo);
     }
@@ -71,7 +71,7 @@ export class MsgportEvmHandler {
       const entity = new ORMPUpgradeablePortMessageSent({
         id: eventLog.id,
         chainId: eventInfo.chainId,
-        msgId: event.msgId,
+        msgId: helpers.stdHashString(event.msgId),
         fromDapp: event.fromDapp,
         toChainId: event.toChainId,
         toDapp: event.toDapp,
@@ -79,7 +79,7 @@ export class MsgportEvmHandler {
         params: event.params,
         blockNumber: BigInt(eventLog.block.height),
         blockTimestamp: BigInt(eventLog.block.timestamp),
-        transactionHash: eventLog.transactionHash,
+        transactionHash: helpers.stdHashString(eventLog.transactionHash),
       });
       await this.msgportHandler.storeMessageSent(entity, eventInfo);
     }
@@ -102,39 +102,44 @@ export class MsgportTronHandler {
       this.ctx.log.warn(`[msgport] no topics in event log: ${eventLog}`);
       return;
     }
+    if (!eventLog.data) {
+      this.ctx.log.warn(`[msgport] no event log data: ${eventLog}`);
+      return;
+    }
     const isMessageRecv =
-      eventLog.topics.findIndex(
-        (item) => item === msgportAbi.events.MessageRecv.topic
+      eventLog.topics.findIndex((item) =>
+        helpers.compareHashString(item, msgportAbi.events.MessageRecv.topic)
       ) !== -1;
     const isMessageSend =
-      eventLog.topics.findIndex(
-        (item) => item === msgportAbi.events.MessageSent.topic
+      eventLog.topics.findIndex((item) =>
+        helpers.compareHashString(item, msgportAbi.events.MessageSent.topic)
       ) !== -1;
 
     let tx = eventLog.getTransaction();
     let eventEvm = {
-      topics: eventLog.topics.map((t) => "0x" + t),
-      data: "0x" + eventLog.data,
+      topics: eventLog.topics.map((t) => helpers.stdHashString(t)),
+      data: helpers.stdHashString(eventLog.data),
     };
+    const internalTx = tx.internalTransactions[eventLog.logIndex];
     const eventInfo: EventInfo = {
       id: eventLog.id,
       chainId: BigInt(ormpContractChain.chainId),
       logIndex: eventLog.logIndex,
-      address: eventLog.address,
+      address: helpers.stdHashString(eventLog.address),
       transactionIndex: tx.transactionIndex,
-      transactionFrom: "FAKE-TRON-TRANSACTION-FROM",
+      transactionFrom: helpers.stdHashString(internalTx.callerAddress),
     };
     if (isMessageRecv) {
       const event = msgportAbi.events.MessageRecv.decode(eventEvm);
       const entity = new ORMPUpgradeablePortMessageRecv({
         id: eventLog.id,
         chainId: eventInfo.chainId,
-        msgId: event.msgId,
+        msgId: helpers.stdHashString(event.msgId),
         result: event.result,
         returnData: event.returnData,
         blockNumber: BigInt(eventLog.block.height),
         blockTimestamp: BigInt(eventLog.block.timestamp),
-        transactionHash: tx.hash,
+        transactionHash: helpers.stdHashString(tx.hash),
       });
       await this.msgportHandler.storeMessageRecv(entity, eventInfo);
     }
@@ -143,7 +148,7 @@ export class MsgportTronHandler {
       const entity = new ORMPUpgradeablePortMessageSent({
         id: eventLog.id,
         chainId: eventInfo.chainId,
-        msgId: event.msgId,
+        msgId: helpers.stdHashString(event.msgId),
         fromDapp: event.fromDapp,
         toChainId: event.toChainId,
         toDapp: event.toDapp,
@@ -151,7 +156,7 @@ export class MsgportTronHandler {
         params: event.params,
         blockNumber: BigInt(eventLog.block.height),
         blockTimestamp: BigInt(eventLog.block.timestamp),
-        transactionHash: tx.hash,
+        transactionHash: helpers.stdHashString(tx.hash),
       });
       await this.msgportHandler.storeMessageSent(entity, eventInfo);
     }
@@ -169,32 +174,32 @@ class MsgportHandler {
   ) {
     await this.store.insert(event);
 
-    // // msgport
-    // const storedMessagePort = await this.store.findOne(MessagePort, {
-    //   where: { id: event.msgId },
-    // });
-    // const storedMessageAccept = await this.store.findOne(ORMPMessageAccepted, {
-    //   where: { id: event.msgId },
-    // });
-    // const currentMessagePort = new MessagePort({
-    //   ...storedMessagePort,
-    //   id: event.msgId,
-    //   ormp: storedMessageAccept,
-    //   protocol: "ormp",
-    //   status: storedMessagePort?.status ?? (event.result ? 1 : 2),
-    //   targetBlockNumber: event.blockNumber,
-    //   targetBlockTimestamp: event.blockTimestamp,
-    //   targetChainId: event.chainId,
-    //   targetLogIndex: eventInfo.logIndex,
-    //   targetPortAddress: eventInfo.address,
-    //   targetTransactionHash: event.transactionHash,
-    //   targetTransactionIndex: eventInfo.transactionIndex,
-    // });
-    // if (storedMessagePort) {
-    //   await this.store.save(currentMessagePort);
-    // } else {
-    //   await this.store.insert(currentMessagePort);
-    // }
+    // msgport
+    const storedMessagePort = await this.store.findOne(MessagePort, {
+      where: { id: helpers.stdHashString(event.msgId) },
+    });
+    const storedMessageAccept = await this.store.findOne(ORMPMessageAccepted, {
+      where: { id: helpers.stdHashString(event.msgId) },
+    });
+    const currentMessagePort = new MessagePort({
+      ...storedMessagePort,
+      id: helpers.stdHashString(event.msgId),
+      ormp: storedMessageAccept,
+      protocol: "ormp",
+      status: storedMessagePort?.status ?? (event.result ? 1 : 2),
+      targetBlockNumber: event.blockNumber,
+      targetBlockTimestamp: event.blockTimestamp,
+      targetChainId: event.chainId,
+      targetLogIndex: eventInfo.logIndex,
+      targetPortAddress: eventInfo.address,
+      targetTransactionHash: event.transactionHash,
+      targetTransactionIndex: eventInfo.transactionIndex,
+    });
+    if (storedMessagePort) {
+      await this.store.save(currentMessagePort);
+    } else {
+      await this.store.insert(currentMessagePort);
+    }
   }
 
   async storeMessageSent(
@@ -203,46 +208,78 @@ class MsgportHandler {
   ) {
     await this.store.insert(event);
 
-    // // msgport
-    // const storedMessagePort = await this.store.findOne(MessagePort, {
-    //   where: { id: event.msgId },
-    // });
-    // const storedMessageAccept = await this.store.findOne(ORMPMessageAccepted, {
-    //   where: { id: event.msgId },
-    // });
-    // const currentMessagePort = new MessagePort({
-    //   ...storedMessagePort,
-    //   id: event.msgId,
-    //   ormp: storedMessageAccept,
-    //   protocol: "ormp",
-    //   payload: event.message,
-    //   params: event.params,
+    // msgport
+    const storedMessagePort = await this.store.findOne(MessagePort, {
+      where: { id: helpers.stdHashString(event.msgId) },
+    });
+    const storedMessageAccept = await this.store.findOne(ORMPMessageAccepted, {
+      where: { id: helpers.stdHashString(event.msgId) },
+    });
+    const currentMessagePort = new MessagePort({
+      ...storedMessagePort,
+      id: helpers.stdHashString(event.msgId),
+      ormp: storedMessageAccept,
+      protocol: "ormp",
+      payload: event.message,
+      params: event.params,
 
-    //   sender: eventInfo.transactionFrom,
+      sender: eventInfo.transactionFrom,
 
-    //   sourceChainId: event.chainId,
-    //   sourceBlockNumber: event.blockNumber,
-    //   sourceBlockTimestamp: event.blockTimestamp,
-    //   sourceTransactionHash: event.transactionHash,
-    //   sourceTransactionIndex: eventInfo.transactionIndex,
-    //   sourceLogIndex: eventInfo.logIndex,
-    //   sourceDappAddress: event.fromDapp,
-    //   sourcePortAddress: eventInfo.address,
+      sourceChainId: event.chainId,
+      sourceBlockNumber: event.blockNumber,
+      sourceBlockTimestamp: event.blockTimestamp,
+      sourceTransactionHash: event.transactionHash,
+      sourceTransactionIndex: eventInfo.transactionIndex,
+      sourceLogIndex: eventInfo.logIndex,
+      sourceDappAddress: event.fromDapp,
+      sourcePortAddress: eventInfo.address,
 
-    //   targetChainId: event.toChainId,
-    //   targetDappAddress: event.toDapp,
+      targetChainId: event.toChainId,
+      targetDappAddress: event.toDapp,
 
-    //   status: storedMessagePort ? storedMessagePort.status : 0,
-    // });
-    // if (storedMessagePort) {
-    //   await this.store.save(currentMessagePort);
-    // } else {
-    //   await this.store.insert(currentMessagePort);
-    // }
+      status: storedMessagePort ? storedMessagePort.status : 0,
+    });
+    if (storedMessagePort) {
+      await this.store.save(currentMessagePort);
+    } else {
+      await this.store.insert(currentMessagePort);
+    }
 
     // // store progress
     // const { messageProgressCount } = this.lifecycle;
     // messageProgressCount.total += 1n;
     // messageProgressCount.inflight += 1n;
+
+    // store progress
+    const storedProgressTotal = await this.store.findOne(MessageProgress, {
+      where: { id: ProgressId.total },
+    });
+    const storedProgressInflight = await this.store.findOne(MessageProgress, {
+      where: { id: ProgressId.inflight },
+    });
+    const currentProgressTotal =
+      storedProgressTotal ??
+      new MessageProgress({
+        id: ProgressId.total,
+        amount: 0n,
+      });
+    const currentProgressInflight =
+      storedProgressInflight ??
+      new MessageProgress({
+        id: ProgressId.inflight,
+        amount: 0n,
+      });
+    currentProgressTotal.amount += 1n;
+    currentProgressInflight.amount += 1n;
+    if (storedProgressTotal) {
+      await this.store.save(currentProgressTotal);
+    } else {
+      await this.store.insert(currentProgressTotal);
+    }
+    if (storedProgressInflight) {
+      await this.store.save(currentProgressInflight);
+    } else {
+      await this.store.insert(currentProgressInflight);
+    }
   }
 }

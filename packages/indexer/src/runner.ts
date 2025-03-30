@@ -5,14 +5,12 @@ import { TronBatchProcessor } from "@subsquid/tron-processor";
 import {
   EvmFieldSelection,
   HandlerLifecycle,
-  MessageProgressCount,
-  ProgressType,
   TronFieldSelection,
 } from "./types";
 import { MsgportEvmHandler, MsgportTronHandler } from "./handler/msgport";
 import { OrmpEvmHandler, OrmpTronHandler } from "./handler/ormp";
 import { SigncribeEvmHandler } from "./handler/signcribe";
-import { MessageProgress } from "./model";
+import * as helpers from "./helpers";
 
 export interface RunnterOptions {
   ormpContractChain: OrmpContractChain;
@@ -30,28 +28,23 @@ export class MsgscanIndexerTronRunner {
     const db = new TypeormDatabase({
       supportHotBlocks: true,
       stateSchema: `chain_${ormpContractChain.chainId}_processor`,
-      isolationLevel: 'READ COMMITTED',
     });
-    this.processor.run(db, async (ctx) => {
-      const storedProgressTotal = await ctx.store.findOne(MessageProgress, {
-        where: { id: ProgressType.total },
-      });
-      const storedProgressInflight = await ctx.store.findOne(MessageProgress, {
-        where: { id: ProgressType.inflight },
-      });
-      const storedProgressFailed = await ctx.store.findOne(MessageProgress, {
-        where: { id: ProgressType.failed },
-      });
-      const messageProgressCount: MessageProgressCount = {
-        total: storedProgressTotal?.amount ?? 0n,
-        inflight: storedProgressInflight?.amount ?? 0n,
-        failed: storedProgressFailed?.amount ?? 0n,
-      };
+    let controlRerunLog: Record<number, boolean> = {};
 
+    this.processor.run(db, async (ctx) => {
+      if (controlRerunLog[ormpContractChain.chainId]) {
+        ctx.log.info(
+          `(evm) [${ormpContractChain.chainId}] restart from ${ctx.blocks[0].header.height}`
+        );
+
+        controlRerunLog[ormpContractChain.chainId] = false;
+      }
+
+      // console.log('----->', ctx.blocks);
       for (const block of ctx.blocks) {
         for (const event of block.logs) {
-          const ormpContractConfig = ormpContractChain.contracts.find(
-            (item) => item.address.toLowerCase() === event.address.toLowerCase()
+          const ormpContractConfig = ormpContractChain.contracts.find((item) =>
+            helpers.compareHashString(item.address, event.address)
           );
 
           if (!ormpContractConfig) {
@@ -60,9 +53,11 @@ export class MsgscanIndexerTronRunner {
           const lifecycle: HandlerLifecycle = {
             ormpContractChain,
             ormpContractConfig,
-            messageProgressCount,
+            // messageProgressCount,
           };
 
+          // console.log(event);
+          // console.log('=======================', ormpContractConfig.name);
           try {
             switch (ormpContractConfig.name.toLowerCase()) {
               case "ormpupgradeableport":
@@ -74,12 +69,16 @@ export class MsgscanIndexerTronRunner {
             }
           } catch (e) {
             ctx.log.warn(
-              `(tron) unhandled contract ${ormpContractConfig.name} at ${
-                event.block.height
-              } ${event.getTransaction().id}, reason: ${e}`
+              `(tron) [${ormpContractChain.chainId}] unhandled contract ${
+                ormpContractConfig.name
+              } at ${event.block.height} ${
+                event.getTransaction().id
+              }, reason: ${e}, stopped from ${
+                ctx.blocks[0].header.height
+              } block`
             );
+            controlRerunLog[ormpContractChain.chainId] = true;
             throw e;
-          } finally {
           }
         }
       }
@@ -126,28 +125,22 @@ export class MsgscanIndexerEvmRunner {
     const db = new TypeormDatabase({
       supportHotBlocks: true,
       stateSchema: `chain_${ormpContractChain.chainId}_processor`,
-      isolationLevel: 'READ COMMITTED',
     });
+    let controlRerunLog: Record<number, boolean> = {};
+
     this.processor.run(db, async (ctx) => {
-      const storedProgressTotal = await ctx.store.findOne(MessageProgress, {
-        where: { id: ProgressType.total },
-      });
-      const storedProgressInflight = await ctx.store.findOne(MessageProgress, {
-        where: { id: ProgressType.inflight },
-      });
-      const storedProgressFailed = await ctx.store.findOne(MessageProgress, {
-        where: { id: ProgressType.failed },
-      });
-      const messageProgressCount: MessageProgressCount = {
-        total: storedProgressTotal?.amount ?? 0n,
-        inflight: storedProgressInflight?.amount ?? 0n,
-        failed: storedProgressFailed?.amount ?? 0n,
-      };
+      if (controlRerunLog[ormpContractChain.chainId]) {
+        ctx.log.info(
+          `(evm) [${ormpContractChain.chainId}] restart from ${ctx.blocks[0].header.height}`
+        );
+
+        controlRerunLog[ormpContractChain.chainId] = false;
+      }
 
       for (const block of ctx.blocks) {
         for (const event of block.logs) {
-          const ormpContractConfig = ormpContractChain.contracts.find(
-            (item) => item.address.toLowerCase() === event.address.toLowerCase()
+          const ormpContractConfig = ormpContractChain.contracts.find((item) =>
+            helpers.compareHashString(item.address, event.address)
           );
 
           if (!ormpContractConfig) {
@@ -156,7 +149,7 @@ export class MsgscanIndexerEvmRunner {
           const lifecycle: HandlerLifecycle = {
             ormpContractChain,
             ormpContractConfig,
-            messageProgressCount,
+            // messageProgressCount,
           };
 
           try {
@@ -173,22 +166,13 @@ export class MsgscanIndexerEvmRunner {
             }
           } catch (e) {
             ctx.log.warn(
-              `(evm) unhandled contract ${ormpContractConfig.name} at ${event.block.height} ${event.transactionHash}, reason: ${e}`
+              `(evm) [${ormpContractChain.chainId}] unhandled contract ${ormpContractConfig.name} at ${event.block.height} ${event.transactionHash}, reason: ${e}, stopped from ${ctx.blocks[0].header.height} block`
             );
-            console.log(e);
+            controlRerunLog[ormpContractChain.chainId] = true;
             throw e;
           }
         }
       }
-      // if (!storedProgressTotal || storedProgressTotal.amount != messageProgressCount.total) {
-      //   ctx.store.save(new MessageProgress({id: ProgressType.total, amount: messageProgressCount.total})); 
-      // }
-      // if (!storedProgressInflight || storedProgressInflight.amount != messageProgressCount.inflight) {
-      //   ctx.store.save(new MessageProgress({id: ProgressType.inflight, amount: messageProgressCount.inflight})); 
-      // }
-      // if (!storedProgressFailed || storedProgressFailed.amount != messageProgressCount.failed) {
-      //   ctx.store.save(new MessageProgress({id: ProgressType.failed, amount: messageProgressCount.failed})); 
-      // }
 
       const cachedProgressRunnerProgress =
         this.processedMetrics[ormpContractChain.chainId];
