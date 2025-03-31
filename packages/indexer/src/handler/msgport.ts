@@ -16,8 +16,8 @@ import {
 } from "@subsquid/tron-processor";
 import * as msgportAbi from "../abi/ormpupgradeableport";
 import {
-  MessagePort,
-  MessageProgress,
+  // MessagePort,
+  // MessageProgress,
   ORMPMessageAccepted,
   ORMPUpgradeablePortMessageRecv,
   ORMPUpgradeablePortMessageSent,
@@ -63,6 +63,9 @@ export class MsgportEvmHandler {
         blockNumber: BigInt(eventLog.block.height),
         blockTimestamp: BigInt(eventLog.block.timestamp),
         transactionHash: helpers.stdHashString(eventLog.transactionHash),
+        transactionIndex: eventInfo.transactionIndex,
+        logIndex: eventInfo.logIndex,
+        portAddress: eventInfo.address,
       });
       await this.msgportHandler.storeMessageRecv(entity, eventInfo);
     }
@@ -80,6 +83,10 @@ export class MsgportEvmHandler {
         blockNumber: BigInt(eventLog.block.height),
         blockTimestamp: BigInt(eventLog.block.timestamp),
         transactionHash: helpers.stdHashString(eventLog.transactionHash),
+        transactionIndex: eventInfo.transactionIndex,
+        transactionFrom: eventInfo.transactionFrom,
+        logIndex: eventInfo.logIndex,
+        portAddress: eventInfo.address,
       });
       await this.msgportHandler.storeMessageSent(entity, eventInfo);
     }
@@ -140,6 +147,9 @@ export class MsgportTronHandler {
         blockNumber: BigInt(eventLog.block.height),
         blockTimestamp: BigInt(eventLog.block.timestamp),
         transactionHash: helpers.stdHashString(tx.hash),
+        transactionIndex: eventInfo.transactionIndex,
+        logIndex: eventInfo.logIndex,
+        portAddress: eventInfo.address,
       });
       await this.msgportHandler.storeMessageRecv(entity, eventInfo);
     }
@@ -157,6 +167,10 @@ export class MsgportTronHandler {
         blockNumber: BigInt(eventLog.block.height),
         blockTimestamp: BigInt(eventLog.block.timestamp),
         transactionHash: helpers.stdHashString(tx.hash),
+        transactionIndex: eventInfo.transactionIndex,
+        transactionFrom: eventInfo.transactionFrom,
+        logIndex: eventInfo.logIndex,
+        portAddress: eventInfo.address,
       });
       await this.msgportHandler.storeMessageSent(entity, eventInfo);
     }
@@ -250,36 +264,36 @@ class MsgportHandler {
     // messageProgressCount.total += 1n;
     // messageProgressCount.inflight += 1n;
 
-    // store progress
-    const storedProgressTotal = await this.store.findOne(MessageProgress, {
-      where: { id: ProgressId.total },
-    });
-    const storedProgressInflight = await this.store.findOne(MessageProgress, {
-      where: { id: ProgressId.inflight },
-    });
-    const currentProgressTotal =
-      storedProgressTotal ??
-      new MessageProgress({
-        id: ProgressId.total,
-        amount: 0n,
-      });
-    const currentProgressInflight =
-      storedProgressInflight ??
-      new MessageProgress({
-        id: ProgressId.inflight,
-        amount: 0n,
-      });
-    currentProgressTotal.amount += 1n;
-    currentProgressInflight.amount += 1n;
-    if (storedProgressTotal) {
-      await this.store.save(currentProgressTotal);
-    } else {
-      await this.store.insert(currentProgressTotal);
-    }
-    if (storedProgressInflight) {
-      await this.store.save(currentProgressInflight);
-    } else {
-      await this.store.insert(currentProgressInflight);
-    }
+    // // store progress
+    // const storedProgressTotal = await this.store.findOne(MessageProgress, {
+    //   where: { id: ProgressId.total },
+    // });
+    // const storedProgressInflight = await this.store.findOne(MessageProgress, {
+    //   where: { id: ProgressId.inflight },
+    // });
+    // const currentProgressTotal =
+    //   storedProgressTotal ??
+    //   new MessageProgress({
+    //     id: ProgressId.total,
+    //     amount: 0n,
+    //   });
+    // const currentProgressInflight =
+    //   storedProgressInflight ??
+    //   new MessageProgress({
+    //     id: ProgressId.inflight,
+    //     amount: 0n,
+    //   });
+    // currentProgressTotal.amount += 1n;
+    // currentProgressInflight.amount += 1n;
+    // if (storedProgressTotal) {
+    //   await this.store.save(currentProgressTotal);
+    // } else {
+    //   await this.store.insert(currentProgressTotal);
+    // }
+    // if (storedProgressInflight) {
+    //   await this.store.save(currentProgressInflight);
+    // } else {
+    //   await this.store.insert(currentProgressInflight);
+    // }
   }
 }

@@ -18,8 +18,8 @@ import {
 } from "@subsquid/tron-processor";
 import * as ormpAbi from "../abi/ormp";
 import {
-  MessagePort,
-  MessageProgress,
+  // MessagePort,
+  // MessageProgress,
   ORMPHashImported,
   ORMPMessageAccepted,
   ORMPMessageAssigned,
@@ -323,12 +323,12 @@ class OrmpHandler {
   ) {
     await this.store.insert(event);
 
-    const storedMessageAccepted = await this.store.findOne(
-      ORMPMessageAccepted,
-      {
-        where: { id: event.msgHash },
-      }
-    );
+    // const storedMessageAccepted = await this.store.findOne(
+    //   ORMPMessageAccepted,
+    //   {
+    //     where: { id: event.msgHash },
+    //   }
+    // );
 
     // // message port
     // const storedMessagePort = await this.store.findOne(MessagePort, {
@@ -355,41 +355,41 @@ class OrmpHandler {
     //   messageProgressCount.failed += 1n;
     // }
 
-    // message progress
-    const storedProgressInflight = await this.store.findOne(MessageProgress, {
-      where: { id: ProgressId.inflight },
-    });
-    const currentProgressInflight =
-      storedProgressInflight ??
-      new MessageProgress({
-        id: ProgressId.inflight,
-        amount: 0n,
-      });
+    // // message progress
+    // const storedProgressInflight = await this.store.findOne(MessageProgress, {
+    //   where: { id: ProgressId.inflight },
+    // });
+    // const currentProgressInflight =
+    //   storedProgressInflight ??
+    //   new MessageProgress({
+    //     id: ProgressId.inflight,
+    //     amount: 0n,
+    //   });
 
-    currentProgressInflight.amount -= 1n;
+    // currentProgressInflight.amount -= 1n;
 
-    if (storedProgressInflight) {
-      await this.store.save(currentProgressInflight);
-    } else {
-      await this.store.insert(currentProgressInflight);
-    }
+    // if (storedProgressInflight) {
+    //   await this.store.save(currentProgressInflight);
+    // } else {
+    //   await this.store.insert(currentProgressInflight);
+    // }
 
-    if (!event.dispatchResult) {
-      const storedProgressFailed = await this.store.findOne(MessageProgress, {
-        where: { id: ProgressId.failed },
-      });
-      const currentProgressFailed =
-        storedProgressFailed ??
-        new MessageProgress({
-          id: ProgressId.failed,
-          amount: 0n,
-        });
-      currentProgressFailed.amount += 1n;
-      if (storedProgressFailed) {
-        await this.store.save(currentProgressFailed);
-      } else {
-        await this.store.insert(currentProgressFailed);
-      }
-    }
+    // if (!event.dispatchResult) {
+    //   const storedProgressFailed = await this.store.findOne(MessageProgress, {
+    //     where: { id: ProgressId.failed },
+    //   });
+    //   const currentProgressFailed =
+    //     storedProgressFailed ??
+    //     new MessageProgress({
+    //       id: ProgressId.failed,
+    //       amount: 0n,
+    //     });
+    //   currentProgressFailed.amount += 1n;
+    //   if (storedProgressFailed) {
+    //     await this.store.save(currentProgressFailed);
+    //   } else {
+    //     await this.store.insert(currentProgressFailed);
+    //   }
+    // }
   }
 }

@@ -1,3 +1,3 @@
-export { MyResolver } from '../resolver'
+export { MsgportResolver } from '../resolver'
 
 
