@@ -10,18 +10,6 @@ import {
 import type { EntityManager } from "typeorm";
 import { ORMPHashImported } from "../model";
 
-// @ObjectType()
-// export class MyQueryResult {
-//   @Field(() => Number, { nullable: false })
-//   total!: number;
-
-//   @Field(() => Number, { nullable: false })
-//   max!: number;
-
-//   constructor(props: Partial<MyQueryResult>) {
-//     Object.assign(this, props);
-//   }
-// }
 
 @ObjectType()
 export class MessageProgressResult {
