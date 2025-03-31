@@ -28,11 +28,26 @@ const signaturePub: OrmpContractConfig = {
   address: "0x57Aa601A0377f5AB313C5A955ee874f5D495fC92",
 };
 
+function extractRpcEndpoint(
+  chainId: number,
+  defaultEndpoint: string
+): string[] {
+  const envEndpoints = process.env[`MSGSCAN_ENDPOINT_${chainId}`];
+  if (!envEndpoints) {
+    return [defaultEndpoint];
+  }
+  const ees = envEndpoints.split(",");
+  if (!ees.length) {
+    return [defaultEndpoint];
+  }
+  return [...ees, defaultEndpoint];
+}
+
 export const ormpContractChains: OrmpContractChain[] = [
   // ethereum
   {
     chainId: 1,
-    rpcs: ["wss://ethereum-rpc.publicnode.com"],
+    rpcs: extractRpcEndpoint(1, "wss://ethereum-rpc.publicnode.com"),
     gateway: "https://v2.archive.subsquid.io/network/ethereum-mainnet",
     finalityConfirmation: 75,
     startBlock: 20009590,
@@ -41,7 +56,7 @@ export const ormpContractChains: OrmpContractChain[] = [
   // crab
   {
     chainId: 44,
-    rpcs: ["wss://crab-rpc.darwinia.network"],
+    rpcs: extractRpcEndpoint(44, "wss://crab-rpc.darwinia.network"),
     finalityConfirmation: 10,
     startBlock: 2900642,
     contracts: defaultOrmpContracts,
@@ -49,7 +64,7 @@ export const ormpContractChains: OrmpContractChain[] = [
   // darwinia
   {
     chainId: 46,
-    rpcs: ["wss://rpc.darwinia.network"],
+    rpcs: extractRpcEndpoint(46, "wss://rpc.darwinia.network"),
     finalityConfirmation: 10,
     startBlock: 2830139,
     contracts: [...defaultOrmpContracts, signaturePub],
@@ -57,7 +72,7 @@ export const ormpContractChains: OrmpContractChain[] = [
   // polygon
   {
     chainId: 137,
-    rpcs: ["wss://polygon.gateway.tenderly.co"],
+    rpcs: extractRpcEndpoint(137, "wss://polygon.gateway.tenderly.co"),
     gateway: "https://v2.archive.subsquid.io/network/polygon-mainnet",
     finalityConfirmation: 10,
     startBlock: 57711531,
@@ -66,7 +81,7 @@ export const ormpContractChains: OrmpContractChain[] = [
   // moobean
   {
     chainId: 1284,
-    rpcs: ["wss://moonbeam-rpc.dwellir.com"],
+    rpcs: extractRpcEndpoint(1284, "wss://moonbeam-rpc.dwellir.com"),
     gateway: "https://v2.archive.subsquid.io/network/moonbeam-mainnet",
     finalityConfirmation: 10,
     startBlock: 6294314,
@@ -75,7 +90,7 @@ export const ormpContractChains: OrmpContractChain[] = [
   // arbitrum
   {
     chainId: 42161,
-    rpcs: ["wss://arbitrum.callstaticrpc.com"],
+    rpcs: extractRpcEndpoint(42161, "wss://arbitrum.callstaticrpc.com"),
     gateway: "https://v2.archive.subsquid.io/network/arbitrum-one",
     finalityConfirmation: 50,
     startBlock: 217896912,
@@ -84,7 +99,7 @@ export const ormpContractChains: OrmpContractChain[] = [
   // blast
   {
     chainId: 81457,
-    rpcs: ["wss://blast.drpc.org"],
+    rpcs: extractRpcEndpoint(81457, "wss://blast.drpc.org"),
     gateway: "https://v2.archive.subsquid.io/network/blast-l2-mainnet",
     finalityConfirmation: 20,
     startBlock: 4293849,
@@ -93,7 +108,7 @@ export const ormpContractChains: OrmpContractChain[] = [
   // hekala-taiko
   {
     chainId: 167009,
-    rpcs: ["wss://ws.hekla.taiko.xyz"],
+    rpcs: extractRpcEndpoint(167009, "wss://ws.hekla.taiko.xyz"),
     finalityConfirmation: 20,
     startBlock: 311800,
     contracts: defaultOrmpContracts,
@@ -101,7 +116,7 @@ export const ormpContractChains: OrmpContractChain[] = [
   // arbitrum-sepolia
   {
     chainId: 421614,
-    rpcs: ["wss://arbitrum-sepolia.drpc.org"],
+    rpcs: extractRpcEndpoint(421614, "wss://arbitrum-sepolia.drpc.org"),
     gateway: "https://v2.archive.subsquid.io/network/arbitrum-sepolia",
     finalityConfirmation: 50,
     startBlock: 53486700,
@@ -110,7 +125,10 @@ export const ormpContractChains: OrmpContractChain[] = [
   // sepolia
   {
     chainId: 11155111,
-    rpcs: ["wss://ethereum-sepolia-rpc.publicnode.com"],
+    rpcs: extractRpcEndpoint(
+      11155111,
+      "wss://ethereum-sepolia-rpc.publicnode.com"
+    ),
     gateway: "https://v2.archive.subsquid.io/network/ethereum-sepolia",
     finalityConfirmation: 25,
     startBlock: 6083800,
@@ -119,7 +137,7 @@ export const ormpContractChains: OrmpContractChain[] = [
   // morph
   {
     chainId: 2818,
-    rpcs: ["wss://rpc.morphl2.io:8443"],
+    rpcs: extractRpcEndpoint(2818, "wss://rpc.morphl2.io:8443"),
     finalityConfirmation: 50,
     startBlock: 59565,
     contracts: defaultOrmpContracts,
@@ -127,7 +145,7 @@ export const ormpContractChains: OrmpContractChain[] = [
   // tron
   {
     chainId: 728126428,
-    rpcs: ["https://api.trongrid.io"],
+    rpcs: extractRpcEndpoint(728126428, "https://api.trongrid.io"),
     gateway: "https://v2.archive.subsquid.io/network/tron-mainnet",
     startBlock: 65689643, // start block: 62251337
     contracts: [
@@ -144,7 +162,7 @@ export const ormpContractChains: OrmpContractChain[] = [
   // 2494104990 tron-shasta
   {
     chainId: 2494104990,
-    rpcs: ["https://api.shasta.trongrid.io"],
+    rpcs: extractRpcEndpoint(2494104990, "https://api.shasta.trongrid.io"),
     startBlock: 44847100,
     contracts: [
       {
