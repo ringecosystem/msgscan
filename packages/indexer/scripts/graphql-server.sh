@@ -8,6 +8,8 @@ WORK_PATH=${BIN_PATH}/../
 
 cd ${WORK_PATH}
 
+yarn build
+
 npx squid-graphql-server
 
 

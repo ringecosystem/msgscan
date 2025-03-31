@@ -69,6 +69,9 @@ type ORMPUpgradeablePortMessageRecv @entity {
   blockNumber: BigInt!
   transactionHash: String!
   blockTimestamp: BigInt!
+  transactionIndex: Int!
+  logIndex: Int!
+  portAddress: String!
 
   chainId: BigInt!
   msgId: String!
@@ -81,6 +84,10 @@ type ORMPUpgradeablePortMessageSent @entity {
   blockNumber: BigInt!
   transactionHash: String!
   blockTimestamp: BigInt!
+  transactionIndex: Int!
+  logIndex: Int!
+  portAddress: String!
+  transactionFrom: String!
 
   chainId: BigInt!
   msgId: String!
@@ -104,44 +111,3 @@ type SignaturePubSignatureSubmittion @entity {
   signature: String!
   data: String!
 }
-
-## custom
-
-type MessagePort @entity {
-  id: ID!
-  protocol: String!
-  payload: String
-  params: String
-  status: Int! # 0: inflight, 1: success, 2: failed
-
-  sender: String
-
-  # source
-  sourceChainId: BigInt
-  sourceBlockNumber: BigInt
-  sourceBlockTimestamp: BigInt
-  sourceTransactionHash: String
-  sourceTransactionIndex: Int
-  sourceLogIndex: Int
-  sourceDappAddress: String
-  sourcePortAddress: String
-
-  # target
-  targetChainId: BigInt
-  targetBlockNumber: BigInt
-  targetBlockTimestamp: BigInt
-  targetTransactionHash: String
-  targetTransactionIndex: Int
-  targetLogIndex: Int
-  targetDappAddress: String
-  targetPortAddress: String
-
-  # relation
-  ormp: ORMPMessageAccepted
-}
-
-type MessageProgress @entity {
-  id: ID!
-  amount: BigInt!
-}
-

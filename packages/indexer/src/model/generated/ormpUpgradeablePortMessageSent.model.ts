@@ -1,4 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, BigIntColumn as BigIntColumn_, StringColumn as StringColumn_} from "@subsquid/typeorm-store"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, BigIntColumn as BigIntColumn_, StringColumn as StringColumn_, IntColumn as IntColumn_} from "@subsquid/typeorm-store"
 
 @Entity_()
 export class ORMPUpgradeablePortMessageSent {
@@ -17,6 +17,18 @@ export class ORMPUpgradeablePortMessageSent {
 
     @BigIntColumn_({nullable: false})
     blockTimestamp!: bigint
+
+    @IntColumn_({nullable: false})
+    transactionIndex!: number
+
+    @IntColumn_({nullable: false})
+    logIndex!: number
+
+    @StringColumn_({nullable: false})
+    portAddress!: string
+
+    @StringColumn_({nullable: false})
+    transactionFrom!: string
 
     @BigIntColumn_({nullable: false})
     chainId!: bigint

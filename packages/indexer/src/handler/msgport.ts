@@ -16,8 +16,8 @@ import {
 } from "@subsquid/tron-processor";
 import * as msgportAbi from "../abi/ormpupgradeableport";
 import {
-  MessagePort,
-  MessageProgress,
+  // MessagePort,
+  // MessageProgress,
   ORMPMessageAccepted,
   ORMPUpgradeablePortMessageRecv,
   ORMPUpgradeablePortMessageSent,
@@ -63,6 +63,9 @@ export class MsgportEvmHandler {
         blockNumber: BigInt(eventLog.block.height),
         blockTimestamp: BigInt(eventLog.block.timestamp),
         transactionHash: helpers.stdHashString(eventLog.transactionHash),
+        transactionIndex: eventInfo.transactionIndex,
+        logIndex: eventInfo.logIndex,
+        portAddress: eventInfo.address,
       });
       await this.msgportHandler.storeMessageRecv(entity, eventInfo);
     }
@@ -80,6 +83,10 @@ export class MsgportEvmHandler {
         blockNumber: BigInt(eventLog.block.height),
         blockTimestamp: BigInt(eventLog.block.timestamp),
         transactionHash: helpers.stdHashString(eventLog.transactionHash),
+        transactionIndex: eventInfo.transactionIndex,
+        transactionFrom: eventInfo.transactionFrom,
+        logIndex: eventInfo.logIndex,
+        portAddress: eventInfo.address,
       });
       await this.msgportHandler.storeMessageSent(entity, eventInfo);
     }
@@ -140,6 +147,9 @@ export class MsgportTronHandler {
         blockNumber: BigInt(eventLog.block.height),
         blockTimestamp: BigInt(eventLog.block.timestamp),
         transactionHash: helpers.stdHashString(tx.hash),
+        transactionIndex: eventInfo.transactionIndex,
+        logIndex: eventInfo.logIndex,
+        portAddress: eventInfo.address,
       });
       await this.msgportHandler.storeMessageRecv(entity, eventInfo);
     }
@@ -157,6 +167,10 @@ export class MsgportTronHandler {
         blockNumber: BigInt(eventLog.block.height),
         blockTimestamp: BigInt(eventLog.block.timestamp),
         transactionHash: helpers.stdHashString(tx.hash),
+        transactionIndex: eventInfo.transactionIndex,
+        transactionFrom: eventInfo.transactionFrom,
+        logIndex: eventInfo.logIndex,
+        portAddress: eventInfo.address,
       });
       await this.msgportHandler.storeMessageSent(entity, eventInfo);
     }
@@ -174,32 +188,32 @@ class MsgportHandler {
   ) {
     await this.store.insert(event);
 
-    // msgport
-    const storedMessagePort = await this.store.findOne(MessagePort, {
-      where: { id: helpers.stdHashString(event.msgId) },
-    });
-    const storedMessageAccept = await this.store.findOne(ORMPMessageAccepted, {
-      where: { id: helpers.stdHashString(event.msgId) },
-    });
-    const currentMessagePort = new MessagePort({
-      ...storedMessagePort,
-      id: helpers.stdHashString(event.msgId),
-      ormp: storedMessageAccept,
-      protocol: "ormp",
-      status: storedMessagePort?.status ?? (event.result ? 1 : 2),
-      targetBlockNumber: event.blockNumber,
-      targetBlockTimestamp: event.blockTimestamp,
-      targetChainId: event.chainId,
-      targetLogIndex: eventInfo.logIndex,
-      targetPortAddress: eventInfo.address,
-      targetTransactionHash: event.transactionHash,
-      targetTransactionIndex: eventInfo.transactionIndex,
-    });
-    if (storedMessagePort) {
-      await this.store.save(currentMessagePort);
-    } else {
-      await this.store.insert(currentMessagePort);
-    }
+    // // msgport
+    // const storedMessagePort = await this.store.findOne(MessagePort, {
+    //   where: { id: helpers.stdHashString(event.msgId) },
+    // });
+    // const storedMessageAccept = await this.store.findOne(ORMPMessageAccepted, {
+    //   where: { id: helpers.stdHashString(event.msgId) },
+    // });
+    // const currentMessagePort = new MessagePort({
+    //   ...storedMessagePort,
+    //   id: helpers.stdHashString(event.msgId),
+    //   ormp: storedMessageAccept,
+    //   protocol: "ormp",
+    //   status: storedMessagePort?.status ?? (event.result ? 1 : 2),
+    //   targetBlockNumber: event.blockNumber,
+    //   targetBlockTimestamp: event.b,
+    //   targetChainId: event.chainId,
+    //   targetLogIndex: eventInfo.logIndex,
+    //   targetPortAddress: eventInfo.address,
+    //   targetTransactionHash: event.transactionHash,
+    //   targetTransactionIndex: eventInfo.transactionIndex,
+    // });
+    // if (storedMessagePort) {
+    //   await this.store.save(currentMessagePort);
+    // } else {
+    //   await this.store.insert(currentMessagePort);
+    // }
   }
 
   async storeMessageSent(
@@ -208,78 +222,78 @@ class MsgportHandler {
   ) {
     await this.store.insert(event);
 
-    // msgport
-    const storedMessagePort = await this.store.findOne(MessagePort, {
-      where: { id: helpers.stdHashString(event.msgId) },
-    });
-    const storedMessageAccept = await this.store.findOne(ORMPMessageAccepted, {
-      where: { id: helpers.stdHashString(event.msgId) },
-    });
-    const currentMessagePort = new MessagePort({
-      ...storedMessagePort,
-      id: helpers.stdHashString(event.msgId),
-      ormp: storedMessageAccept,
-      protocol: "ormp",
-      payload: event.message,
-      params: event.params,
+    // // msgport
+    // const storedMessagePort = await this.store.findOne(MessagePort, {
+    //   where: { id: helpers.stdHashString(event.msgId) },
+    // });
+    // const storedMessageAccept = await this.store.findOne(ORMPMessageAccepted, {
+    //   where: { id: helpers.stdHashString(event.msgId) },
+    // });
+    // const currentMessagePort = new MessagePort({
+    //   ...storedMessagePort,
+    //   id: helpers.stdHashString(event.msgId),
+    //   ormp: storedMessageAccept,
+    //   protocol: "ormp",
+    //   payload: event.message,
+    //   params: event.params,
 
-      sender: eventInfo.transactionFrom,
+    //   sender: eventInfo.transactionFrom,
 
-      sourceChainId: event.chainId,
-      sourceBlockNumber: event.blockNumber,
-      sourceBlockTimestamp: event.blockTimestamp,
-      sourceTransactionHash: event.transactionHash,
-      sourceTransactionIndex: eventInfo.transactionIndex,
-      sourceLogIndex: eventInfo.logIndex,
-      sourceDappAddress: event.fromDapp,
-      sourcePortAddress: eventInfo.address,
+    //   sourceChainId: event.chainId,
+    //   sourceBlockNumber: event.blockNumber,
+    //   sourceBlockTimestamp: event.blockTimestamp,
+    //   sourceTransactionHash: event.transactionHash,
+    //   sourceTransactionIndex: eventInfo.transactionIndex,
+    //   sourceLogIndex: eventInfo.logIndex,
+    //   sourceDappAddress: event.fromDapp,
+    //   sourcePortAddress: eventInfo.address,
 
-      targetChainId: event.toChainId,
-      targetDappAddress: event.toDapp,
+    //   targetChainId: event.toChainId,
+    //   targetDappAddress: event.toDapp,
 
-      status: storedMessagePort ? storedMessagePort.status : 0,
-    });
-    if (storedMessagePort) {
-      await this.store.save(currentMessagePort);
-    } else {
-      await this.store.insert(currentMessagePort);
-    }
+    //   status: storedMessagePort ? storedMessagePort.status : 0,
+    // });
+    // if (storedMessagePort) {
+    //   await this.store.save(currentMessagePort);
+    // } else {
+    //   await this.store.insert(currentMessagePort);
+    // }
 
     // // store progress
     // const { messageProgressCount } = this.lifecycle;
     // messageProgressCount.total += 1n;
     // messageProgressCount.inflight += 1n;
 
-    // store progress
-    const storedProgressTotal = await this.store.findOne(MessageProgress, {
-      where: { id: ProgressId.total },
-    });
-    const storedProgressInflight = await this.store.findOne(MessageProgress, {
-      where: { id: ProgressId.inflight },
-    });
-    const currentProgressTotal =
-      storedProgressTotal ??
-      new MessageProgress({
-        id: ProgressId.total,
-        amount: 0n,
-      });
-    const currentProgressInflight =
-      storedProgressInflight ??
-      new MessageProgress({
-        id: ProgressId.inflight,
-        amount: 0n,
-      });
-    currentProgressTotal.amount += 1n;
-    currentProgressInflight.amount += 1n;
-    if (storedProgressTotal) {
-      await this.store.save(currentProgressTotal);
-    } else {
-      await this.store.insert(currentProgressTotal);
-    }
-    if (storedProgressInflight) {
-      await this.store.save(currentProgressInflight);
-    } else {
-      await this.store.insert(currentProgressInflight);
-    }
+    // // store progress
+    // const storedProgressTotal = await this.store.findOne(MessageProgress, {
+    //   where: { id: ProgressId.total },
+    // });
+    // const storedProgressInflight = await this.store.findOne(MessageProgress, {
+    //   where: { id: ProgressId.inflight },
+    // });
+    // const currentProgressTotal =
+    //   storedProgressTotal ??
+    //   new MessageProgress({
+    //     id: ProgressId.total,
+    //     amount: 0n,
+    //   });
+    // const currentProgressInflight =
+    //   storedProgressInflight ??
+    //   new MessageProgress({
+    //     id: ProgressId.inflight,
+    //     amount: 0n,
+    //   });
+    // currentProgressTotal.amount += 1n;
+    // currentProgressInflight.amount += 1n;
+    // if (storedProgressTotal) {
+    //   await this.store.save(currentProgressTotal);
+    // } else {
+    //   await this.store.insert(currentProgressTotal);
+    // }
+    // if (storedProgressInflight) {
+    //   await this.store.save(currentProgressInflight);
+    // } else {
+    //   await this.store.insert(currentProgressInflight);
+    // }
   }
 }

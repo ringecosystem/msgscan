@@ -1,5 +1,4 @@
 import { OrmpContractChain, OrmpContractConfig } from "./config";
-import { MessageProgress } from "./model";
 
 export const evmFieldSelection = {
   transaction: {
@@ -25,8 +24,8 @@ export const tronFieldSelection = {
     topics: true,
   },
   internalTransaction: {
-    transferToAddress: true
-  }
+    transferToAddress: true,
+  },
 };
 
 export const ADDRESS_RELAYER = [
@@ -63,7 +62,6 @@ export interface EventInfo {
 export interface HandlerLifecycle {
   ormpContractChain: OrmpContractChain;
   ormpContractConfig: OrmpContractConfig;
-  // messageProgressCount: MessageProgressCount;
 }
 
 export interface MessageProgressCount {

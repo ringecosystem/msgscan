@@ -13,12 +13,10 @@ async function runProcessorEvm(options: RunProcessorOptions) {
   const { ormpContract } = options;
   const processor = new EvmBatchProcessor()
     .setRpcEndpoint(ormpContract.rpcs[0])
-    .setFields(evmFieldSelection);
+    .setFields(evmFieldSelection)
+    .setFinalityConfirmation(ormpContract.finalityConfirmation ?? 50);
   if (ormpContract.gateway) {
     processor.setGateway(ormpContract.gateway);
-  }
-  if (ormpContract.finalityConfirmation) {
-    processor.setFinalityConfirmation(ormpContract.finalityConfirmation);
   }
   processor.addLog({
     range: { from: ormpContract.startBlock ?? 0 },
