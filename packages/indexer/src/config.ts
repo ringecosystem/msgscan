@@ -176,3 +176,8 @@ export const ormpContractChains: OrmpContractChain[] = [
     ],
   },
 ];
+
+// https://rpc.ankr.com/http/tron
+{"jsonrpc":"2.0","method":"wallet/getnodeinfo","params":[],"id":1}
+
+// https://rpc.ankr.com/http/tron/getblockbynumber?
