@@ -12,7 +12,10 @@ interface RunProcessorOptions {
 async function runProcessorEvm(options: RunProcessorOptions) {
   const { ormpContract } = options;
   const processor = new EvmBatchProcessor()
-    .setRpcEndpoint(ormpContract.rpcs[0])
+    .setRpcEndpoint({
+      url: ormpContract.rpcs[0],
+      rateLimit: ormpContract.rateLimit,
+    })
     .setFields(evmFieldSelection)
     .setFinalityConfirmation(ormpContract.finalityConfirmation ?? 50);
   if (ormpContract.gateway) {
