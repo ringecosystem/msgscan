@@ -321,7 +321,7 @@ export class MsgportResolver {
       sqls.push(`and v.source_block_timestamp < $${1 + paramIndex}`);
       paramIndex += 1;
     }
-    sqls.push("order by v.source_block_timestamp desc");
+    sqls.push("order by v.target_block_timestamp desc nulls first, v.source_block_timestamp desc");
     sqls.push(`limit $${1 + paramIndex}`);
     paramIndex += 1;
     sqls.push(`offset $${1 + paramIndex}`);
