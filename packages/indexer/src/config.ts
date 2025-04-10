@@ -94,7 +94,7 @@ export const ormpContractChains: OrmpContractChain[] = [
     rpcs: extractRpcEndpoint(42161, "wss://arbitrum.callstaticrpc.com"),
     gateway: "https://v2.archive.subsquid.io/network/arbitrum-one",
     finalityConfirmation: 50,
-    startBlock: 321234901, // 217896912
+    startBlock: 217896912, // 217896912
     contracts: defaultOrmpContracts,
     rateLimit: 100,
   },
