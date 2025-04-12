@@ -1,7 +1,7 @@
-import { FastifyInstance } from "fastify";
+import { PrismaClient } from "@prisma/client";
 import { RuntimeProfile } from "./patch/helpers";
 
 export interface GripperRunnerOptions {
-  fastify: FastifyInstance;
   profile: RuntimeProfile;
+  prisma: PrismaClient;
 }

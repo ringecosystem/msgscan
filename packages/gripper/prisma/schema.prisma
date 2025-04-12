@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model sync_position {
+  id     String @id
+  cursor String
+}
+
+model message_progress {
+  id       String @id
+  total    Int
+  inflight Int
+  failed   Int
+}
+
+model message_port {
+  id                       String    @id
+  msg_id                   String
+  protocol                 String
+  status                   Int
+  source_chain_id          String?
+  source_block_number      Int?
+  source_block_timestamp   DateTime?
+  source_transaction_hash  String?
+  // source_transaction_index Int?
+  source_log_index         Int?
+  // source_port_address      String?
+  source_dapp_address      String?
+  target_chain_id          Int?
+  target_dapp_address      String?
+  // payload                  String?
+  // params                   String?
+  message_encoded          String?
+  sender                   String?
+  target_block_number      Int?
+  target_block_timestamp   DateTime?
+  target_transaction_hash  String?
+  // target_transaction_index Int?
+  // target_log_index         Int?
+  target_port_address      String?
+  ctime                    DateTime  @default(now())
+  utime                    DateTime  @updatedAt
+}
