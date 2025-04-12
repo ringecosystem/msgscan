@@ -62,6 +62,11 @@ export class IndexerTask {
         const { chain, endpoint } = ie;
         if (this.skipCounter[chain] && this.skipCounter[chain] > 0) {
           this.skipCounter[chain] -= 1;
+          if (this.skipCounter[chain] % 5 == 0) {
+            console.log(
+              `[${chain}]-+ skip ${this.skipCounter[chain]} round left`
+            );
+          }
           continue;
         }
         try {
@@ -74,13 +79,13 @@ export class IndexerTask {
             (crt.messageAcceptedV2s?.items.length === 0 &&
               crt.messageDispatchedV2s?.items.length === 0)
           ) {
-            console.log(`not have messages for [${chain}] skip 50 round`);
-            this.skipCounter[chain] = 50;
+            console.log(`[${chain}]-- not have messages skip 25 round`);
+            this.skipCounter[chain] = 25;
             continue;
           }
           messages.push(crt);
         } catch (e) {
-          console.error("Error in crawl: ", chain, endpoint, e);
+          console.error(`[${chain}]xx error in crawl: `, endpoint, e);
         }
       }
       await this.storeMessages({
@@ -128,7 +133,7 @@ export class IndexerTask {
         messageAcceptedV2s(
           orderDirection: "asc"
           orderBy: "blockTimestamp"
-          limit: 1
+          limit: 50
           after: $afterAccepted
         ) {
           items {
@@ -164,7 +169,7 @@ export class IndexerTask {
         messageDispatchedV2s(
           orderDirection: "asc"
           orderBy: "blockTimestamp"
-          limit: 1
+          limit: 50
           after: $afterDispatched
         ) {
           items {
@@ -229,7 +234,7 @@ export class IndexerTask {
     for (const message of messages) {
       const { chain, messageAcceptedV2s, messageDispatchedV2s } = message;
       console.log(
-        `crawled [${chain}] {accepted: ${messageAcceptedV2s?.items.length}, dispatched: ${messageDispatchedV2s?.items.length}}`
+        `[${chain}]:: crawled {accepted: ${messageAcceptedV2s?.items.length}, dispatched: ${messageDispatchedV2s?.items.length}}`
       );
       if (messageAcceptedV2s) {
         for (const item of messageAcceptedV2s.items) {
