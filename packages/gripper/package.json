@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "scripts": {
     "build": "shx rm -rf build && tsc -b",
-    "package": "npm run codegen && node esbuild.js",
+    "package": "node esbuild.js",
     "start": "node build/index.js",
     "lint": "eslint . --ext .ts --fix"
   },
