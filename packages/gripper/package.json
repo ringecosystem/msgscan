@@ -4,13 +4,16 @@
   "description": "msgscan indexer",
   "main": "build/index.js",
   "scripts": {
-    "codegen": "npx graphql-codegen",
-    "build": "shx rm -rf build && npm run codegen && tsc -b && shx cp -r graphql build",
+    "build": "shx rm -rf build && tsc -b",
     "package": "npm run codegen && node esbuild.js",
     "start": "node build/index.js",
     "lint": "eslint . --ext .ts --fix"
   },
   "dependencies": {
+    "@fastify/express": "^4",
+    "@fastify/cors": "^10",
+    "@fastify/http-proxy": "^11",
+    "@joggr/fastify-prisma": "^5",
     "chalk": "^4",
     "commander": "^12",
     "graphql": "^16.10.0",
@@ -18,7 +21,9 @@
     "reflect-metadata": "^0.2",
     "typedi": "^0.10",
     "graphql-request": "^7.1.2",
-    "@prisma/client": "6"
+    "@prisma/client": "6",
+    "fastify": "^5",
+    "postgraphile": "^4.14.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.5",

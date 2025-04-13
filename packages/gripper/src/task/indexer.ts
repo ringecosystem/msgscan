@@ -3,6 +3,7 @@ import { Service } from "typedi";
 import { GripperRunnerOptions } from "../types";
 // @ts-ignore
 import { gql, request } from "graphql-request";
+import fastify from "fastify";
 
 @Service({})
 export class IndexerTask {
@@ -50,20 +51,21 @@ export class IndexerTask {
   constructor() {}
 
   async start(options: GripperRunnerOptions) {
+    const { fastify } = options;
     let times = 0;
     while (true) {
       times += 1;
       if (times > 10000000) {
         times = 0;
       }
-      console.log(`====== round ${times} =======`);
+      fastify.log.info(`====== round ${times} =======`);
       const messages = [];
       for (const ie of this.indexEndpoints) {
         const { chain, endpoint } = ie;
         if (this.skipCounter[chain] && this.skipCounter[chain] > 0) {
           this.skipCounter[chain] -= 1;
           if (this.skipCounter[chain] % 5 == 0) {
-            console.log(
+            fastify.log.info(
               `[${chain}]-+ skip ${this.skipCounter[chain]} round left`
             );
           }
@@ -79,13 +81,13 @@ export class IndexerTask {
             (crt.messageAcceptedV2s?.items.length === 0 &&
               crt.messageDispatchedV2s?.items.length === 0)
           ) {
-            console.log(`[${chain}]-- not have messages skip 25 round`);
+            fastify.log.info(`[${chain}]-- not have messages skip 25 round`);
             this.skipCounter[chain] = 25;
             continue;
           }
           messages.push(crt);
         } catch (e) {
-          console.error(`[${chain}]xx error in crawl: `, endpoint, e);
+          fastify.log.error(`[${chain}]xx error in crawl: `, endpoint, e);
         }
       }
       await this.storeMessages({
@@ -103,7 +105,8 @@ export class IndexerTask {
 
   private async crawl(options: CrawlOptions): Promise<CrawlResult | undefined> {
     const { runnerOptions, ponderEndpoint } = options;
-    const { prisma } = runnerOptions;
+    const { fastify } = runnerOptions;
+    const prisma = fastify.prisma;
     const syncPostionIds = [
       this.syncPostionId({
         chain: ponderEndpoint.chain,
@@ -201,7 +204,7 @@ export class IndexerTask {
       return;
     }
     if (responseMessageScanInfo["errors"]) {
-      console.error(responseMessageScanInfo["errors"]);
+      fastify.log.error(responseMessageScanInfo["errors"]);
       return;
     }
     const messageAcceptedV2s = responseMessageScanInfo[
@@ -219,7 +222,8 @@ export class IndexerTask {
 
   private async storeMessages(options: StoreOptions) {
     const { runnerOptions, messages } = options;
-    const { prisma } = runnerOptions;
+    const { fastify } = runnerOptions;
+    const prisma = fastify.prisma;
 
     const storedMessageProgress = await prisma.message_progress.findFirst({
       where: { id: "global" },
@@ -233,7 +237,7 @@ export class IndexerTask {
 
     for (const message of messages) {
       const { chain, messageAcceptedV2s, messageDispatchedV2s } = message;
-      console.log(
+      fastify.log.info(
         `[${chain}]:: crawled {accepted: ${messageAcceptedV2s?.items.length}, dispatched: ${messageDispatchedV2s?.items.length}}`
       );
       if (messageAcceptedV2s) {
