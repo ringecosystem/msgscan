@@ -254,7 +254,7 @@ export class IndexerTask {
             status: storedMessagePort?.status ?? 0,
             source_chain_id: item.messageFromChainId,
             source_block_number: +item.blockNumber,
-            source_block_timestamp: new Date(+item.blockTimestamp),
+            source_block_timestamp: new Date(+item.blockTimestamp * 1000),
             source_transaction_hash: item.transactionHash,
             // source_transaction_index : -0,
             source_log_index: +item.logIndex,
@@ -292,7 +292,7 @@ export class IndexerTask {
             msg_id: msgId,
             protocol: "ormp",
             target_block_number: +item.blockNumber,
-            target_block_timestamp: new Date(+item.blockTimestamp),
+            target_block_timestamp: new Date(+item.blockTimestamp * 1000),
             target_transaction_hash: item.transactionHash,
             status: item.dispatchResult ? 1 : 2,
           };
