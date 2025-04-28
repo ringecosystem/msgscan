@@ -20,30 +20,84 @@ model message_progress {
 }
 
 model message_port {
-  id                       String    @id
-  msg_id                   String
-  protocol                 String
-  status                   Int
-  source_chain_id          String?
-  source_block_number      Int?
-  source_block_timestamp   DateTime?
-  source_transaction_hash  String?
+  id String @id
+  // msg_id                   String
+  // protocol                 String
+  // status                   Int
+  // source_chain_id          String?
+  // source_block_number      Int?
+  // source_block_timestamp   DateTime?
+  // source_transaction_hash  String?
+  // // source_transaction_index Int?
+  // source_log_index         Int?
+  // // source_port_address      String?
+  // source_dapp_address      String?
+  // target_chain_id          Int?
+  // target_dapp_address      String?
+  // // payload                  String?
+  // // params                   String?
+  // message_encoded          String?
+  // sender                   String?
+  // target_block_number      Int?
+  // target_block_timestamp   DateTime?
+  // target_transaction_hash  String?
+  // // target_transaction_index Int?
+  // // target_log_index         Int?
+  // target_port_address      String?
+
+  msg_id   String
+  protocol String
+  payload  String?
+  params   String?
+  status   Int
+  sender   String?
+
+  // source
+  source_chain_id         String?
+  source_block_number     Int?
+  source_block_timestamp  DateTime?
+  source_transaction_hash String?
   // source_transaction_index Int?
-  source_log_index         Int?
-  // source_port_address      String?
-  source_dapp_address      String?
-  target_chain_id          Int?
-  target_dapp_address      String?
-  // payload                  String?
-  // params                   String?
-  message_encoded          String?
-  sender                   String?
-  target_block_number      Int?
-  target_block_timestamp   DateTime?
-  target_transaction_hash  String?
+  source_log_index        Int?
+  source_dapp_address     String?
+  source_port_address     String?
+
+  // target
+  target_chain_id         String?
+  target_block_number     Int?
+  target_block_timestamp  DateTime?
+  target_transaction_hash String?
   // target_transaction_index Int?
-  // target_log_index         Int?
-  target_port_address      String?
-  ctime                    DateTime  @default(now())
-  utime                    DateTime  @updatedAt
+  target_log_index        Int?
+  target_dapp_address     String?
+  target_port_address     String?
+
+  ctime DateTime @default(now())
+  utime DateTime @updatedAt
+}
+
+model message_ormp {
+  id              String   @id
+  blockNumber     Int
+  transactionHash String
+  blockTimestamp  DateTime
+
+  msgHash     String
+  channel     String
+  index       Int
+  fromChainId String
+  from        String
+  toChainId   String
+  to          String
+  gasLimit    String
+  encoded     String
+
+  // extra
+  oracle            String
+  oracleAssigned    Boolean
+  oracleAssignedFee BigInt
+
+  relayer            String
+  relayerAssigned    Boolean
+  relayerAssignedFee BigInt
 }
