@@ -3,50 +3,14 @@ import { Service } from "typedi";
 import { GripperRunnerOptions } from "../types";
 // @ts-ignore
 import { gql, request } from "graphql-request";
-import fastify from "fastify";
 
 @Service({})
 export class IndexerTask {
-  private readonly indexEndpoints: PonderEndpoint[] = [
-    {
-      chain: "polygon",
-      endpoint: "https://ormponder.darwinia.network/polygon",
-    },
-    {
-      chain: "moonbeam",
-      endpoint: "https://ormponder.darwinia.network/moonbeam",
-    },
-    {
-      chain: "ethereum",
-      endpoint: "https://ormponder.darwinia.network/ethereum",
-    },
-    {
-      chain: "arbitrum",
-      endpoint: "https://ormponder.darwinia.network/arbitrum",
-    },
-    { chain: "blast", endpoint: "https://ormponder.darwinia.network/blast" },
-    { chain: "crab", endpoint: "https://ormponder.darwinia.network/crab" },
-    {
-      chain: "darwinia",
-      endpoint: "https://ormponder.darwinia.network/darwinia",
-    },
-    {
-      chain: "arbitrum-sepolia",
-      endpoint: "https://ormponder.darwinia.network/arbitrum-sepolia",
-    },
-    {
-      chain: "sepolia",
-      endpoint: "https://ormponder.darwinia.network/sepolia",
-    },
-    { chain: "morph", endpoint: "https://ormponder.darwinia.network/morph" },
-    {
-      chain: "tron-shasta",
-      endpoint: "https://ormponder.darwinia.network/tron-shasta",
-    },
-    { chain: "tron", endpoint: "https://ormponder.darwinia.network/tron" },
-  ];
+  private readonly indexerEndpoint: IndexerEndpoint = {
+    endpoint: "https://ormpindexer.vercel.app/graphql",
+  };
 
-  private readonly skipCounter: Record<string, number> = {};
+  private skipCounter: number = 0;
 
   constructor() {}
 
@@ -59,62 +23,67 @@ export class IndexerTask {
         times = 0;
       }
       fastify.log.info(`====== round ${times} =======`);
-      const messages = [];
-      for (const ie of this.indexEndpoints) {
-        const { chain, endpoint } = ie;
-        if (this.skipCounter[chain] && this.skipCounter[chain] > 0) {
-          this.skipCounter[chain] -= 1;
-          if (this.skipCounter[chain] % 5 == 0) {
-            fastify.log.info(
-              `[${chain}]-+ skip ${this.skipCounter[chain]} round left`
-            );
-          }
+      if (this.skipCounter > 0) {
+        this.skipCounter -= 1;
+        if (this.skipCounter % 5 == 0) {
+          fastify.log.info(`-+ skip ${this.skipCounter} round left`);
+        }
+        await setTimeout(3000);
+        continue;
+      }
+
+      let messageScanInfo: CrawlResult;
+      try {
+        const crawResult = await this.crawl({
+          runnerOptions: options,
+          indexerEndpoint: this.indexerEndpoint,
+        });
+        if (
+          !crawResult ||
+          (crawResult.ormpMessageAccepteds.length === 0 &&
+            crawResult.ormpMessageDispatcheds.length === 0)
+        ) {
+          fastify.log.info(`-- not have messages skip 25 round`);
+          this.skipCounter = 25;
           continue;
         }
-        try {
-          const crt = await this.crawl({
-            runnerOptions: options,
-            ponderEndpoint: { chain, endpoint },
-          });
-          if (
-            !crt ||
-            (crt.messageAcceptedV2s?.items.length === 0 &&
-              crt.messageDispatchedV2s?.items.length === 0)
-          ) {
-            fastify.log.info(`[${chain}]-- not have messages skip 25 round`);
-            this.skipCounter[chain] = 25;
-            continue;
-          }
-          messages.push(crt);
-        } catch (e) {
-          fastify.log.error(`[${chain}]xx error in crawl: `, endpoint, e);
-        }
+        messageScanInfo = crawResult;
+      } catch (e) {
+        fastify.log.error(`xx error in crawl: `, e);
       }
+
+      fastify.log.info(
+        `messageScanInfo: accepteds: ${messageScanInfo.ormpMessageAccepteds.length} dispatcheds: ${messageScanInfo.ormpMessageDispatcheds.length} sents: ${messageScanInfo.msgportMessageSents.length} recvs: ${messageScanInfo.msgportMessageRecvs.length}`
+      );
       await this.storeMessages({
         runnerOptions: options,
-        messages,
+        message: messageScanInfo,
       });
       await setTimeout(3000);
     }
   }
 
-  private syncPostionId(options: { chain: string; model: string }) {
-    const id = `${options.chain}-${options.model}`;
+  private syncPostionId(options: { model: string }) {
+    const id = `${options.model}`;
     return id.toLowerCase();
   }
 
   private async crawl(options: CrawlOptions): Promise<CrawlResult | undefined> {
-    const { runnerOptions, ponderEndpoint } = options;
+    const { runnerOptions, indexerEndpoint } = options;
     const { fastify } = runnerOptions;
     const prisma = fastify.prisma;
     const syncPostionIds = [
       this.syncPostionId({
-        chain: ponderEndpoint.chain,
-        model: "messageAcceptedV2s",
+        model: "ormpMessageAccepteds",
       }),
       this.syncPostionId({
-        chain: ponderEndpoint.chain,
-        model: "messageDispatchedV2s",
+        model: "ormpMessageDispatcheds",
+      }),
+      this.syncPostionId({
+        model: "msgportMessageSents",
+      }),
+      this.syncPostionId({
+        model: "msgportMessageRecvs",
       }),
     ];
     const storedPostions = await prisma.sync_position.findMany({
@@ -124,80 +93,121 @@ export class IndexerTask {
         },
       },
     });
-    const messageAccepetedV2sPosition = storedPostions.find(
+    const ormpMessageAcceptedsPosition = storedPostions.find(
       (item) => item.id === syncPostionIds[0]
     );
-    const messageDispatchedV2sPosition = storedPostions.find(
+    const ormpMessageDispatchedsPosition = storedPostions.find(
       (item) => item.id === syncPostionIds[1]
+    );
+    const msgportMessageSentsPosition = storedPostions.find(
+      (item) => item.id === syncPostionIds[2]
+    );
+    const msgportMessageRecvsPosition = storedPostions.find(
+      (item) => item.id === syncPostionIds[3]
     );
 
     const gqlMessageScanInfo = gql`
-      query MessageScanInfo($afterAccepted: String, $afterDispatched: String) {
-        messageAcceptedV2s(
-          orderDirection: "asc"
-          orderBy: "blockTimestamp"
-          limit: 50
-          after: $afterAccepted
+      query MessageScanInfo(
+        $messageAcceptedOffset: Int!
+        $messageDispatchedOffset: Int!
+        $msgportSentOffset: Int!
+        $msgportRecvOffset: Int!
+      ) {
+        ormpMessageAccepteds(
+          orderBy: blockNumber_ASC
+          limit: 10
+          offset: $messageAcceptedOffset
         ) {
-          items {
-            id
-            blockNumber
-            blockTimestamp
-            transactionHash
-            logIndex
-            msgHash
-            messageChannel
-            messageIndex
-            messageFromChainId
-            messageFrom
-            messageToChainId
-            messageTo
-            messageGasLimit
-            messageEncoded
-            oracle
-            oracleAssigned
-            oracleAssignedFee
-            oracleLogIndex
-            relayer
-            relayerAssigned
-            relayerAssignedFee
-            relayerLogIndex
-          }
-          pageInfo {
-            startCursor
-            endCursor
-          }
+          id
+          chainId
+          blockNumber
+          blockTimestamp
+          transactionHash
+          logIndex
+          msgHash
+          channel
+          index
+          fromChainId
+          from
+          toChainId
+          to
+          gasLimit
+          encoded
+          oracle
+          oracleAssigned
+          oracleAssignedFee
+          relayer
+          relayerAssigned
+          relayerAssignedFee
         }
-
-        messageDispatchedV2s(
-          orderDirection: "asc"
-          orderBy: "blockTimestamp"
-          limit: 50
-          after: $afterDispatched
+        ormpMessageDispatcheds(
+          orderBy: blockNumber_ASC
+          limit: 10
+          offset: $messageDispatchedOffset
         ) {
-          items {
-            id
-            targetChainId
-            blockNumber
-            blockTimestamp
-            transactionHash
-            msgHash
-            dispatchResult
-          }
-          pageInfo {
-            startCursor
-            endCursor
-          }
+          id
+          chainId
+          targetChainId
+          blockNumber
+          blockTimestamp
+          transactionHash
+          msgHash
+          dispatchResult
+        }
+        msgportMessageSents(
+          orderBy: blockNumber_ASC
+          limit: 10
+          offset: $msgportSentOffset
+        ) {
+          id
+          chainId
+          blockNumber
+          blockTimestamp
+          transactionHash
+          transactionFrom
+          transactionIndex
+          logIndex
+          msgId
+          fromChainId
+          fromDapp
+          toChainId
+          toDapp
+          message
+          params
+          portAddress
+        }
+        msgportMessageRecvs(
+          orderBy: blockNumber_ASC
+          limit: 10
+          offset: $msgportRecvOffset
+        ) {
+          id
+          chainId
+          blockNumber
+          blockTimestamp
+          transactionHash
+          transactionIndex
+          logIndex
+          msgId
+          portAddress
+          result
+          returnData
         }
       }
     `;
-    const responseMessageScanInfo: GraphqlResponse | PonderError =
+
+    const position = {
+      messageAcceptedOffset: +(ormpMessageAcceptedsPosition?.cursor ?? 0),
+      messageDispatchedOffset: +(ormpMessageDispatchedsPosition?.cursor ?? 0),
+      msgportSentOffset: +(msgportMessageSentsPosition?.cursor ?? 0),
+      msgportRecvOffset: +(msgportMessageRecvsPosition?.cursor ?? 0),
+    };
+    const responseMessageScanInfo: GraphqlResponse | IndexerError =
       await request({
-        url: ponderEndpoint.endpoint,
+        url: indexerEndpoint.endpoint,
         document: gqlMessageScanInfo,
         variables: {
-          afterAccepted: messageAccepetedV2sPosition?.cursor ?? null,
-          afterDispatched: messageDispatchedV2sPosition?.cursor ?? null,
+          ...position,
         },
       });
     if (!responseMessageScanInfo) {
@@ -207,21 +217,29 @@ export class IndexerTask {
       fastify.log.error(responseMessageScanInfo["errors"]);
       return;
     }
-    const messageAcceptedV2s = responseMessageScanInfo[
-      "messageAcceptedV2s"
-    ] as unknown as PonderPage<MessageAcceptedV2>;
-    const messageDispatchedV2s = responseMessageScanInfo[
-      "messageDispatchedV2s"
-    ] as unknown as PonderPage<messageDispatchedV2s>;
+    const ormpMessageAccepteds = responseMessageScanInfo[
+      "ormpMessageAccepteds"
+    ] as unknown as OrmpMessageAccepted[];
+    const ormpMessageDispatcheds = responseMessageScanInfo[
+      "ormpMessageDispatcheds"
+    ] as unknown as OrmpMessageDispatched[];
+    const msgportMessageSents = responseMessageScanInfo[
+      "msgportMessageSents"
+    ] as unknown as MsgportMessageSent[];
+    const msgportMessageRecvs = responseMessageScanInfo[
+      "msgportMessageRecvs"
+    ] as unknown as MsgportMessageRecv[];
     return {
-      chain: ponderEndpoint.chain,
-      messageAcceptedV2s,
-      messageDispatchedV2s,
+      ormpMessageAccepteds,
+      ormpMessageDispatcheds,
+      msgportMessageSents,
+      msgportMessageRecvs,
+      position,
     };
   }
 
   private async storeMessages(options: StoreOptions) {
-    const { runnerOptions, messages } = options;
+    const { runnerOptions, message } = options;
     const { fastify } = runnerOptions;
     const prisma = fastify.prisma;
 
@@ -235,131 +253,238 @@ export class IndexerTask {
       failed: storedMessageProgress?.failed ?? 0,
     };
 
-    for (const message of messages) {
-      const { chain, messageAcceptedV2s, messageDispatchedV2s } = message;
-      fastify.log.info(
-        `[${chain}]:: crawled {accepted: ${messageAcceptedV2s?.items.length}, dispatched: ${messageDispatchedV2s?.items.length}}`
-      );
-      if (messageAcceptedV2s) {
-        for (const item of messageAcceptedV2s.items) {
-          const msgId = item.msgHash;
-          const storedMessagePort = await prisma.message_port.findFirst({
-            where: { msg_id: msgId },
-          });
-          const messagePortInput = {
-            ...storedMessagePort,
-            id: msgId,
-            msg_id: msgId,
-            protocol: "ormp",
-            status: storedMessagePort?.status ?? 0,
-            source_chain_id: item.messageFromChainId,
-            source_block_number: +item.blockNumber,
-            source_block_timestamp: new Date(+item.blockTimestamp * 1000),
-            source_transaction_hash: item.transactionHash,
-            // source_transaction_index : -0,
-            source_log_index: +item.logIndex,
-            // source_port_address      : -0,
-            source_dapp_address: item.messageFrom,
-            target_chain_id: +item.messageToChainId,
-            target_dapp_address: item.messageTo,
-            // payload
-            // params
-            message_encoded: item.messageEncoded,
-            sender: item.messageFrom,
-          };
-          if (storedMessagePort) {
-            await prisma.message_port.update({
-              where: { id: messagePortInput.id },
-              data: messagePortInput,
-            });
-          } else {
-            await prisma.message_port.create({ data: messagePortInput });
-          }
-          currentMessageProgress.total += 1;
-          currentMessageProgress.inflight += 1;
-        }
-      }
-      if (messageDispatchedV2s) {
-        for (const item of messageDispatchedV2s.items) {
-          const msgId = item.msgHash;
-          const storedMessagePort = await prisma.message_port.findFirst({
-            where: { msg_id: msgId },
-          });
+    const {
+      ormpMessageAccepteds,
+      ormpMessageDispatcheds,
+      msgportMessageSents,
+      msgportMessageRecvs,
+      position,
+    } = message;
 
-          const messagePortInput = {
-            ...storedMessagePort,
-            id: msgId,
-            msg_id: msgId,
-            protocol: "ormp",
-            target_block_number: +item.blockNumber,
-            target_block_timestamp: new Date(+item.blockTimestamp * 1000),
-            target_transaction_hash: item.transactionHash,
-            status: item.dispatchResult ? 1 : 2,
-          };
-          if (storedMessagePort) {
-            await prisma.message_port.update({
-              where: { id: messagePortInput.id },
-              data: messagePortInput,
-            });
-          } else {
-            await prisma.message_port.create({ data: messagePortInput });
-          }
-          currentMessageProgress.inflight -= 1;
-          if (!item.dispatchResult) {
-            currentMessageProgress.failed += 1;
-          }
+    if (ormpMessageAccepteds.length) {
+      for (const item of ormpMessageAccepteds) {
+        const msgId = item.msgHash;
+        const storedMessagePort = await prisma.message_port.findFirst({
+          where: { msg_id: msgId },
+        });
+        const messagePortInput = {
+          ...storedMessagePort,
+          id: msgId,
+          msg_id: msgId,
+          protocol: "ormp",
+          status: storedMessagePort?.status ?? 0,
+          source_chain_id: +item.fromChainId,
+          source_block_number: +item.blockNumber,
+          source_block_timestamp: new Date(+item.blockTimestamp),
+          source_transaction_hash: item.transactionHash,
+          source_log_index: +item.logIndex,
+          target_chain_id: +item.toChainId,
+        };
+        if (storedMessagePort) {
+          await prisma.message_port.update({
+            where: { id: messagePortInput.id },
+            data: messagePortInput,
+          });
+          fastify.log.debug(`[message-accepted] updated msgport: ${msgId}`);
+        } else {
+          await prisma.message_port.create({ data: messagePortInput });
+          fastify.log.debug(`[message-accepted] stored msgport: ${msgId}`);
         }
-      }
+        currentMessageProgress.total += 1;
+        currentMessageProgress.inflight += 1;
 
-      const nextAcceptedCursor = messageAcceptedV2s.pageInfo.endCursor;
-      const nextDispatchedCursor = messageDispatchedV2s.pageInfo.endCursor;
-      if (nextAcceptedCursor) {
-        await prisma.sync_position.upsert({
-          where: {
-            id: this.syncPostionId({ chain, model: "messageAcceptedV2s" }),
-          },
-          update: { cursor: nextAcceptedCursor },
-          create: {
-            id: this.syncPostionId({ chain, model: "messageAcceptedV2s" }),
-            cursor: nextAcceptedCursor,
-          },
-        });
-      }
-      if (nextDispatchedCursor) {
-        await prisma.sync_position.upsert({
-          where: {
-            id: this.syncPostionId({ chain, model: "messageDispatchedV2s" }),
-          },
-          update: { cursor: nextDispatchedCursor },
-          create: {
-            id: this.syncPostionId({ chain, model: "messageDispatchedV2s" }),
-            cursor: nextDispatchedCursor,
-          },
-        });
+        const messageOrmp = {
+          id: msgId,
+          block_number: +item.blockNumber,
+          block_timestamp: new Date(+item.blockTimestamp),
+          transaction_hash: item.transactionHash,
+
+          msg_hash: item.msgHash,
+          channel: item.channel,
+          index: +item.index,
+          from_chain_id: +item.fromChainId,
+          from: item.from,
+          to_chain_id: +item.toChainId,
+          to: item.to,
+          gas_limit: item.gasLimit,
+          encoded: item.encoded,
+
+          oracle: item.oracle,
+          oracle_assigned: item.oracleAssigned,
+          oracle_assigned_fee: item.oracleAssignedFee,
+
+          relayer: item.relayer,
+          relayer_assigned: item.relayerAssigned,
+          relayer_assigned_fee: item.relayerAssignedFee,
+        };
+        await prisma.message_ormp.create({ data: messageOrmp });
+        fastify.log.debug(`[message-accepted] stored message ormp: ${msgId}`);
       }
     }
 
-    if (storedMessageProgress) {
-      await prisma.message_progress.update({
-        where: { id: storedMessageProgress.id },
-        data: currentMessageProgress,
-      });
-    } else {
-      await prisma.message_progress.create({
-        data: currentMessageProgress,
-      });
+    if (ormpMessageDispatcheds.length) {
+      for (const item of ormpMessageDispatcheds) {
+        const msgId = item.msgHash;
+        const storedMessagePort = await prisma.message_port.findFirst({
+          where: { msg_id: msgId },
+        });
+
+        const messagePortInput = {
+          ...storedMessagePort,
+          id: msgId,
+          msg_id: msgId,
+          protocol: "ormp",
+          target_block_number: +item.blockNumber,
+          target_block_timestamp: new Date(+item.blockTimestamp),
+          target_transaction_hash: item.transactionHash,
+          status: item.dispatchResult ? 1 : 2,
+        };
+        if (storedMessagePort) {
+          await prisma.message_port.update({
+            where: { id: messagePortInput.id },
+            data: messagePortInput,
+          });
+          fastify.log.debug(`[message-dispatch] update msgport: ${msgId}`);
+        } else {
+          await prisma.message_port.create({ data: messagePortInput });
+          fastify.log.debug(`[message-dispatch] stored msgport: ${msgId}`);
+        }
+        currentMessageProgress.inflight -= 1;
+        if (!item.dispatchResult) {
+          currentMessageProgress.failed += 1;
+        }
+      }
     }
+
+    if (msgportMessageSents.length) {
+      for (const item of msgportMessageSents) {
+        const msgId = item.msgId;
+        const storedMessagePort = await prisma.message_port.findFirst({
+          where: { msg_id: msgId },
+        });
+        const messagePortInput = {
+          ...storedMessagePort,
+          id: msgId,
+          msg_id: msgId,
+          protocol: "ormp",
+          source_dapp_address: item.fromDapp,
+          target_dapp_address: item.toDapp,
+          payload: item.message,
+          params: item.params,
+          sender: item.transactionFrom,
+          source_port_address: item.portAddress,
+        };
+        if (storedMessagePort) {
+          await prisma.message_port.update({
+            where: { id: messagePortInput.id },
+            data: messagePortInput,
+          });
+          fastify.log.debug(`[msgport-sent] update msgport: ${msgId}`);
+        } else {
+          await prisma.message_port.create({ data: messagePortInput });
+          fastify.log.debug(`[msgport-sent] stored msgport: ${msgId}`);
+        }
+      }
+    }
+
+    if (msgportMessageRecvs.length) {
+      for (const item of msgportMessageRecvs) {
+        const msgId = item.msgId;
+        const storedMessagePort = await prisma.message_port.findFirst({
+          where: { msg_id: msgId },
+        });
+        const messagePortInput = {
+          ...storedMessagePort,
+          id: msgId,
+          msg_id: msgId,
+          protocol: "ormp",
+          target_port_address: item.portAddress,
+        };
+        if (storedMessagePort) {
+          await prisma.message_port.update({
+            where: { id: messagePortInput.id },
+            data: messagePortInput,
+          });
+          fastify.log.debug(`[msgport-recv] update msgport: ${msgId}`);
+        } else {
+          await prisma.message_port.create({ data: messagePortInput });
+          fastify.log.debug(`[msgport-recv] update msgport: ${msgId}`);
+        }
+      }
+    }
+
+    const nextMessageAcceptedOffset =
+      position.messageAcceptedOffset + ormpMessageAccepteds.length;
+    const nextMessageDispatchedOffset =
+      position.messageDispatchedOffset + ormpMessageDispatcheds.length;
+    const nextMsgportSentOffset =
+      position.msgportSentOffset + msgportMessageSents.length;
+    const nextMsgportRecvOffset =
+      position.msgportRecvOffset + msgportMessageRecvs.length;
+
+    await prisma.sync_position.upsert({
+      where: {
+        id: this.syncPostionId({ model: "ormpMessageAccepteds" }),
+      },
+      update: { cursor: nextMessageAcceptedOffset.toString() },
+      create: {
+        id: this.syncPostionId({ model: "ormpMessageAccepteds" }),
+        cursor: nextMessageAcceptedOffset.toString(),
+      },
+    });
+    await prisma.sync_position.upsert({
+      where: {
+        id: this.syncPostionId({ model: "ormpMessageDispatcheds" }),
+      },
+      update: { cursor: nextMessageDispatchedOffset.toString() },
+      create: {
+        id: this.syncPostionId({ model: "ormpMessageDispatcheds" }),
+        cursor: nextMessageDispatchedOffset.toString(),
+      },
+    });
+    await prisma.sync_position.upsert({
+      where: {
+        id: this.syncPostionId({ model: "msgportMessageSents" }),
+      },
+      update: { cursor: nextMsgportSentOffset.toString() },
+      create: {
+        id: this.syncPostionId({ model: "msgportMessageSents" }),
+        cursor: nextMsgportSentOffset.toString(),
+      },
+    });
+    await prisma.sync_position.upsert({
+      where: {
+        id: this.syncPostionId({ model: "msgportMessageRecvs" }),
+      },
+      update: { cursor: nextMsgportRecvOffset.toString() },
+      create: {
+        id: this.syncPostionId({ model: "msgportMessageRecvs" }),
+        cursor: nextMsgportRecvOffset.toString(),
+      },
+    });
+    fastify.log.debug(
+      `update position: { accepted: ${nextMessageAcceptedOffset}, dispatched: ${nextMessageDispatchedOffset}, sent: ${nextMsgportSentOffset}, recv: ${nextMsgportRecvOffset} }`
+    );
+
+    await prisma.message_progress.upsert({
+      where: { id: "global" },
+      update: currentMessageProgress,
+      create: currentMessageProgress,
+    });
+    fastify.log.info(
+      `update message progress: { total: ${currentMessageProgress.total}, inflight: ${currentMessageProgress.inflight}, failed: ${currentMessageProgress.failed} }`
+    );
   }
 }
 
 interface CrawlOptions {
   runnerOptions: GripperRunnerOptions;
-  ponderEndpoint: PonderEndpoint;
+  indexerEndpoint: IndexerEndpoint;
 }
 
 interface StoreOptions {
   runnerOptions: GripperRunnerOptions;
-  messages: CrawlResult[];
+  message: CrawlResult;
 }
 
 interface GraphqlResponse {
@@ -367,13 +492,56 @@ interface GraphqlResponse {
 }
 
 interface CrawlResult {
-  chain: string;
-  messageAcceptedV2s?: PonderPage<MessageAcceptedV2>;
-  messageDispatchedV2s?: PonderPage<messageDispatchedV2s>;
+  ormpMessageAccepteds: OrmpMessageAccepted[];
+  ormpMessageDispatcheds: OrmpMessageDispatched[];
+  msgportMessageSents: MsgportMessageSent[];
+  msgportMessageRecvs: MsgportMessageRecv[];
+  position: MessageScanQueryPosition;
 }
 
-interface messageDispatchedV2s {
+interface MessageScanQueryPosition {
+  messageAcceptedOffset: number;
+  messageDispatchedOffset: number;
+  msgportSentOffset: number;
+  msgportRecvOffset: number;
+}
+
+interface MsgportMessageSent {
   id: string;
+  chainId: string;
+  blockNumber: string;
+  blockTimestamp: string;
+  transactionHash: string;
+  transactionFrom: string;
+  transactionIndex: number;
+  logIndex: number;
+  msgId: string;
+  fromChainId: string;
+  fromDapp: string;
+  toChainId: string;
+  toDapp: string;
+  message: string;
+  params: string;
+  portAddress: string;
+}
+
+interface MsgportMessageRecv {
+  id: string;
+  chainId: string;
+  blockNumber: string;
+  blockTimestamp: string;
+  transactionHash: string;
+  transactionIndex: number;
+  logIndex: number;
+  msgId: string;
+  portAddress: string;
+  result: boolean;
+  returnData: string;
+}
+
+interface OrmpMessageDispatched {
+  id: string;
+  chainId: string;
   targetChainId: string;
   blockNumber: string;
   blockTimestamp: string;
@@ -382,46 +550,35 @@ interface messageDispatchedV2s {
   dispatchResult: boolean;
 }
 
-interface MessageAcceptedV2 {
+interface OrmpMessageAccepted {
   id: string;
+  chainId: string;
   blockNumber: string;
   blockTimestamp: string;
   transactionHash: string;
   logIndex: number;
   msgHash: string;
-  messageChannel: string;
-  messageIndex: string;
-  messageFromChainId: string;
-  messageFrom: string;
-  messageToChainId: string;
-  messageTo: string;
-  messageGasLimit: string;
-  messageEncoded: string;
+  channel: string;
+  index: string;
+  fromChainId: string;
+  from: string;
+  toChainId: string;
+  to: string;
+  gasLimit: string;
+  encoded: string;
   oracle?: string;
   oracleAssigned: boolean;
   oracleAssignedFee?: string;
-  oracleLogIndex?: number;
   relayer?: string;
   relayerAssigned: boolean;
   relayerAssignedFee?: string;
-  relayerLogIndex?: number;
 }
 
-interface PonderPage<T> {
-  items: T[];
-  pageInfo: PageInfo;
+interface IndexerError {
+  errors: IndexerErrorInfo[];
 }
 
-interface PageInfo {
-  startCursor: string;
-  endCursor: string;
-}
-
-interface PonderError {
-  errors: PErrorInfo[];
-}
-
-interface PErrorInfo {
+interface IndexerErrorInfo {
   message: string;
   locations: {
     line: number;
@@ -429,7 +586,6 @@ interface PErrorInfo {
   }[];
 }
 
-interface PonderEndpoint {
-  chain: string;
+interface IndexerEndpoint {
   endpoint: string;
 }

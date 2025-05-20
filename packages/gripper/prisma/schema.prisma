@@ -21,29 +21,6 @@ model message_progress {
 
 model message_port {
   id String @id
-  // msg_id                   String
-  // protocol                 String
-  // status                   Int
-  // source_chain_id          String?
-  // source_block_number      Int?
-  // source_block_timestamp   DateTime?
-  // source_transaction_hash  String?
-  // // source_transaction_index Int?
-  // source_log_index         Int?
-  // // source_port_address      String?
-  // source_dapp_address      String?
-  // target_chain_id          Int?
-  // target_dapp_address      String?
-  // // payload                  String?
-  // // params                   String?
-  // message_encoded          String?
-  // sender                   String?
-  // target_block_number      Int?
-  // target_block_timestamp   DateTime?
-  // target_transaction_hash  String?
-  // // target_transaction_index Int?
-  // // target_log_index         Int?
-  // target_port_address      String?
 
   msg_id   String
   protocol String
@@ -53,21 +30,19 @@ model message_port {
   sender   String?
 
   // source
-  source_chain_id         String?
+  source_chain_id         Int?
   source_block_number     Int?
   source_block_timestamp  DateTime?
   source_transaction_hash String?
-  // source_transaction_index Int?
   source_log_index        Int?
   source_dapp_address     String?
   source_port_address     String?
 
   // target
-  target_chain_id         String?
+  target_chain_id         Int?
   target_block_number     Int?
   target_block_timestamp  DateTime?
   target_transaction_hash String?
-  // target_transaction_index Int?
   target_log_index        Int?
   target_dapp_address     String?
   target_port_address     String?
@@ -77,27 +52,30 @@ model message_port {
 }
 
 model message_ormp {
-  id              String   @id
-  blockNumber     Int
-  transactionHash String
-  blockTimestamp  DateTime
+  id               String   @id
+  block_number     Int
+  transaction_hash String
+  block_timestamp  DateTime
 
-  msgHash     String
-  channel     String
-  index       Int
-  fromChainId String
-  from        String
-  toChainId   String
-  to          String
-  gasLimit    String
-  encoded     String
+  msg_hash      String
+  channel       String
+  index         Int
+  from_chain_id Int
+  from          String
+  to_chain_id   Int
+  to            String
+  gas_limit     String
+  encoded       String
 
   // extra
-  oracle            String
-  oracleAssigned    Boolean
-  oracleAssignedFee BigInt
+  oracle              String?
+  oracle_assigned     Boolean?
+  oracle_assigned_fee String?
 
-  relayer            String
-  relayerAssigned    Boolean
-  relayerAssignedFee BigInt
+  relayer              String?
+  relayer_assigned     Boolean?
+  relayer_assigned_fee String?
+
+  ctime DateTime @default(now())
+  utime DateTime @updatedAt
 }
