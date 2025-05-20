@@ -319,7 +319,11 @@ export class IndexerTask {
           relayer_assigned: item.relayerAssigned,
           relayer_assigned_fee: item.relayerAssignedFee,
         };
-        await prisma.message_ormp.create({ data: messageOrmp });
+        await prisma.message_ormp.upsert({
+          where: { id: messageOrmp.id },
+          update: messageOrmp,
+          create: messageOrmp,
+        });
         fastify.log.debug(`[message-accepted] stored message ormp: ${msgId}`);
       }
     }
