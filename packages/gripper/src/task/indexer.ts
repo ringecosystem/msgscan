@@ -49,7 +49,9 @@ export class IndexerTask {
         }
         messageScanInfo = crawResult;
       } catch (e) {
-        fastify.log.error(`xx error in crawl: `, e);
+        fastify.log.error(`xx error in crawl: ${e}`);
+        this.skipCounter = 5;
+        continue;
       }
 
       fastify.log.info(

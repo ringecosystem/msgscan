@@ -23,7 +23,9 @@
     "graphql-request": "^7.1.2",
     "@prisma/client": "6",
     "fastify": "^5",
-    "postgraphile": "^4.14.0"
+    "postgraphile": "^4.14.1",
+    "@graphile-contrib/pg-simplify-inflector": "^6.1.0",
+    "postgraphile-plugin-connection-filter": "^2.3.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.5",

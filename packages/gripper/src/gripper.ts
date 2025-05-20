@@ -8,6 +8,10 @@ import fastifyExpress from "@fastify/express";
 import fastifyPrisma from "@joggr/fastify-prisma";
 import { GripperRunnerOptions } from "./types";
 
+import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
+import PgSimplifyInflectorPlugin from "@graphile-contrib/pg-simplify-inflector";
+
+
 @Service({})
 export class GripperServer {
   constructor(private readonly indexerTask: IndexerTask) {}
@@ -42,6 +46,10 @@ export class GripperServer {
     await fastify.register(fastifyPrisma);
 
     const postgraphileMiddleware = postgraphile(databaseUrl, "public", {
+      appendPlugins: [
+        PgSimplifyInflectorPlugin,
+        ConnectionFilterPlugin,
+      ],
       graphiql: true,
       enhanceGraphiql: true,
     });
