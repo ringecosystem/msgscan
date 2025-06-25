@@ -1,0 +1,46 @@
+{
+  "name": "msgscan-indexer",
+  "version": "0.1.0",
+  "description": "msgscan indexer",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "shx rm -rf build && tsc -b",
+    "package": "node esbuild.js",
+    "start": "node build/index.js",
+    "lint": "eslint . --ext .ts --fix"
+  },
+  "dependencies": {
+    "@fastify/express": "^4",
+    "@fastify/cors": "^10",
+    "@fastify/http-proxy": "^11",
+    "@joggr/fastify-prisma": "^5",
+    "chalk": "^4",
+    "commander": "^12",
+    "graphql": "^16.10.0",
+    "pino-pretty": "^13.0.0",
+    "reflect-metadata": "^0.2",
+    "typedi": "^0.10",
+    "graphql-request": "^7.1.2",
+    "@prisma/client": "6",
+    "fastify": "^5",
+    "postgraphile": "^4.14.1",
+    "@graphile-contrib/pg-simplify-inflector": "^6.1.0",
+    "postgraphile-plugin-connection-filter": "^2.3.0"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.5",
+    "@types/node": "^22",
+    "@typescript-eslint/eslint-plugin": "^5",
+    "@typescript-eslint/parser": "^5",
+    "esbuild": "^0.25",
+    "eslint": "^8",
+    "shx": "^0.3.4",
+    "ts-node": "^10",
+    "typescript": "^5",
+    "prisma": "^6"
+  },
+  "files": [
+    "dist",
+    "build"
+  ]
+}

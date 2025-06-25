@@ -25,3 +25,9 @@ dist-ssr
 
 .data
 *.local.*
+
+build
+*.tsbuildinfo
+.env
+*.db
+*.db-journal

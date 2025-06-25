@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         image:
-          - indexer
+          - gripper
     steps:
       - uses: actions/checkout@v4
 

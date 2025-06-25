@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model sync_position {
+  id     String @id
+  cursor String
+}
+
+model message_progress {
+  id       String @id
+  total    Int
+  inflight Int
+  failed   Int
+}
+
+model message_port {
+  id String @id
+
+  msg_id   String
+  protocol String
+  payload  String?
+  params   String?
+  status   Int
+  sender   String?
+
+  // source
+  source_chain_id         Int?
+  source_block_number     Int?
+  source_block_timestamp  DateTime?
+  source_transaction_hash String?
+  source_log_index        Int?
+  source_dapp_address     String?
+  source_port_address     String?
+
+  // target
+  target_chain_id         Int?
+  target_block_number     Int?
+  target_block_timestamp  DateTime?
+  target_transaction_hash String?
+  target_log_index        Int?
+  target_dapp_address     String?
+  target_port_address     String?
+
+  ctime DateTime @default(now())
+  utime DateTime @updatedAt
+}
+
+model message_ormp {
+  id               String   @id
+  block_number     Int
+  transaction_hash String
+  block_timestamp  DateTime
+
+  msg_hash      String
+  channel       String
+  index         Int
+  from_chain_id Int
+  from          String
+  to_chain_id   Int
+  to            String
+  gas_limit     String
+  encoded       String
+
+  // extra
+  oracle              String?
+  oracle_assigned     Boolean?
+  oracle_assigned_fee String?
+
+  relayer              String?
+  relayer_assigned     Boolean?
+  relayer_assigned_fee String?
+
+  ctime DateTime @default(now())
+  utime DateTime @updatedAt
+}
