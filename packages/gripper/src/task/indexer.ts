@@ -7,7 +7,7 @@ import { gql, request } from "graphql-request";
 @Service({})
 export class IndexerTask {
   private readonly indexerEndpoint: IndexerEndpoint = {
-    endpoint: "https://ormpindexer.vercel.app/graphql",
+    endpoint: "https://ormpindexer.ringdao.com/graphql",
   };
 
   private skipCounter: number = 0;
