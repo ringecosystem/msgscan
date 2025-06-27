@@ -275,10 +275,6 @@ export class IndexerTask {
           msg_id: msgId,
           protocol: "ormp",
           status: storedMessagePort?.status ?? 0,
-          source_chain_id: +item.fromChainId,
-          source_block_number: +item.blockNumber,
-          source_block_timestamp: new Date(+item.blockTimestamp),
-          source_transaction_hash: item.transactionHash,
           source_log_index: +item.logIndex,
           target_chain_id: +item.toChainId,
         };
@@ -379,6 +375,10 @@ export class IndexerTask {
           params: item.params,
           sender: item.transactionFrom,
           source_port_address: item.portAddress,
+          source_chain_id: +item.fromChainId,
+          source_block_number: +item.blockNumber,
+          source_block_timestamp: new Date(+item.blockTimestamp),
+          source_transaction_hash: item.transactionHash,
         };
         if (storedMessagePort) {
           await prisma.message_port.update({
