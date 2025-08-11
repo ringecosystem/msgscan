@@ -7,7 +7,7 @@ import { gql, request } from "graphql-request";
 @Service({})
 export class IndexerTask {
   private readonly indexerEndpoint: IndexerEndpoint = {
-    endpoint: "https://ormpindexer.vercel.app/graphql",
+    endpoint: "https://ormpindexer.ringdao.com/graphql",
   };
 
   private skipCounter: number = 0;
@@ -117,7 +117,7 @@ export class IndexerTask {
       ) {
         ormpMessageAccepteds(
           orderBy: blockNumber_ASC
-          limit: 10
+          limit: 500
           offset: $messageAcceptedOffset
         ) {
           id
@@ -144,7 +144,7 @@ export class IndexerTask {
         }
         ormpMessageDispatcheds(
           orderBy: blockNumber_ASC
-          limit: 10
+          limit: 500
           offset: $messageDispatchedOffset
         ) {
           id
@@ -158,7 +158,7 @@ export class IndexerTask {
         }
         msgportMessageSents(
           orderBy: blockNumber_ASC
-          limit: 10
+          limit: 500
           offset: $msgportSentOffset
         ) {
           id
@@ -180,7 +180,7 @@ export class IndexerTask {
         }
         msgportMessageRecvs(
           orderBy: blockNumber_ASC
-          limit: 10
+          limit: 500
           offset: $msgportRecvOffset
         ) {
           id
@@ -275,10 +275,6 @@ export class IndexerTask {
           msg_id: msgId,
           protocol: "ormp",
           status: storedMessagePort?.status ?? 0,
-          source_chain_id: +item.fromChainId,
-          source_block_number: +item.blockNumber,
-          source_block_timestamp: new Date(+item.blockTimestamp),
-          source_transaction_hash: item.transactionHash,
           source_log_index: +item.logIndex,
           target_chain_id: +item.toChainId,
         };
@@ -379,6 +375,10 @@ export class IndexerTask {
           params: item.params,
           sender: item.transactionFrom,
           source_port_address: item.portAddress,
+          source_chain_id: +item.fromChainId,
+          source_block_number: +item.blockNumber,
+          source_block_timestamp: new Date(+item.blockTimestamp),
+          source_transaction_hash: item.transactionHash,
         };
         if (storedMessagePort) {
           await prisma.message_port.update({
