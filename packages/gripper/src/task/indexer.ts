@@ -117,7 +117,7 @@ export class IndexerTask {
       ) {
         ormpMessageAccepteds(
           orderBy: blockNumber_ASC
-          limit: 10
+          limit: 500
           offset: $messageAcceptedOffset
         ) {
           id
@@ -144,7 +144,7 @@ export class IndexerTask {
         }
         ormpMessageDispatcheds(
           orderBy: blockNumber_ASC
-          limit: 10
+          limit: 500
           offset: $messageDispatchedOffset
         ) {
           id
@@ -158,7 +158,7 @@ export class IndexerTask {
         }
         msgportMessageSents(
           orderBy: blockNumber_ASC
-          limit: 10
+          limit: 500
           offset: $msgportSentOffset
         ) {
           id
@@ -180,7 +180,7 @@ export class IndexerTask {
         }
         msgportMessageRecvs(
           orderBy: blockNumber_ASC
-          limit: 10
+          limit: 500
           offset: $msgportRecvOffset
         ) {
           id
