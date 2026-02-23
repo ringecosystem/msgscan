@@ -1,9 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
-import { capitalize } from 'lodash-es';
 
 import { dappRemark } from '@/config/dapp_remark';
-import { getDAppInfo } from '@/utils/dapp';
+import { capitalizeText, getDAppInfo } from '@/utils/dapp';
 import { cn } from '@/lib/utils';
 
 interface AddressDisplayFilterDappRemarkProps {
@@ -25,11 +24,11 @@ const AddressDisplayFilterDappRemark = ({
   const displayAddress = formatAddress ? formatAddress(address) : address;
 
   return dappName && dappLogo ? (
-    <span className={cn('flex items-center gap-[0.31rem]', className)}>
-      <Image src={dappLogo} width={width} height={height} alt={`${capitalize(dappName)}`} />
-      <span>{capitalize(dappName)}</span>
+    <div className={cn('flex items-center gap-[0.31rem]', className)}>
+      <Image src={dappLogo} width={width} height={height} alt="" aria-hidden="true" />
+      <span>{capitalizeText(dappName)}</span>
       {children}
-    </span>
+      </div>
   ) : (
     displayAddress
   );

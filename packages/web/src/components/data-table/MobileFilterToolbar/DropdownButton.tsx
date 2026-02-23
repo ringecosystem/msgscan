@@ -21,13 +21,17 @@ const DropdownButton = ({
   children,
   className
 }: React.PropsWithChildren<DropdownButtonProps>) => {
+  const triggerFocusClassName =
+    'focus-visible:outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50';
+
   return (
     <Button
       variant="outline"
       size="sm"
       onClick={() => onOpenChange?.(true)}
       className={cn(
-        'flex items-center gap-[0.31rem] border-none text-sm font-normal focus-visible:ring-0',
+        'flex items-center gap-[0.31rem] border-none text-sm font-normal cursor-pointer transition-colors duration-200 hover:bg-muted/50',
+        triggerFocusClassName,
         className
       )}
     >

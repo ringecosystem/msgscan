@@ -1,20 +1,21 @@
-import { createBreakpoint } from 'react-use';
+import { useEffect, useState } from 'react';
 
-const breakpoint = createBreakpoint({
-  default: 0,
-  sm: 640,
-  md: 768,
-  lg: 1024,
-  xl: 1280,
-  '2xl': 1536
-});
+const MOBILE_MAX_WIDTH = 767;
+const PAD_MAX_WIDTH = 1023;
 
 const useBreakpoint = () => {
-  const result = breakpoint();
+  const [width, setWidth] = useState<number>(0);
 
-  if (result === 'default' || result === 'sm') {
+  useEffect(() => {
+    const update = () => setWidth(window.innerWidth);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  if (width <= MOBILE_MAX_WIDTH) {
     return 'mobile';
-  } else if (result === 'md') {
+  } else if (width <= PAD_MAX_WIDTH) {
     return 'pad';
   } else {
     return 'desktop';

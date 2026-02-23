@@ -1,42 +1,50 @@
-import { Badge } from '@/components/ui/badge';
-import { MESSAGE_STATUS } from '@/types/message';
+import { Loader2, Check, X } from 'lucide-react';
 
-import Inflight from './icon/inflight';
-import Success from './icon/success';
-import Failed from './icon/failed';
+import { MESSAGE_STATUS } from '@/types/message';
+import { cn } from '@/lib/utils';
 
 interface MessageStatusProps {
   status: MESSAGE_STATUS;
 }
 
+const statusConfig = {
+  [MESSAGE_STATUS.PENDING]: {
+    label: 'Inflight',
+    icon: Loader2,
+    className: 'bg-warning/10 text-warning border-warning/20',
+    spin: true,
+  },
+  [MESSAGE_STATUS.SUCCESS]: {
+    label: 'Success',
+    icon: Check,
+    className: 'bg-success/10 text-success border-success/20',
+    spin: false,
+  },
+  [MESSAGE_STATUS.FAILED]: {
+    label: 'Failed',
+    icon: X,
+    className: 'bg-failure/10 text-failure border-failure/20',
+    spin: false,
+  },
+} as const;
+
 const MessageStatus = ({ status }: MessageStatusProps) => {
-  switch (status) {
-    case MESSAGE_STATUS.PENDING:
-      return (
-        <Badge className="gap-[0.19rem] bg-[hsl(var(--inflight))] text-xs text-foreground hover:bg-[hsl(var(--inflight))]/80 dark:text-background">
-          <Inflight />
-          Inflight
-        </Badge>
-      );
+  const config = statusConfig[status];
+  if (!config) return null;
 
-    case MESSAGE_STATUS.SUCCESS:
-      return (
-        <Badge className="gap-[0.19rem] bg-[hsl(var(--success))] text-xs text-foreground hover:bg-[hsl(var(--success))]/80 dark:text-background">
-          <Success />
-          Success
-        </Badge>
-      );
-    case MESSAGE_STATUS.FAILED:
-      return (
-        <Badge className="gap-[0.19rem] bg-[hsl(var(--failure))] text-xs text-foreground hover:bg-[hsl(var(--failure))]/80 dark:text-background">
-          <Failed />
-          Failed
-        </Badge>
-      );
+  const Icon = config.icon;
 
-    default:
-      return null;
-  }
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium',
+        config.className
+      )}
+    >
+      <Icon className={cn('size-3', config.spin && 'animate-spin')} />
+      {config.label}
+    </span>
+  );
 };
 
 export default MessageStatus;

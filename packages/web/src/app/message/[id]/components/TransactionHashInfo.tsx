@@ -1,4 +1,6 @@
-import ChainTxDisplay from '@/components/chain-tx-display';
+import { cn } from '@/lib/utils';
+import { CodeFont } from '@/config/font';
+import { toShortText } from '@/utils';
 import ClipboardIconButton from '@/components/clipboard-icon-button';
 import ExplorerLinkButton from '@/components/explorer-link-button';
 
@@ -10,25 +12,20 @@ interface TransactionHashInfoProps {
 }
 
 const TransactionHashInfo = ({ chain, hash }: TransactionHashInfoProps) => {
-  let _url = `${chain?.blockExplorers?.default?.url}/tx/${hash}`;
-  if (chain?.name.includes("Tron")) {
-    _url = `${chain?.blockExplorers?.default?.url}/#/transaction/${hash?.replace('0x', '')}`
+  if (!hash) return <span className="text-xs text-muted-foreground">-</span>;
+
+  let explorerUrl = `${chain?.blockExplorers?.default?.url}/tx/${hash}`;
+  if (chain?.name.includes('Tron')) {
+    explorerUrl = `${chain?.blockExplorers?.default?.url}/#/transaction/${hash.replace('0x', '')}`;
   }
+
   return (
-    <div className="flex items-center">
-      <ChainTxDisplay
-        chain={chain}
-        className="w-[90%] max-w-[calc(100vw-14rem)]"
-        rootClassName="gap-[0.62rem]"
-        isFullText
-        value={hash}
-        isLink={false}
-      >
-        {hash && <ClipboardIconButton text={hash} size={16} />}
-        {hash && chain ? (
-          <ExplorerLinkButton url={`${_url}`} />
-        ) : null}
-      </ChainTxDisplay>
+    <div className="flex items-center gap-1.5">
+      <span className={cn('text-[13px]', CodeFont.className)} title={hash}>
+        {toShortText({ text: hash, frontLength: 6, backLength: 4 })}
+      </span>
+      {chain && <ExplorerLinkButton url={explorerUrl} />}
+      <ClipboardIconButton text={hash} size={14} />
     </div>
   );
 };

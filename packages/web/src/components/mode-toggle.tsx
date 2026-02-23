@@ -23,16 +23,19 @@ export function ModeToggle() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="secondary"
-          size="icon"
-          className="h-[1.625rem] flex-shrink-0 lg:h-[2.625rem]"
-        >
-          <Sun className="h-[1rem] w-[1rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 lg:h-[1.2rem] lg:w-[1.2rem]" />
-          <Moon className="absolute h-[1rem] w-[1rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 lg:h-[1.2rem] lg:w-[1.2rem]" />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            variant="outline"
+            size="icon"
+            className="size-9 shrink-0 rounded-full border-border bg-transparent shadow-none dark:bg-input/30 dark:hover:bg-input/50"
+            aria-label="Toggle theme"
+          />
+        }
+      >
+        <Sun className="size-4 rotate-0 scale-100 transition-[transform,opacity] dark:-rotate-90 dark:scale-0" />
+        <Moon className="absolute size-4 rotate-90 scale-0 transition-[transform,opacity] dark:rotate-0 dark:scale-100" />
+        <span className="sr-only">Toggle theme</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {themeOptions.map((option) => (

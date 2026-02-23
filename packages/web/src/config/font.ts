@@ -1,6 +1,6 @@
-import { Inter , JetBrains_Mono } from 'next/font/google';
+import { Geist, JetBrains_Mono } from 'next/font/google';
 
-export const GlobalFont = Inter({
+export const GlobalFont = Geist({
   subsets: ['latin'],
   variable: '--global-font'
 });

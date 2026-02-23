@@ -1,6 +1,8 @@
+'use client';
+
 import { Copy, Check } from 'lucide-react';
 import { useCallback, useEffect, useState, useRef } from 'react';
-import { useCopyToClipboard } from 'react-use';
+import { toast } from 'sonner';
 
 import { cn } from '@/lib/utils';
 
@@ -12,25 +14,31 @@ interface ClipboardIconButtonProps {
 }
 
 const ClipboardIconButton = ({ text = '', size }: ClipboardIconButtonProps) => {
-  const [state, copyToClipboard] = useCopyToClipboard();
   const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const enterTimeout = useRef<NodeJS.Timeout | undefined>();
-  const leaveTimeout = useRef<NodeJS.Timeout | undefined>();
+  const enterTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const leaveTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const copiedTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const handleCopy = useCallback(() => {
     if (!text) return;
-    copyToClipboard(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1000);
-  }, [copyToClipboard, text]);
-
-  useEffect(() => {
-    if (state.error) {
-      console.error('Copy failed:', state.error);
-    }
-  }, [state]);
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        setCopied(true);
+        toast.success('Copied!');
+        clearTimeout(copiedTimeout.current);
+        copiedTimeout.current = setTimeout(() => {
+          setCopied(false);
+          copiedTimeout.current = undefined;
+        }, 1000);
+      })
+      .catch((error) => {
+        console.error('Copy failed:', error);
+        toast.error('Failed to copy');
+      });
+  }, [text]);
 
   const handleMouseEnter = useCallback(() => {
     clearTimeout(leaveTimeout.current);
@@ -50,6 +58,7 @@ const ClipboardIconButton = ({ text = '', size }: ClipboardIconButtonProps) => {
     return () => {
       clearTimeout(enterTimeout.current);
       clearTimeout(leaveTimeout.current);
+      clearTimeout(copiedTimeout.current);
     };
   }, []);
 
@@ -57,30 +66,30 @@ const ClipboardIconButton = ({ text = '', size }: ClipboardIconButtonProps) => {
 
   return (
     <Tooltip open={open}>
-      <TooltipTrigger asChild>
-        <div
-          onClick={handleCopy}
-          className="size-4 cursor-pointer"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          <Check
-            strokeWidth={1.25}
-            size={size}
-            className={cn(
-              'text-muted-foreground hover:text-muted-foreground/80',
-              copied ? 'block' : 'hidden'
-            )}
-          />
-          <Copy
-            strokeWidth={1.25}
-            size={size}
-            className={cn(
-              'text-muted-foreground hover:text-muted-foreground/80',
-              copied ? 'hidden' : 'block'
-            )}
-          />
-        </div>
+      <TooltipTrigger
+        type="button"
+        onClick={handleCopy}
+        className="inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        aria-label="Copy to clipboard"
+      >
+        <Check
+          strokeWidth={1.5}
+          size={size}
+          className={cn(
+            'text-muted-foreground hover:text-muted-foreground/80',
+            copied ? 'block' : 'hidden'
+          )}
+        />
+        <Copy
+          strokeWidth={1.5}
+          size={size}
+          className={cn(
+            'text-muted-foreground hover:text-muted-foreground/80',
+            copied ? 'hidden' : 'block'
+          )}
+        />
       </TooltipTrigger>
       <TooltipContent>{copied ? 'Copied!' : 'Copy to clipboard'}</TooltipContent>
     </Tooltip>

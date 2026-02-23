@@ -1,119 +1,315 @@
-@tailwind base;
-  @tailwind components;
-  @tailwind utilities;
+@import "tailwindcss";
+@config "../../tailwind.config.mjs";
 
-  @layer base {
-    :root {
-      --background: 0 0% 100%;
-      --foreground: 0 0% 0%;
+@custom-variant dark (&:is(.dark *));
 
-      --card: 0 0% 98%;
-      --card-foreground: 0 0% 0%;
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
 
-      --popover: 0 0% 98%;
-      --popover-foreground: 0 0% 0%;
+  --card: 0 0% 98%;
+  --card-foreground: 222.2 84% 4.9%;
+  --card-elevated: 0 0% 95%;
 
-      --primary: 222.2 47.4% 11.2%;
-      --primary-foreground: 210 40% 98%;
+  --popover: 0 0% 98%;
+  --popover-foreground: 222.2 84% 4.9%;
 
-      --secondary: 0 0% 98%;
-      --secondary-foreground: 0 0% 60%;
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
 
-      --muted: 0 0% 98%;
-      --muted-foreground:  0 0% 50%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 215.4 16.3% 46.9%;
 
-      --accent: 210 40% 96.1%;
-      --accent-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
 
-      --destructive: 0 84.2% 60.2%;
-      --destructive-foreground: 210 40% 98%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
 
-      --border: 214.3 31.8% 91.4%;
-      --input: 0 0% 98%;
-      --ring: 0 0% 90%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
 
-      --radius: 0.25rem;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 222.2 84% 4.9%;
 
-      --header-height: 50px;
+  --radius: 0.625rem;
 
-      --footer-height: 50px;
+  --header-height: 64px;
+  --footer-height: 50px;
 
-      --inflight: 43 97% 59%;
-      --success: 105 63% 62%;
-      --failure: 0 100% 71%;
+  /* Semantic status colors */
+  --success: 142 71% 45%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 92% 50%;
+  --warning-foreground: 0 0% 100%;
+  --pending: 43 97% 59%;
+  --pending-foreground: 0 0% 0%;
+  --info: 217 91% 60%;
+  --info-foreground: 0 0% 100%;
+  --inflight: 43 97% 59%;
+  --failure: 0 84.2% 60.2%;
 
-      --skeleton: 240 4.8% 95.9%;
+  /* Step indicator colors */
+  --step-1: 217 91% 60%;
+  --step-2: 262 83% 58%;
+  --step-3: 38 92% 50%;
+  --step-4-success: 142 71% 45%;
+  --step-4-failed: 0 84.2% 60.2%;
+  --step-incomplete: 215 20% 65%;
+  --step-connector: 214.3 31.8% 91.4%;
 
-    }
+  --skeleton: 240 4.8% 95.9%;
+}
 
-    .dark {
-      --background: 0 0% 0%;
-      --foreground: 0 0% 100%;
+.dark {
+  --background: 222.2 84% 1.4%;
+  --foreground: 210 40% 98%;
 
-      --card: 0 0% 8.63%;
-      --card-foreground: 0 0% 100%;
+  --card: 222.2 47.4% 11.2%;
+  --card-foreground: 210 40% 98%;
+  --card-elevated: 222.2 47.4% 14%;
 
-      --popover: 0 0% 8.63%;
-      --popover-foreground: 0 0% 100%;
+  --popover: 222.2 47.4% 11.2%;
+  --popover-foreground: 210 40% 98%;
 
-      --primary: 210 40% 98%;
-      --primary-foreground: 222.2 47.4% 11.2%;
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 47.4% 11.2%;
 
-      --secondary:0 0% 8.63%;
-      --secondary-foreground: 0 0% 60%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
 
-      --muted: 0 0% 8.63%;
-      --muted-foreground: 0 0% 50%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20% 65%;
 
-      --accent: 0 0% 15%;
-      --accent-foreground: 210 40% 98%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
 
-      --destructive: 0 62.8% 30.6%;
-      --destructive-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
 
-      --border: 0 0% 16.47%;
-      --input: 0 0% 8.63%;
-      --ring:0 0% 30%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
 
-      --skeleton: 240 3.7% 15.9%;
+  /* Semantic status colors (dark) */
+  --success: 142 71% 45%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 92% 50%;
+  --warning-foreground: 0 0% 0%;
+  --pending: 43 97% 59%;
+  --pending-foreground: 0 0% 0%;
+  --info: 217 91% 60%;
+  --info-foreground: 0 0% 100%;
+  --inflight: 43 97% 59%;
+  --failure: 0 84.2% 60.2%;
 
-    }
+  /* Step indicator colors (dark) */
+  --step-1: 217 91% 60%;
+  --step-2: 262 83% 58%;
+  --step-3: 38 92% 50%;
+  --step-4-success: 142 71% 45%;
+  --step-4-failed: 0 84.2% 60.2%;
+  --step-incomplete: 215 20% 45%;
+  --step-connector: 217.2 32.6% 17.5%;
+
+  --skeleton: 217.2 32.6% 17.5%;
+}
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-elevated: hsl(var(--card-elevated));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+  --color-pending: hsl(var(--pending));
+  --color-pending-foreground: hsl(var(--pending-foreground));
+  --color-info: hsl(var(--info));
+  --color-info-foreground: hsl(var(--info-foreground));
+  --color-inflight: hsl(var(--inflight));
+  --color-failure: hsl(var(--failure));
+  --color-skeleton: hsl(var(--skeleton));
+
+  --color-step-1: hsl(var(--step-1));
+  --color-step-2: hsl(var(--step-2));
+  --color-step-3: hsl(var(--step-3));
+  --color-step-4-success: hsl(var(--step-4-success));
+  --color-step-4-failed: hsl(var(--step-4-failed));
+  --color-step-incomplete: hsl(var(--step-incomplete));
+  --color-step-connector: hsl(var(--step-connector));
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+* {
+  @apply border-border;
+}
+
+body {
+  @apply bg-background text-foreground;
+}
+
+/* Step pulse animation */
+@keyframes step-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.15);
+  }
+}
+
+.animate-step-pulse {
+  animation: step-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Ellipsis animation */
+@keyframes ellipsis {
+  0%,
+  20% {
+    content: "";
+  }
+  40% {
+    content: ".";
+  }
+  60% {
+    content: "..";
+  }
+  80%,
+  100% {
+    content: "...";
+  }
+}
+
+.animate-ellipsis::after {
+  content: "";
+  animation: ellipsis 1.5s infinite;
+}
+
+/* Step progress bar — connection lines (large, detail page) */
+.step-item-lg {
+  position: relative;
+}
+
+.step-item-lg:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: calc(50% + 17px);
+  right: calc(-50% + 17px);
+  height: 3px;
+  border-radius: 9999px;
+  background: var(--color-step-incomplete);
+  pointer-events: none;
+}
+
+/* Connection line coloring — per-step colors */
+.step-item-lg.step-done-1:not(:last-child)::after {
+  background: var(--color-step-1);
+}
+
+.step-item-lg.step-done-2:not(:last-child)::after {
+  background: var(--color-step-2);
+}
+
+.step-item-lg.step-done-3:not(:last-child)::after {
+  background: var(--color-step-3);
+}
+
+.step-item-lg.step-done-4:not(:last-child)::after {
+  background: var(--color-step-4-success);
+}
+
+/* Active step — dashed animated connector */
+.step-item-lg.step-active:not(:last-child)::after {
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-step-incomplete) 0,
+    var(--color-step-incomplete) 6px,
+    transparent 6px,
+    transparent 10px
+  );
+}
+
+/* Incomplete steps keep default connector color (already set by base rule) */
+
+/* Dot pulse animation for active step (box-shadow glow) */
+@keyframes step-dot-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsl(var(--step-3) / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px hsl(var(--step-3) / 0);
+  }
+}
+
+.animate-step-dot-pulse {
+  animation: step-dot-pulse 2s ease-in-out infinite;
+}
+
+/* Responsive adjustments for step connection lines */
+@media (max-width: 768px) {
+  .step-item-lg:not(:last-child)::after {
+    top: 7px;
+    left: calc(50% + 15px);
+    right: calc(-50% + 15px);
+  }
+}
+
+@media (max-width: 480px) {
+  .step-item-lg:not(:last-child)::after {
+    top: 6px;
+    left: calc(50% + 13px);
+    right: calc(-50% + 13px);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 
-  @layer base {
-    * {
-      @apply border-border;
-    }
-    body {
-      @apply bg-background text-foreground;
-    }
+  .animate-step-pulse {
+    animation: none;
   }
-
-  @media (min-width: 1024px) {
-    :root {
-      --header-height: 80px;
-      --footer-height: 60px;
-    }
-  }
-  
-
-  @keyframes ellipsis {
-    0%, 20% {
-      content: '';
-    }
-    40% {
-      content: '.';
-    }
-    60% {
-      content: '..';
-    }
-    80%, 100% {
-      content: '...';
-    }
-  }
-  
-  .animate-ellipsis::after {
-    content: '';
-    animation: ellipsis 1.5s infinite;
-  }
-  
+}

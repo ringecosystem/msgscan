@@ -8,7 +8,7 @@ export enum CURRENT_FILTERS {
 }
 
 export const CURRENT_FILTERS_LIST = {
-  [CURRENT_FILTERS.DAPP]: 'Dapp',
+  [CURRENT_FILTERS.DAPP]: 'Source Dapp',
   [CURRENT_FILTERS.STATUS]: 'Status',
   [CURRENT_FILTERS.DATE]: 'Date',
   [CURRENT_FILTERS.SOURCE_CHAIN]: 'Source',

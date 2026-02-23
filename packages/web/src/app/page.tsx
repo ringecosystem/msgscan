@@ -1,24 +1,22 @@
-import { getChainsByNetwork } from '@/utils/network';
-import SearchBar from '@/components/search-bar';
-import { Separator } from '@/components/ui/separator';
+import { getChainsByNetwork, getNetwork } from '@/utils/network';
 import MessagePortTable from '@/components/message-port-table';
 import MessageProgressStats from '@/components/message-progress-stats';
+import ChartContainer from '@/components/charts/chart-container';
 
 interface PageProps {
-  searchParams: {
-    network: string;
-  };
+  searchParams: Promise<{
+    network?: string;
+  }>;
 }
-export default function Page({ searchParams }: PageProps) {
-  const chains = getChainsByNetwork(searchParams?.network);
+export default async function Page({ searchParams }: PageProps) {
+  const { network } = await searchParams;
+  const effectiveNetwork = getNetwork(network);
+  const chains = getChainsByNetwork(effectiveNetwork);
   return (
-    <>
-      <div className="mt-4 block lg:hidden">
-        <SearchBar />
-      </div>
+    <div className="py-3 space-y-3">
       <MessageProgressStats chains={chains} />
-      <Separator className="hidden lg:block" />
-      <MessagePortTable network={searchParams?.network} chains={chains} />
-    </>
+      <ChartContainer chains={chains} />
+      <MessagePortTable network={effectiveNetwork} chains={chains} />
+    </div>
   );
 }

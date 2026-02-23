@@ -1,7 +1,7 @@
 'use client';
 
 import {
-  useQueryState,
+  useQueryStates,
   parseAsString,
   parseAsInteger,
   parseAsArrayOf,
@@ -10,34 +10,57 @@ import {
 
 import type { DAppConfigKeys } from '@/utils';
 
+const queryStateOptions = {
+  history: 'replace' as const,
+  shallow: true as const
+};
+
+const queryParsers = {
+  fromDapp: parseAsArrayOf(parseAsString).withOptions(queryStateOptions),
+  status: parseAsArrayOf(parseAsInteger).withOptions(queryStateOptions),
+  dateFrom: parseAsIsoDateTime.withOptions(queryStateOptions),
+  dateTo: parseAsIsoDateTime.withOptions(queryStateOptions),
+  fromChainId: parseAsArrayOf(parseAsInteger).withOptions(queryStateOptions),
+  toChainId: parseAsArrayOf(parseAsInteger).withOptions(queryStateOptions)
+};
+
 const useQueryParamState = () => {
-  const [selectedDapps, setSelectedDapps] = useQueryState('dapp', parseAsArrayOf(parseAsString));
-  const [selectedStatuses, setSelectedStatuses] = useQueryState(
-    'status',
-    parseAsArrayOf(parseAsInteger)
-  );
-  const [dateFrom, setDateFrom] = useQueryState('dateFrom', parseAsIsoDateTime);
-  const [dateTo, setDateTo] = useQueryState('dateTo', parseAsIsoDateTime);
-  const [selectedSourceChains, setSelectedSourceChains] = useQueryState(
-    'sourceChain',
-    parseAsArrayOf(parseAsInteger)
-  );
-  const [selectedTargetChains, setSelectedTargetChains] = useQueryState(
-    'targetChain',
-    parseAsArrayOf(parseAsInteger)
-  );
+  const [queryState, setQueryState] = useQueryStates(queryParsers);
+
+  const setSelectedDapps = (value: DAppConfigKeys[] | null) => {
+    setQueryState({ fromDapp: value });
+  };
+  const setSelectedSourceChains = (value: number[] | null) => {
+    setQueryState({ fromChainId: value });
+  };
+  const setSelectedTargetChains = (value: number[] | null) => {
+    setQueryState({ toChainId: value });
+  };
+  const setSelectedStatuses = (value: number[] | null) => {
+    setQueryState({ status: value });
+  };
+  const setDateFrom = (value: Date | null) => {
+    setQueryState({ dateFrom: value });
+  };
+  const setDateTo = (value: Date | null) => {
+    setQueryState({ dateTo: value });
+  };
+  const setDateRange = (from: Date | null, to: Date | null) => {
+    setQueryState({ dateFrom: from, dateTo: to });
+  };
 
   return {
-    selectedDapps: (selectedDapps as DAppConfigKeys[]) ?? [],
-    selectedStatuses: selectedStatuses ?? [],
-    dateFrom: dateFrom ?? undefined,
-    dateTo: dateTo ?? undefined,
-    selectedSourceChains: selectedSourceChains ?? [],
-    selectedTargetChains: selectedTargetChains ?? [],
+    selectedDapps: (queryState.fromDapp as DAppConfigKeys[]) ?? [],
+    selectedStatuses: queryState.status ?? [],
+    dateFrom: queryState.dateFrom ?? undefined,
+    dateTo: queryState.dateTo ?? undefined,
+    selectedSourceChains: queryState.fromChainId ?? [],
+    selectedTargetChains: queryState.toChainId ?? [],
     setSelectedDapps,
     setSelectedStatuses,
     setDateFrom,
     setDateTo,
+    setDateRange,
     setSelectedSourceChains,
     setSelectedTargetChains
   };

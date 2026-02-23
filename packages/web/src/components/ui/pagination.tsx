@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
-import { omit } from 'lodash-es';
 
+import { buttonVariants } from '@/components/ui/button-variants';
 import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
 
 import Spin from './spin';
 
-import type { ButtonProps} from '@/components/ui/button';
+type ButtonSize = 'default' | 'xs' | 'sm' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg';
 
 const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
   <nav
@@ -33,11 +32,13 @@ PaginationItem.displayName = 'PaginationItem';
 
 type PaginationLinkProps = {
   isActive?: boolean;
-} & Pick<ButtonProps, 'size'> &
-  React.ComponentProps<'a'>;
+  size?: ButtonSize;
+} &
+  React.ComponentProps<'button'>;
 
 const PaginationLink = ({ className, isActive, size = 'icon', ...props }: PaginationLinkProps) => (
-  <a
+  <button
+    type="button"
     aria-current={isActive ? 'page' : undefined}
     className={cn(
       buttonVariants({
@@ -54,15 +55,15 @@ PaginationLink.displayName = 'PaginationLink';
 type PaginationPreviousProps = React.ComponentProps<typeof PaginationLink> & {
   loading?: boolean;
 };
-const PaginationPrevious = ({ className, ...props }: PaginationPreviousProps) => (
+const PaginationPrevious = ({ className, loading, disabled, ...props }: PaginationPreviousProps) => (
   <PaginationLink
     aria-label="Go to previous page"
     size="default"
-    className={cn('gap-1 pl-2.5', className, props.loading ? 'cursor-not-allowed' : '')}
-    {...omit(props, 'loading')}
-    onClick={props.loading ? undefined : props?.onClick}
+    className={cn('gap-1 pl-2.5', className, loading ? 'cursor-not-allowed' : '')}
+    disabled={disabled || loading}
+    {...props}
   >
-    {props?.loading ? (
+    {loading ? (
       <>
         <ChevronLeft className="h-4 w-4 text-muted-foreground" />
         <Spin className="size-4 text-muted-foreground" />
@@ -80,15 +81,15 @@ PaginationPrevious.displayName = 'PaginationPrevious';
 type PaginationNextProps = React.ComponentProps<typeof PaginationLink> & {
   loading?: boolean;
 };
-const PaginationNext = ({ className, ...props }: PaginationNextProps) => (
+const PaginationNext = ({ className, loading, disabled, ...props }: PaginationNextProps) => (
   <PaginationLink
     aria-label="Go to next page"
     size="default"
-    className={cn('gap-1 pr-2.5', className, props.loading ? 'cursor-not-allowed' : '')}
-    {...omit(props, 'loading')}
-    onClick={props.loading ? undefined : props?.onClick}
+    className={cn('gap-1 pr-2.5', className, loading ? 'cursor-not-allowed' : '')}
+    disabled={disabled || loading}
+    {...props}
   >
-    {props?.loading ? (
+    {loading ? (
       <>
         <Spin className="size-4 text-muted-foreground" />
         <ChevronRight className="h-4 w-4 text-muted-foreground" />
