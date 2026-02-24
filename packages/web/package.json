@@ -1,6 +1,11 @@
 {
   "name": "@ringdao/msgscan-ui",
   "version": "0.1.0",
+  "packageManager": "pnpm@10.15.0",
+  "engines": {
+    "node": "22.x",
+    "pnpm": "10.x"
+  },
   "scripts": {
     "dev": "next dev -p 3200",
     "build": "next build",
