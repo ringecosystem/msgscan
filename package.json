@@ -2,6 +2,7 @@
   "name": "@ringdao/msgscan",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.15.0",
   "scripts": {
     "start:web": "pnpm --filter @ringdao/msgscan-ui start",
     "build:web": "pnpm --filter @ringdao/msgscan-ui build",

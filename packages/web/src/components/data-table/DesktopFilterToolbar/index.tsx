@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import { MESSAGE_STATUS_LIST } from '@/config/status';
 import { cn } from '@/lib/utils';
 import { getDappOptions } from '@/utils';
@@ -45,65 +44,70 @@ const TableFilterToolbar = ({ chains, className, hideDappFilter }: TableFilterTo
   } = useQueryParamState();
 
   const limit = CHAIN_OPTIONS?.length;
+
+  const hasActiveFilters =
+    (selectedDapps?.length ?? 0) > 0 ||
+    (selectedStatuses?.length ?? 0) > 0 ||
+    Boolean(dateFrom) ||
+    Boolean(dateTo) ||
+    (selectedSourceChains?.length ?? 0) > 0 ||
+    (selectedTargetChains?.length ?? 0) > 0;
+
   return (
-    <div className={cn('flex items-center justify-between py-5', className)}>
-      <div className="text-sm font-normal leading-[1.4rem] text-foreground">Messages</div>
-      <div className="flex gap-3">
+    <div className={cn('mt-3 mb-2 flex flex-wrap items-center justify-end gap-2', className)}>
+      <div className="flex flex-wrap items-center gap-2">
         {!hideDappFilter && (
           <TableMultiSelectFilter
             options={dappOptions}
             value={selectedDapps}
             onChange={handleDappChange}
-            title="Dapp"
+            title="Source Dapp"
             onClearFilters={handleResetDapps}
-            contentClassName="w-[10rem]"
+            contentClassName="min-w-[10rem]"
           />
         )}
-
         <TableMultiSelectFilter
           options={MESSAGE_STATUS_LIST}
           value={selectedStatuses}
           onChange={handleStatusChange}
           title="Status"
           onClearFilters={handleResetStatus}
-          contentClassName="w-[10rem]"
+          contentClassName="min-w-[10rem]"
         />
-
         <TableDateFilter
           onChange={handleDateChange}
           date={{
             from: dateFrom,
             to: dateTo
           }}
-          contentClassName="w-[35rem]"
+          contentClassName="w-fit max-w-[calc(100vw-2rem)]"
         />
-
         <TableChainFilter
           options={CHAIN_OPTIONS}
           value={selectedSourceChains}
           onChange={handleSourceChainChange}
           title="Source"
-          contentClassName="w-[28rem]"
+          contentClassName="w-[22rem]"
           limit={limit}
         />
-
         <TableChainFilter
           options={CHAIN_OPTIONS}
           value={selectedTargetChains}
           onChange={handleTargetChainChange}
           title="Target"
-          contentClassName="w-[28rem]"
+          contentClassName="w-[22rem]"
           limit={limit}
         />
-
-        <Button
-          variant="outline"
-          size="sm"
-          className="border-none text-sm font-normal text-secondary-foreground"
-          onClick={handleReset}
-        >
-          Reset
-        </Button>
+        {hasActiveFilters && <div className="bg-border mx-1 h-4 w-px" />}
+        {hasActiveFilters && (
+          <button
+            type="button"
+            className="text-muted-foreground hover:text-foreground cursor-pointer text-xs transition-colors hover:underline"
+            onClick={handleReset}
+          >
+            Reset
+          </button>
+        )}
       </div>
     </div>
   );

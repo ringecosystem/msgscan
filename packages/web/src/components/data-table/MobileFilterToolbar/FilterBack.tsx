@@ -7,13 +7,15 @@ interface FilterBackProps {
 }
 const MobileFilterBack = ({ onClick, title, isShowIcon = true }: FilterBackProps) => {
   return (
-    <div
+    <button
+      type="button"
       onClick={onClick}
-      className="absolute left-4 top-4 flex cursor-pointer items-center gap-[0.25rem] text-sm font-normal text-foreground hover:opacity-80"
+      className="flex items-center gap-[0.25rem] text-sm font-normal text-foreground hover:opacity-80"
+      aria-label={isShowIcon ? 'Back' : title}
     >
-      {isShowIcon ? <ArrowLeft strokeWidth={1.25} size={24} /> : null}
+      {isShowIcon ? <ArrowLeft strokeWidth={1.5} size={24} /> : null}
       <span>{title}</span>
-    </div>
+    </button>
   );
 };
 

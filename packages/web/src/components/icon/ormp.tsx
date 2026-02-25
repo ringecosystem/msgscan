@@ -13,7 +13,7 @@ const OrmpIcon = (props: React.SVGProps<SVGSVGElement>) => {
         cy="11"
         r="8"
         stroke="currentColor"
-        strokeWidth="1.25"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -22,7 +22,7 @@ const OrmpIcon = (props: React.SVGProps<SVGSVGElement>) => {
         cy="11"
         r="4"
         stroke="currentColor"
-        strokeWidth="1.25"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

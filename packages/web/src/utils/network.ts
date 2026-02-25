@@ -1,11 +1,18 @@
 import { chains } from '@/config/chains';
-import { networkList } from '@/config/network';
+import { defaultNetwork, networkList } from '@/config/network';
 import { Network } from '@/types/network';
 
+export const normalizeNetwork = (network?: string): string | undefined => {
+  if (typeof network !== 'string') return undefined;
+  const normalized = network.trim().toLowerCase();
+  return normalized.length > 0 ? normalized : undefined;
+};
+
 export const getNetwork = (network?: string) => {
-  return network && networkList.includes(network as Network)
-    ? (network as Network)
-    : Network.MAINNET;
+  const normalized = normalizeNetwork(network);
+  return normalized && networkList.includes(normalized as Network)
+    ? (normalized as Network)
+    : defaultNetwork;
 };
 export const getChainsByNetwork = (network?: string) => {
   const effectiveNetwork = getNetwork(network);

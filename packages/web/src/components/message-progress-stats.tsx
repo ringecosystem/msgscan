@@ -1,6 +1,7 @@
 'use client';
 
-import { useMessageProgress } from '@/hooks/services';
+import { useMessageStats } from '@/hooks/services';
+import { useMessageTrend } from '@/hooks/use-message-trend';
 import StatsContainer from '@/components/stats-container';
 
 import type { CHAIN } from '@/types/chains';
@@ -9,17 +10,30 @@ interface MessageProgressStatsProps {
   chains: CHAIN[];
 }
 const MessageProgressStats = ({ chains }: MessageProgressStatsProps) => {
-  const { data: messageProgress } = useMessageProgress();
+  const {
+    data: messageStats,
+    isPending: isStatsPending,
+    isError: isStatsError,
+    refetch: refetchStats
+  } = useMessageStats(chains);
+  const {
+    data: trendData,
+    isPending: isTrendPending,
+    isError: isTrendError,
+    refetch: refetchTrend
+  } = useMessageTrend(chains);
 
   return (
-    <div className="py-[2.5rem] lg:py-0">
-      <StatsContainer
-        networkTotal={chains?.length}
-        data={
-          Array.isArray(messageProgress?.MessageProgress) ? messageProgress?.MessageProgress : []
-        }
-      />
-    </div>
+    <StatsContainer
+      chains={chains}
+      data={messageStats}
+      trendData={trendData}
+      isLoading={isStatsPending || isTrendPending}
+      isError={isStatsError || isTrendError}
+      onRetry={() => {
+        void Promise.allSettled([refetchStats(), refetchTrend()]);
+      }}
+    />
   );
 };
 

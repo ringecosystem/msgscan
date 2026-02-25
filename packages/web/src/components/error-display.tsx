@@ -16,10 +16,10 @@ const ErrorDisplay = ({ title, description, svgPath, svgPathLight }: Props) => {
         <Image alt={title} src={svgPathLight} fill={true} className="inline dark:hidden" priority />
       </div>
       <div>
-        <h2 className="text-center text-[1.875rem] font-bold italic leading-[3rem] text-foreground">
+        <h1 className="text-center text-[1.875rem] font-bold italic leading-[3rem] text-foreground">
           {title}
-        </h2>
-        <p className="text-center text-sm font-normal leading-[3rem] text-muted-foreground">
+        </h1>
+        <p className="max-w-sm text-balance text-center text-sm font-normal leading-[3rem] text-muted-foreground">
           {description}
         </p>
       </div>

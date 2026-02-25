@@ -20,14 +20,14 @@ const HeaderLogo = () => {
         height={26}
         className="hidden lg:block"
       />
-      <Logo className="block text-foreground dark:text-[#F2F3F5] lg:hidden" />
+      <Logo className="block text-foreground lg:hidden" />
     </Link>
   );
 };
 
 const HeaderLogoWrapper = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="h-[26px] w-[90px] animate-pulse rounded-md bg-muted lg:w-[147px]" />}>
       <HeaderLogo />
     </Suspense>
   );

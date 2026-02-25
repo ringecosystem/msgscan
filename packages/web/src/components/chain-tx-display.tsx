@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'; // 假设shadcn已经提供了Tooltip组件
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { toShortText } from '@/utils';
 import { CodeFont } from '@/config/font';
@@ -15,6 +15,7 @@ interface ChainTxDisplayProps {
   isLink?: boolean;
   href?: string;
   isFullText?: boolean;
+  showIcon?: boolean;
   rootClassName?: string;
   className?: string;
   iconClassName?: string;
@@ -26,16 +27,18 @@ const ChainTxDisplay = ({
   isLink = true,
   href,
   isFullText = false,
+  showIcon = true,
   rootClassName,
   className,
   iconClassName,
   children
 }: React.PropsWithChildren<ChainTxDisplayProps>) => {
   const renderContent = () => {
-    let txLink = `${chain?.blockExplorers?.default?.url}/tx/${value}`;
+    const explorerBaseUrl = chain?.blockExplorers?.default?.url;
+    let txLink = explorerBaseUrl ? `${explorerBaseUrl}/tx/${value}` : undefined;
 
-    if (chain?.name.includes("Tron")) {
-      txLink = `${chain?.blockExplorers?.default?.url}/#/transaction/${value?.replace('0x', '')}`
+    if (chain?.name?.includes('Tron') && explorerBaseUrl) {
+      txLink = `${explorerBaseUrl}/#/transaction/${value?.replace('0x', '')}`;
     }
     if (isLink) {
       if (href) {
@@ -55,23 +58,25 @@ const ChainTxDisplay = ({
           </Link>
         );
       }
-      return (
-        <Link
-          href={txLink}
-          className={cn('truncate hover:underline', CodeFont.className, className)}
-          title={value}
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          {isFullText
-            ? value
-            : toShortText({
-              text: value,
-              frontLength: 6,
-              backLength: 4
-            })}
-        </Link>
-      );
+      if (txLink) {
+        return (
+          <Link
+            href={txLink}
+            className={cn('truncate hover:underline', CodeFont.className, className)}
+            title={value}
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            {isFullText
+              ? value
+              : toShortText({
+                text: value,
+                frontLength: 6,
+                backLength: 4
+              })}
+          </Link>
+        );
+      }
     } else {
       return (
         <span className={cn('truncate', CodeFont.className, className)} title={value}>
@@ -81,21 +86,33 @@ const ChainTxDisplay = ({
               text: value,
               frontLength: 6,
               backLength: 4
-            })}
+          })}
         </span>
       );
     }
+
+    return (
+      <span className={cn('truncate', CodeFont.className, className)} title={value}>
+        {isFullText
+          ? value
+          : toShortText({
+            text: value,
+            frontLength: 6,
+            backLength: 4
+          })}
+      </span>
+    );
   };
 
   return (
-    <div className={cn('flex items-center gap-[0.31rem]', rootClassName)}>
-      {chain ? (
+    <div className={cn('flex items-center gap-[0.31rem] relative z-10', rootClassName)}>
+      {showIcon && chain ? (
         <Tooltip>
-          <TooltipTrigger asChild>
+          <TooltipTrigger render={<span className="inline-flex" />}>
             <Image
               width={20}
               height={20}
-              alt=""
+              alt={`${chain.name} icon`}
               src={chain.iconUrl}
               className={cn('rounded-full', iconClassName)}
             />

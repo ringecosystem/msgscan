@@ -18,11 +18,19 @@ const ExplorerLinkButton: React.FC<ExplorerLinkButtonProps> = ({ url, size = 16 
 
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <Link href={url} target="_blank" rel="noopener noreferrer">
+      <TooltipTrigger
+        render={<span className="inline-flex" />}
+      >
+        <Link
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Open transaction in block explorer"
+          className="inline-flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 rounded-sm"
+        >
           <ExternalLink
             size={size}
-            strokeWidth={1.25}
+            strokeWidth={1.5}
             className="text-muted-foreground hover:text-muted-foreground"
           />
         </Link>

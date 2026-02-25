@@ -1,5 +1,3 @@
-import { isNaN } from 'lodash-es';
-
 export const formatNumber = (value: number, locale: string = 'en-US'): string => {
   return new Intl.NumberFormat(locale, {
     style: 'decimal',
@@ -20,5 +18,5 @@ export const convertToNumber = (value: number | string | undefined = 0): number 
   }
 
   const numberValue = Number(value);
-  return isNaN(numberValue) ? 0 : numberValue;
+  return Number.isNaN(numberValue) ? 0 : numberValue;
 };

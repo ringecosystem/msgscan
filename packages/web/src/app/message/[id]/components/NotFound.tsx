@@ -1,31 +1,29 @@
+'use client';
+
 import Link from 'next/link';
 
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import { buttonVariants } from '@/components/ui/button-variants';
+import { useNetworkFromQuery } from '@/hooks/useNetwork';
+import ErrorDisplay from '@/components/error-display';
+import { cn } from '@/lib/utils';
 
 const NotFound = () => {
+  const network = useNetworkFromQuery();
+
   return (
     <div
-      className="flex w-full items-center justify-center"
+      className="flex w-full flex-col items-center justify-center gap-6"
       style={{ minHeight: 'calc(100vh - var(--header-height) - var(--footer-height))' }}
     >
-      <div>
-        <h3 className="text-center text-xl text-foreground">Message Not Found</h3>
-        <Separator className="my-2" />
-        <div className="flex flex-col items-center">
-          <p className="text-center text-sm text-secondary-foreground">
-            The transaction details you are looking for cannot be found or may no longer exist.
-          </p>
-          <p className="text-center text-sm text-secondary-foreground">
-            Please verify the params or try another search.
-          </p>
-          <Button className="mt-4 p-0">
-            <Link href="/" className="block w-full px-4 py-2">
-              Back Home
-            </Link>
-          </Button>
-        </div>
-      </div>
+      <ErrorDisplay
+        title="Message Not Found"
+        svgPath="/images/common/404.svg"
+        svgPathLight="/images/common/404-light.svg"
+        description="We couldn't find this message. It may not be indexed yet, or may not exist on the selected network."
+      />
+      <Link href={`/?network=${network}`} className={cn(buttonVariants({ variant: 'outline' }), 'px-4')}>
+        Back Home
+      </Link>
     </div>
   );
 };

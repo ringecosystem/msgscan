@@ -1,8 +1,10 @@
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
+
 import { APP_DESCRIPTION, APP_KEYWORDS, APP_NAME } from '@/config/site';
-import { cn } from '@/lib/utils';
 import { GlobalFont } from '@/config/font';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+import { cn } from '@/lib/utils';
 import AppProvider from '@/provider/AppProvider';
 
 import type { Metadata, Viewport } from 'next';
@@ -80,7 +82,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#FFFFFF'
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#FFFFFF' },
+    { media: '(prefers-color-scheme: dark)', color: '#020817' }
+  ]
 };
 export default function RootLayout({
   children
@@ -90,22 +95,19 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={cn('min-h-screen bg-background font-sans antialiased', GlobalFont.className)}
+        className={cn('min-h-dvh bg-background font-sans antialiased', GlobalFont.className)}
       >
-        <AppProvider>
-          <div>
-            <Header />
-            <div
-              className="container pt-[var(--header-height)]"
-              style={{
-                minHeight: 'calc(100vh - var(--footer-height))'
-              }}
-            >
-              {children}
+        <NuqsAdapter>
+          <AppProvider>
+            <div className="flex min-h-dvh flex-col">
+              <Header />
+              <main className="mx-auto w-full max-w-[1440px] flex-1 px-4 sm:px-6 lg:px-8">
+                {children}
+              </main>
+              <Footer />
             </div>
-            <Footer />
-          </div>
-        </AppProvider>
+          </AppProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useWindowScroll } from 'react-use';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
 
@@ -16,9 +15,16 @@ interface BackToTopButtonProps {
   className?: string;
 }
 const BackToTopButton = ({ className }: BackToTopButtonProps) => {
-  const { y: pageYOffset } = useWindowScroll();
+  const [pageYOffset, setPageYOffset] = React.useState(0);
   const isVisible = pageYOffset > 200;
   const isMounted = useMounted();
+
+  React.useEffect(() => {
+    const handleScroll = () => setPageYOffset(window.scrollY);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -41,7 +47,7 @@ const BackToTopButton = ({ className }: BackToTopButtonProps) => {
           <ArrowUp
             size={18}
             className="text-card-foreground group-hover:opacity-80"
-            strokeWidth={1.25}
+            strokeWidth={1.5}
           />
           <span className="text-xs text-card-foreground group-hover:opacity-80">Back to Top</span>
         </motion.button>

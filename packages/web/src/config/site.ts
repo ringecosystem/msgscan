@@ -4,3 +4,4 @@ export const APP_DESCRIPTION =
 export const APP_KEYWORDS = 'msgport, msgscan, msgportscan';
 //interface 5000 ms
 export const REFRESH_INTERVAL = 5000;
+export const DETAIL_REFRESH_INTERVAL = 15_000;

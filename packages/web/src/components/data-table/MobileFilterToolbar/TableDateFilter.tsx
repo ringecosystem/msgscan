@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { Calendar } from '@/components/ui/calendar';
 
-import type { DateRange, SelectRangeEventHandler } from 'react-day-picker';
+import type { DateRange } from 'react-day-picker';
 
 interface TableDateFilterProps {
   date?: DateRange;
@@ -10,8 +10,8 @@ interface TableDateFilterProps {
 }
 
 const TableDateFilter = ({ date, onChange }: TableDateFilterProps) => {
-  const handleChange = useCallback<SelectRangeEventHandler>(
-    (selectedDate) => {
+  const handleChange = useCallback(
+    (selectedDate: DateRange | undefined) => {
       if (!selectedDate) return;
       const { from, to } = selectedDate;
       if (onChange) {
@@ -25,15 +25,15 @@ const TableDateFilter = ({ date, onChange }: TableDateFilterProps) => {
   );
 
   return (
-    <div className="absolute left-0 top-0 w-[calc(100vw-3rem)] bg-background">
+    <div className="w-full bg-background">
       <Calendar
         initialFocus
         mode="range"
         defaultMonth={date?.from}
         selected={date}
-        className="bg-card"
+        className="bg-card w-full"
         onSelect={handleChange}
-        numberOfMonths={2}
+        numberOfMonths={1}
       />
     </div>
   );

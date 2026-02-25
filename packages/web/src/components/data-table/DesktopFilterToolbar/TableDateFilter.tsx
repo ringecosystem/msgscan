@@ -6,7 +6,12 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 
-import type { DateRange, SelectRangeEventHandler } from 'react-day-picker';
+import {
+  FILTER_TRIGGER_BASE_CLASSNAME,
+  FILTER_TRIGGER_FOCUS_CLASSNAME
+} from './filterTriggerStyles';
+
+import type { DateRange } from 'react-day-picker';
 
 interface TableDateFilterProps {
   date?: DateRange;
@@ -23,8 +28,8 @@ const TableDateFilter = ({
 }: TableDateFilterProps) => {
   const [open, setOpen] = useState(false);
 
-  const handleChange = useCallback<SelectRangeEventHandler>(
-    (selectedDate) => {
+  const handleChange = useCallback(
+    (selectedDate: DateRange | undefined) => {
       if (!selectedDate) return;
       const { from, to } = selectedDate;
       if (onChange) {
@@ -39,32 +44,35 @@ const TableDateFilter = ({
 
   return (
     <Popover onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className={cn(
-            'flex items-center gap-[0.31rem] border-none text-sm font-normal',
-            buttonClassName
-          )}
-        >
-          <span className="text-secondary-foreground">Date:</span>
-          <div className="flex items-center gap-[0.31rem]">
-            <span className="text-sm text-foreground">
-              {!date?.from && !date?.to
-                ? 'All'
-                : `${date.from?.toLocaleDateString() ?? ''} - ${date.to?.toLocaleDateString() ?? ''}`}
-            </span>
+      <PopoverTrigger
+        render={
+          <Button
+            variant="outline"
+            size="sm"
+            className={cn(
+              FILTER_TRIGGER_BASE_CLASSNAME,
+              FILTER_TRIGGER_FOCUS_CLASSNAME,
+              buttonClassName
+            )}
+          />
+        }
+      >
+        <span className="shrink-0 text-secondary-foreground">Date:</span>
+        <div className="flex items-center gap-[0.31rem]">
+          <span className="text-sm text-foreground">
+            {!date?.from && !date?.to
+              ? 'All'
+              : `${date.from?.toLocaleDateString() ?? ''} - ${date.to?.toLocaleDateString() ?? ''}`}
+          </span>
 
-            <ChevronDown
-              size={16}
-              strokeWidth={1.5}
-              className={cn('transform transition-transform', open ? 'rotate-180' : 'rotate-0')}
-            />
-          </div>
-        </Button>
+          <ChevronDown
+            size={16}
+            strokeWidth={1.5}
+            className={cn('transform transition-transform duration-200', open ? 'rotate-180' : 'rotate-0')}
+          />
+        </div>
       </PopoverTrigger>
-      <PopoverContent className={cn('p-0', contentClassName)} align="end">
+      <PopoverContent className={cn('p-0', contentClassName)} align="start">
         <Calendar
           initialFocus
           mode="range"

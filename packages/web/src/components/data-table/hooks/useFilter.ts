@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
 
 import useQueryParamState from '@/hooks/useQueryParamState';
 
@@ -7,101 +6,74 @@ import type { DateRange } from 'react-day-picker';
 import type { DAppConfigKeys } from '@/utils';
 
 function useFilter() {
-  const queryClient = useQueryClient();
-
   const {
     setSelectedDapps,
     setSelectedStatuses,
-    setDateFrom,
-    setDateTo,
+    setDateRange,
     setSelectedSourceChains,
     setSelectedTargetChains
   } = useQueryParamState();
 
   const handleDappChange = useCallback(
     (newDapps: DAppConfigKeys[]) => {
-      queryClient.resetQueries({
-        queryKey: ['messagePort']
-      });
-      setSelectedDapps(newDapps);
+      // Empty array means "All" (no filter) -> remove query param to keep URL clean.
+      setSelectedDapps(newDapps.length ? newDapps : null);
     },
-    [setSelectedDapps, queryClient]
+    [setSelectedDapps]
   );
 
   const handleStatusChange = useCallback(
     (newStatuses: number[]) => {
-      queryClient.resetQueries({
-        queryKey: ['messagePort']
-      });
-      setSelectedStatuses(newStatuses);
+      // Empty array means "All" (no filter) -> remove query param to keep URL clean.
+      setSelectedStatuses(newStatuses.length ? newStatuses : null);
     },
-    [setSelectedStatuses, queryClient]
+    [setSelectedStatuses]
   );
 
   const handleDateChange = useCallback(
     (newDate: DateRange) => {
-      queryClient.resetQueries({
-        queryKey: ['messagePort']
-      });
-      setDateFrom(newDate?.from ?? null);
-      setDateTo(newDate?.to ?? null);
+      setDateRange(newDate?.from ?? null, newDate?.to ?? null);
     },
-    [setDateFrom, setDateTo, queryClient]
+    [setDateRange]
   );
 
   const handleSourceChainChange = useCallback(
     (newSourceChains: number[]) => {
-      queryClient.resetQueries({
-        queryKey: ['messagePort']
-      });
-      setSelectedSourceChains(newSourceChains);
+      // Empty array means "All" (no filter) -> remove query param to keep URL clean.
+      setSelectedSourceChains(newSourceChains.length ? newSourceChains : null);
     },
-    [setSelectedSourceChains, queryClient]
+    [setSelectedSourceChains]
   );
 
   const handleTargetChainChange = useCallback(
     (newTargetChains: number[]) => {
-      queryClient.resetQueries({
-        queryKey: ['messagePort']
-      });
-      setSelectedTargetChains(newTargetChains);
+      // Empty array means "All" (no filter) -> remove query param to keep URL clean.
+      setSelectedTargetChains(newTargetChains.length ? newTargetChains : null);
     },
-    [setSelectedTargetChains, queryClient]
+    [setSelectedTargetChains]
   );
 
   const handleReset = useCallback(() => {
-    queryClient.resetQueries({
-      queryKey: ['messagePort']
-    });
     setSelectedDapps(null);
     setSelectedStatuses(null);
     setSelectedSourceChains(null);
     setSelectedTargetChains(null);
-    setDateFrom(null);
-    setDateTo(null);
+    setDateRange(null, null);
   }, [
     setSelectedDapps,
-    setDateFrom,
-    setDateTo,
+    setDateRange,
     setSelectedSourceChains,
     setSelectedStatuses,
-    setSelectedTargetChains,
-    queryClient
+    setSelectedTargetChains
   ]);
 
   const handleResetStatus = useCallback(() => {
-    queryClient.resetQueries({
-      queryKey: ['messagePort']
-    });
-    setSelectedStatuses([]);
-  }, [setSelectedStatuses, queryClient]);
+    setSelectedStatuses(null);
+  }, [setSelectedStatuses]);
 
   const handleResetDapps = useCallback(() => {
-    queryClient.resetQueries({
-      queryKey: ['messagePort']
-    });
-    setSelectedDapps([]);
-  }, [setSelectedDapps, queryClient]);
+    setSelectedDapps(null);
+  }, [setSelectedDapps]);
 
   return {
     handleDappChange,

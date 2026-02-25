@@ -1,0 +1,50 @@
+module.exports = {
+  extends: [
+    'prettier',
+    'plugin:@tanstack/eslint-plugin-query/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'next/core-web-vitals'
+  ],
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: ['./tsconfig.json'],
+    tsconfigRootDir: __dirname
+  },
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx']
+    },
+    'import/resolver': {
+      typescript: true,
+      node: true
+    }
+  },
+  plugins: ['@typescript-eslint'],
+  parser: '@typescript-eslint/parser',
+  rules: {
+    '@typescript-eslint/no-explicit-any': 'warn',
+    'import/order': [
+      'error',
+      {
+        groups: ['builtin', 'external', 'internal', 'parent', 'index', 'sibling', 'object', 'type'],
+        pathGroups: [
+          {
+            pattern: 'react',
+            group: 'external'
+          },
+          {
+            pattern: '@/**',
+            group: 'internal',
+            position: 'after'
+          }
+        ],
+        pathGroupsExcludedImportTypes: ['type'],
+        'newlines-between': 'always'
+      }
+    ],
+    '@typescript-eslint/consistent-type-exports': 'error',
+    '@typescript-eslint/consistent-type-imports': 'error',
+    '@typescript-eslint/no-import-type-side-effects': 'error'
+  }
+};

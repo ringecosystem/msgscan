@@ -13,21 +13,44 @@ export const FlipWords = ({
   duration?: number;
   className?: string;
 }) => {
-  const [currentWord, setCurrentWord] = useState(words[0]);
+  const [currentWord, setCurrentWord] = useState(words[0] ?? '');
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
   const startAnimation = useCallback(() => {
+    if (!words.length) return;
     const word = words[words.indexOf(currentWord) + 1] || words[0];
     setCurrentWord(word);
     setIsAnimating(true);
   }, [currentWord, words]);
 
   useEffect(() => {
-    if (!isAnimating)
-      setTimeout(() => {
-        startAnimation();
-      }, duration);
-  }, [isAnimating, duration, startAnimation]);
+    if (!words.length) {
+      setCurrentWord('');
+      setIsAnimating(false);
+      return;
+    }
+
+    if (!words.includes(currentWord)) {
+      setCurrentWord(words[0]);
+      setIsAnimating(false);
+    }
+  }, [words, currentWord]);
+
+  useEffect(() => {
+    if (isAnimating || !words.length) return;
+
+    const timer = setTimeout(() => {
+      startAnimation();
+    }, duration);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [isAnimating, duration, startAnimation, words.length]);
+
+  if (!words.length) {
+    return null;
+  }
 
   return (
     <AnimatePresence
