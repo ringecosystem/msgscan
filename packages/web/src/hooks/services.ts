@@ -85,15 +85,13 @@ export function useMessages(
   );
 
   return useQuery({
-    // Keep query key stable by using serialized filter/paging snapshots.
-    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     queryKey: ['messages', filtersKey, pagingKey, chainKey],
     enabled: options?.enabled ?? true,
-    queryFn: async ({ signal }) =>
+    queryFn: async ({ signal, queryKey: [, filtersSnapshot, pagingSnapshot, queryChainKey] }) =>
       fetchMessages({
-        filters,
-        paging,
-        chains: resolveChainsByKey(chainKey),
+        filters: JSON.parse(filtersSnapshot) as MessageFilters,
+        paging: JSON.parse(pagingSnapshot) as MessagePaging,
+        chains: resolveChainsByKey(queryChainKey),
         signal
       }),
     // Status filtering triggers expensive multi-step scanning. Avoid background polling,
