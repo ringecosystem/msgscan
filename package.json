@@ -7,5 +7,13 @@
     "start:web": "pnpm --filter @ringdao/msgscan-ui start",
     "build:web": "pnpm --filter @ringdao/msgscan-ui build",
     "build:all": "pnpm --filter @ringdao/* build"
+  },
+  "pnpm": {
+    "overrides": {
+      "esbuild": "0.28.1",
+      "lodash": "4.18.1",
+      "postcss": "8.5.16",
+      "vite": "7.3.6"
+    }
   }
 }
