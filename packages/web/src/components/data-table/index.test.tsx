@@ -28,13 +28,15 @@ vi.mock('next/font/google', () => ({
   })
 }));
 
+const senderAddress = '0xebd9a48ed1128375eb4383ed4d53478b4fd85a8d';
+
 const message = {
   msgId: '0xdaf33c177c251e906a3cdf38572b049fcc49403a27deac44635bf675611899b4',
   protocol: 'ormp',
   status: 3,
   transactionHash: '0x530d7d7273781f2fd9a6afea43bbcdc4db1824794f730d6b631cf567e44feef9',
   targetTransactionHash: '0x18a9251d1989b4f12953f8aab32311f273737c1386a78135c5e16771eb823bbf',
-  transactionFrom: '0xebd9a48ed1128375eb4383ed4d53478b4fd85a8d',
+  transactionFrom: senderAddress,
   fromChainId: '46',
   toChainId: '1',
   fromDapp: '0x682294d1c00a9ca13290b53b7544b8f734d6501f',
@@ -132,12 +134,12 @@ describe('DataTable row interaction', () => {
     );
 
     const senderLink = container.querySelector<HTMLAnchorElement>(
-      `a[title="${message.transactionFrom}"]`
+      `a[title="${senderAddress}"]`
     );
 
     expect(senderLink).not.toBeNull();
     expect(senderLink?.getAttribute('href')).toBe(
-      `/sender/${encodeURIComponent(message.transactionFrom)}?network=mainnet`
+      `/sender/${encodeURIComponent(senderAddress)}?network=mainnet`
     );
   });
 });

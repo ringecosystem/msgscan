@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import { useEffect } from 'react';
 
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -8,6 +7,8 @@ import ToastProvider from '@/components/shared/toast-provider';
 
 import AppQueryClientProvider from './AppQueryClientProvider';
 import AppThemeProvider from './AppThemeProvider';
+
+import type * as React from 'react';
 
 const AppProvider = ({ children }: React.PropsWithChildren<unknown>) => {
   useEffect(() => {

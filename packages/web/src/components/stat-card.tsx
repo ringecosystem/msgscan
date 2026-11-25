@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -7,6 +6,8 @@ import { CodeFont } from '@/config/font';
 import { cn } from '@/lib/utils';
 
 import Counter from './counter';
+
+import type React from 'react';
 
 interface StatCardProps {
   title: string;

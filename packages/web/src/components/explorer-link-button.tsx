@@ -1,8 +1,9 @@
-import React from 'react';
 import Link from 'next/link';
 import { ExternalLink } from 'lucide-react';
 
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+
+import type React from 'react';
 
 interface ExplorerLinkButtonProps {
   url?: string;

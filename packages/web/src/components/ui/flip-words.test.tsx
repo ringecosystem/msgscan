@@ -1,10 +1,11 @@
 /** @vitest-environment jsdom */
 
 import { act, cleanup, render } from '@testing-library/react';
-import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { FlipWords } from './flip-words';
+
+import type React from 'react';
 
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,

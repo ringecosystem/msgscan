@@ -9,7 +9,8 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/prepare-web
 
       - uses: darwinia-network/devops/actions/smart-vercel@main
         name: Deploy to Vercel
@@ -18,7 +19,7 @@ jobs:
           vercel_group: itering
           preview_output: true
           script_run: false
-          dist_path: packages/web
+          dist_path: web-deploy
           project_name: msgscan
           enable_cache: true
           enable_notify_slack: true
