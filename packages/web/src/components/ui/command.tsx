@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import { Command as CommandPrimitive } from "cmdk"
 import { SearchIcon, CheckIcon } from "lucide-react"
 
@@ -16,6 +15,8 @@ import {
   InputGroup,
   InputGroupAddon,
 } from "@/components/ui/input-group"
+
+import type * as React from "react"
 
 function Command({
   className,

@@ -1,2 +1,11 @@
 packages:
   - 'packages/*'
+
+overrides:
+  '@prisma/config@6.19.3>deepmerge-ts': 8.0.2
+  '@prisma/config@6.19.3>effect': 3.22.1
+  esbuild: 0.28.1
+  'graphql-config@6.0.0>minimatch': 11.0.9
+  lodash: 4.18.1
+  postcss: 8.5.33
+  vite: 7.3.8

@@ -1,9 +1,10 @@
-import React from 'react';
 import Image from 'next/image';
 
 import { dappRemark } from '@/config/dapp_remark';
 import { capitalizeText, getDAppInfo } from '@/utils/dapp';
 import { cn } from '@/lib/utils';
+
+import type React from 'react';
 
 interface AddressDisplayFilterDappRemarkProps {
   address: string;

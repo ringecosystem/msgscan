@@ -1,7 +1,6 @@
 import { setTimeout } from "timers/promises";
 import { Service } from "typedi";
 import { GripperRunnerOptions } from "../types";
-// @ts-ignore
 import { gql, request } from "graphql-request";
 
 @Service({})
@@ -10,9 +9,7 @@ export class IndexerTask {
     endpoint: "https://ormpindexer.ringdao.com/graphql",
   };
 
-  private skipCounter: number = 0;
-
-  constructor() {}
+  private skipCounter = 0;
 
   async start(options: GripperRunnerOptions) {
     const { fastify } = options;

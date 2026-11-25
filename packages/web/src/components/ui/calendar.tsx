@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import {
   DayPicker,
   getDefaultClassNames,
@@ -11,6 +10,8 @@ import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "lucide-react
 
 import { buttonVariants } from "@/components/ui/button-variants"
 import { cn } from "@/lib/utils"
+
+import type * as React from "react"
 
 type CalendarButtonVariant = NonNullable<
   Parameters<typeof buttonVariants>[0]

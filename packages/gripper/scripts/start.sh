@@ -8,7 +8,7 @@ WORK_PATH=${BIN_PATH}/../
 
 cd ${WORK_PATH}
 
-npx prisma migrate dev --name init
-npx prisma generate
+corepack pnpm exec prisma migrate dev --name init
+corepack pnpm exec prisma generate
 
-npm run start -- $@
+exec corepack pnpm run start "$@"

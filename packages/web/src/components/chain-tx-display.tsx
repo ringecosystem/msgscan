@@ -1,4 +1,3 @@
-import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -7,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { toShortText } from '@/utils';
 import { CodeFont } from '@/config/font';
 
+import type React from 'react';
 import type { CHAIN } from '@/types/chains';
 
 interface ChainTxDisplayProps {

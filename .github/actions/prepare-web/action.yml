@@ -1,0 +1,12 @@
+name: Prepare web deployment
+description: Export the Web package and its resolved workspace dependencies for Vercel
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v6
+      with:
+        node-version: '22'
+    - shell: bash
+      run: >-
+        corepack pnpm --filter @ringdao/msgscan-ui deploy web-deploy
+        --lockfile-only --ignore-scripts --config.inject-workspace-packages=true
